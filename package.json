@@ -1,0 +1,16 @@
+{
+	"private": true,
+	"name": "final-call",
+	"version": "1.0.0",
+	"description": "For Sale Game",
+	"main": "index.js",
+	"author": "JunghoChoi",
+	"license": "ISC",
+	"scripts": {
+		"client": "yarn workspace @final-call/client dev",
+		"server": "yarn workspace @final-call/server dev"
+	},
+	"workspaces": [
+		"packages/*"
+	]
+}
