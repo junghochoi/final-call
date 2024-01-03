@@ -1,9 +1,12 @@
-import Image from "next/image"
+"use client"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+
+import { useRouter } from "next/router"
+import Link from "next/link"
 
 export default function Home() {
 	return (
@@ -15,13 +18,10 @@ export default function Home() {
 					<Button className="w-24">Start</Button>
 
 					<Separator className="bg-fc-accent px-4" />
-					{/* <div className="flex w-full">
-						<Separator />
-						<span> OR </span>
-						<Separator />
-					</div> */}
 
-					<Button className="w-fit">Create Private Game</Button>
+					<Link href="/lobby">
+						<Button className="w-fit">Create Private Game</Button>
+					</Link>
 				</div>
 
 				<div className="p-6 rounded w-full lg:w-1/2 bg-fc-blue-dark">
