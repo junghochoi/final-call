@@ -1,3 +1,4 @@
+
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -6,6 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 const NICKNAME_KEY = "nickname";
+const DEFAULT_NICKNAME = "nonce"
 const SANTA_COLOR_KEY = "santa";
 
 

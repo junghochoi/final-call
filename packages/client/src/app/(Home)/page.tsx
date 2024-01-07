@@ -35,7 +35,7 @@ export default function Home() {
 						}}
 					/>
 
-					<div className="flex justify-between">
+					<div className="flex justify-between space-x-2">
 						<Button className="w-fit">Join Public game</Button>
 						{/* <Separator className="bg-fc-accent px-4" /> */}
 						<Button onClick={createPrivateGame} className="w-fit">
