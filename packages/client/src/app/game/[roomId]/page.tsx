@@ -20,9 +20,12 @@ function useNickname() {
 const GamePage = () => {
 	const params = useParams<{ roomId: string }>()
 	const nickname = useNickname()
-	start({
-		roomId: params.roomId,
-	})
+
+	useEffect(() => {
+		start({
+			roomId: params.roomId,
+		})
+	}, [])
 
 	return (
 		<div>

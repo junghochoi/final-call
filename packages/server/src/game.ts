@@ -25,13 +25,13 @@ export class Game {
 			SocketData
 		>
 	) {
-		this.initialize()
 		this.sessionStore = new SessionStore()
 		this.roomManager = new RoomManager()
+		this.initialize()
 	}
 
 	private initialize() {
-		this.server.use((socket, next) => {
+		this.server.use((socket: Socket, next) => {
 			const roomId = socket.handshake.query.roomId as string
 			const nickname = socket.handshake.query.nickname as string
 			const sessionId = socket.handshake.query.sessionId as string
@@ -53,67 +53,74 @@ export class Game {
 			return next()
 		})
 
-		this.server.on("connect", (socket) => {
-			/**
-			 * Establish Sessions for all Web Socket Connections
-			 */
-			this.sessionStore.saveSession(socket.data.sessionId, {
-				nickname: socket.data.nickname,
-				connected: true,
-			})
+		this.server.on(
+			"connect",
+			(
+				socket: Socket<
+					ClientToServerEvents,
+					ServerToClientEvents,
+					{},
+					SocketData
+				>
+			) => {
+				/**
+				 * Establish Sessions for all Web Socket Connections
+				 */
+				this.sessionStore.saveSession(socket.data.sessionId, {
+					nickname: socket.data.nickname,
+					connected: true,
+				})
 
-			const playerInitData: PlayerInitializationPayload =
-				typeof socket.data.nickname !== "undefined"
-					? {
-							sessionId: socket.data.sessionId,
-							playerData: {
-								roomId: socket.data.roomId,
-								nickname: socket.data.nickname,
+				const playerInitData: PlayerInitializationPayload =
+					typeof socket.data.nickname !== "undefined"
+						? {
 								sessionId: socket.data.sessionId,
-								socket: socket,
-							},
-					  }
-					: {
-							sessionId: socket.data.sessionId,
-							playerData: undefined,
-					  }
+								playerData: {
+									roomId: socket.data.roomId,
+									nickname: socket.data.nickname,
+									sessionId: socket.data.sessionId,
+									// socket: socket,
+								},
+						  }
+						: {
+								sessionId: socket.data.sessionId,
+								playerData: undefined,
+						  }
 
-			console.log("Created playerInitData")
-
-			// socket.emit("PlayerInitialization", playerInitData)
-
-			// this.createEventListeners(socket)
-		})
+				console.log(playerInitData)
+				// console.log("will emit")
+				socket.emit("PlayerInitialization", playerInitData)
+			}
+		)
 	}
-	private createEventListeners(socket: Socket): void {
-		/**
-		 * Initialize Websocket Listeners
-		 *
-		 */
-		// socket.on("PlayerJoin", (player: Player) => {
-		// 	if (this.roomManager.joinRoom(player.roomId, player)) {
-		// 		socket.join(player.roomId)
-		// 		this.emitGameState(player.roomId)
-		// 	}
-		// })
-		// socket.on("Play", (payload) => {
-		// 	socket.leave(payload.roomId)
-		// 	this.emitGameState(payload.roomId)
-		// })
-		// socket.on("UserReconnect", (payload) => {
-		// 	socket.join(payload.roomId)
-		// 	this.emitGameState(payload.roomId)
-		// })
-		// socket.on("disconnecting", (reason) => {
-		// 	console.log(`Disconnecting ${socket.id} for "${reason}"`)
-		// 	// const exitRoomId = socket.handshake.auth.roomId
-		// 	console.log(socket.id)
-		// 	const exitRoomId = this.roomManager.handleUserDisconnect(socket.id)
-		// 	this.emitGameState(exitRoomId)
-		// })
-		// socket.onAny((event, ...args) => {
-		// 	console.log(event, args)
-		// })
+
+	private createEventListeners(
+		socket: Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>
+	) {
+		socket.on("PlayerJoin", (player: Player) => {
+			if (this.roomManager.joinRoom(player.roomId, player)) {
+				socket.join(player.roomId)
+				this.emitGameState(player.roomId)
+			}
+		})
+		socket.on("PlayerLeave", (payload: Player) => {
+			socket.leave(payload.roomId)
+			this.emitGameState(payload.roomId)
+		})
+		socket.on("PlayerReconnect", (payload: Player) => {
+			socket.join(payload.roomId)
+			this.emitGameState(payload.roomId)
+		})
+		socket.on("disconnecting", (reason) => {
+			console.log(`Disconnecting ${socket.id} for "${reason}"`)
+			// const exitRoomId = socket.handshake.auth.roomId
+			console.log(socket.id)
+			const exitRoomId = this.roomManager.handleUserDisconnect(socket.id)
+			this.emitGameState(exitRoomId)
+		})
+		socket.onAny((event, ...args) => {
+			console.log(event, args)
+		})
 	}
 
 	private emitGameState(roomId: RoomID): void {

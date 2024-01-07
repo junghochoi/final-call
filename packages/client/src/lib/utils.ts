@@ -17,6 +17,8 @@ function getItemFromLocalStorage(
 	if (typeof window !== "undefined") {
 		return window.localStorage.getItem(key) ?? defaultValue
 	}
+
+	console.log("window is undefined ")
 	return defaultValue
 }
 
