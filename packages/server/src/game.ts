@@ -99,7 +99,6 @@ export class Game {
 		socket: Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>
 	) {
 		socket.on("PlayerJoin", (player: Player) => {
-			console.log(player)
 			if (this.roomManager.joinRoom(player.roomId, player)) {
 				socket.join(player.roomId)
 				this.emitGameState(player.roomId)
@@ -113,10 +112,12 @@ export class Game {
 			socket.join(payload.roomId)
 			this.emitGameState(payload.roomId)
 		})
+
 		socket.on("disconnecting", (reason) => {
 			console.log(`Disconnecting ${socket.id} for "${reason}"`)
-			// const exitRoomId = socket.handshake.auth.roomId
-			const exitRoomId = this.roomManager.handleUserDisconnect(socket.id)
+			const exitRoomId = socket.handshake.auth.roomId
+			socket.leave(exitRoomId)
+			this.roomManager.leaveRoom(exitRoomId, socket.id)
 			this.emitGameState(exitRoomId)
 		})
 		socket.onAny((event, ...args) => {

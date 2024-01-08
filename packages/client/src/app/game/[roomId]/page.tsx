@@ -22,17 +22,6 @@ export type GameState = {
 	players: Player[]
 }
 
-export function useNickname() {
-	const [gameState, setGameState] = useState<GameState>()
-
-	// useEffect(() => {
-	// 	const nickname = getNickname()
-	// 	if (nickname) setNickname(nickname)
-	// 	else setNickname("")
-	// }, [])
-	// return nickname
-}
-
 let socket: Socket<ServerToClientEvents, ClientToServerEvents>
 
 const GamePage = () => {
@@ -44,22 +33,25 @@ const GamePage = () => {
 	})
 
 	useEffect(() => {
-		getSocketConnection(roomId).then((s) => {
-			socket = s
+		getSocketConnection(roomId).then((connection) => {
+			socket = connection
+
 			startGameEventHandlers()
 			socket.connect()
 		})
+
+		return () => {
+			console.log(socket)
+			socket.disconnect()
+			socket.off("connect")
+		}
 	}, [])
 
 	const handleUserJoinGame = async (nickname: string) => {
-		console.log("joining game")
-
 		const sessionId = getSessionId()
 
-		console.log(sessionId)
-
 		if (sessionId === undefined) {
-			throw new Error("sessionID not defined ")
+			throw new Error("sessionID not defined")
 		} else {
 			socket.emit("PlayerJoin", {
 				nickname,

@@ -48,15 +48,14 @@ export class RoomManager {
 		return false
 	}
 
-	handleUserDisconnect(sessionId: SessionID): RoomID {
-		for (let [roomId, room] of this.rooms) {
-			if (room.hasParticipant(sessionId)) {
-				this.leaveRoom(roomId, sessionId)
-				return roomId
-			}
-		}
-		return ""
-	}
+	// handleUserDisconnect(roomId: RoomID, sessionId: SessionID): boolean {
+	// 	const room = this.rooms.get(roomId)
+	// 	if (room && room.hasParticipant(sessionId)) {
+	// 		return this.leaveRoom(roomId, sessionId)
+	// 	}
+
+	// 	return false
+	// }
 
 	getParticipant(roomId: RoomID, sessionId: SessionID): Player | undefined {
 		const room = this.rooms.get(roomId)
