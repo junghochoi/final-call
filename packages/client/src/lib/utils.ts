@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 const NICKNAME_KEY = "nickname"
-const DEFAULT_NICKNAME = "anonymous"
+const DEFAULT_NICKNAME = undefined
 const SESSION_ID_KEY = "npt"
 const DEFAULT_SESSION_ID = undefined
 
@@ -15,16 +15,14 @@ function getItemFromLocalStorage(
 	defaultValue: string | undefined
 ) {
 	if (typeof window !== "undefined") {
-		return window.localStorage.getItem(key) ?? defaultValue
+		return window.sessionStorage.getItem(key) ?? defaultValue
 	}
-
-	console.log("window is undefined ")
 	return defaultValue
 }
 
 function persistItemToLocalStorage(key: string, value: string) {
 	if (typeof window !== "undefined") {
-		window.localStorage.setItem(key, value)
+		window.sessionStorage.setItem(key, value)
 	}
 }
 

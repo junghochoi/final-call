@@ -5,7 +5,7 @@ export type RoomID = string
 
 export type Player = {
 	nickname: string
-	// socket: Socket
+	socket: Socket
 	roomId: RoomID
 	sessionId: SessionID
 }

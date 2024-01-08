@@ -3,24 +3,27 @@ import { USE_LOCAL_WS } from "@/config"
 
 import { getConnectionInfo } from "@/api/room"
 import { getNickname, getSessionId } from "@/lib/utils"
+import { RoomID } from "@/types"
 
-export async function start({ roomId }: { roomId: string }) {
+export async function getSocketConnection(roomId: RoomID) {
 	const connectionInfo = await getConnectionInfo(roomId)
 
 	const websocketUrl = `${USE_LOCAL_WS ? "ws://" : "wss://"}${
 		connectionInfo.exposedPort?.host
-	}:${
-		connectionInfo.exposedPort?.port
-	}?roomId=${roomId}&nickname=${getNickname()}&sessionId=${getSessionId()}`
+	}:${connectionInfo.exposedPort?.port}`
 
 	console.log(websocketUrl)
 
 	const socket = io(websocketUrl, {
 		transports: ["websocket"],
 		upgrade: false,
+		autoConnect: false,
+		auth: {
+			roomId: roomId,
+			nickname: getNickname(),
+			sessionId: getSessionId(),
+		},
 	})
 
-	socket.on("PlayerInitialization", (socket) => {
-		console.log("Hello world")
-	})
+	return socket
 }

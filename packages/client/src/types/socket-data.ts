@@ -1,5 +1,5 @@
 interface SocketData {
-	nickname: string | undefined
+	nickname: string
 	roomId: string
 	sessionId: string
 	connected: boolean

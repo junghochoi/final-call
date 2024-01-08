@@ -1,36 +1,80 @@
 "use client"
 
-import { getNickname } from "@/lib/utils"
-import { start } from "./game"
+import { getNickname, persistSessionId } from "@/lib/utils"
+import { getSocketConnection } from "./socket"
 import { useEffect, useState } from "react"
 import { PlayerCard } from "./playerCard"
 import { useParams } from "next/navigation"
 
-function useNickname() {
-	const [nickname, setNickname] = useState<string>("")
+import { Socket } from "socket.io-client"
 
-	useEffect(() => {
-		const nickname = getNickname()
-		if (nickname) setNickname(nickname)
-		else setNickname("")
-	}, [])
-	return nickname
+import {
+	Player,
+	ServerToClientEvents,
+	ClientToServerEvents,
+	PlayerInitializationPayload,
+} from "@/types"
+
+export type GameState = {
+	currPlayer: Player | undefined
+	players: Player[]
+}
+
+export function useNickname() {
+	const [gameState, setGameState] = useState<GameState>()
+
+	// useEffect(() => {
+	// 	const nickname = getNickname()
+	// 	if (nickname) setNickname(nickname)
+	// 	else setNickname("")
+	// }, [])
+	// return nickname
 }
 
 const GamePage = () => {
-	const params = useParams<{ roomId: string }>()
-	const nickname = useNickname()
+	const { roomId } = useParams<{ roomId: string }>()
+
+	const [gameState, setGameState] = useState<GameState>({
+		currPlayer: undefined,
+		players: [],
+	})
 
 	useEffect(() => {
-		start({
-			roomId: params.roomId,
+		getSocketConnection(roomId).then((socket) => {
+			startGameEventHandlers(socket)
+			socket.connect()
 		})
 	}, [])
+
+	const startGameEventHandlers = (
+		socket: Socket<ServerToClientEvents, ClientToServerEvents>
+	) => {
+		socket.on(
+			"PlayerInitialization",
+			({ sessionId, playerData }: PlayerInitializationPayload) => {
+				console.log(playerData)
+				if (playerData) {
+					setGameState((prevGameState) => {
+						return {
+							...prevGameState,
+							currPlayer: playerData,
+						}
+					})
+					socket.emit("PlayerReconnect", playerData)
+				}
+				persistSessionId(sessionId)
+			}
+		)
+	}
+
+	if (gameState.currPlayer === undefined) {
+		return <div>Curr Player Undefined </div>
+	}
 
 	return (
 		<div>
 			<p>Game Page</p>
-			<PlayerCard nickname={nickname} />
+			<PlayerCard nickname={gameState.currPlayer?.nickname} />
 		</div>
 	)
 }

@@ -6,8 +6,8 @@ import {
 	ServerToClientEvents,
 	SocketData,
 	PlayerInitializationPayload,
-	Player,
 	RoomID,
+	Player,
 } from "./types"
 
 import { RoomManager } from "./roomManager"
@@ -32,9 +32,9 @@ export class Game {
 
 	private initialize() {
 		this.server.use((socket: Socket, next) => {
-			const roomId = socket.handshake.query.roomId as string
-			const nickname = socket.handshake.query.nickname as string
-			const sessionId = socket.handshake.query.sessionId as string
+			const roomId = socket.handshake.auth.roomId
+			const nickname = socket.handshake.auth.nickname
+			const sessionId = socket.handshake.auth.sessionId
 
 			if (sessionId) {
 				const session = this.sessionStore.findSession(sessionId)
@@ -66,13 +66,13 @@ export class Game {
 				/**
 				 * Establish Sessions for all Web Socket Connections
 				 */
-				this.sessionStore.saveSession(socket.data.sessionId, {
-					nickname: socket.data.nickname,
-					connected: true,
-				})
+				// this.sessionStore.saveSession(socket.data.sessionId, {
+				// 	nickname: socket.data.nickname,
+				// 	connected: true,
+				// })
 
 				const playerInitData: PlayerInitializationPayload =
-					typeof socket.data.nickname !== "undefined"
+					socket.data.nickname !== undefined
 						? {
 								sessionId: socket.data.sessionId,
 								playerData: {
