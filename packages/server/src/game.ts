@@ -87,8 +87,9 @@ export class Game {
 								playerData: undefined,
 						  }
 
-				console.log(playerInitData)
+				// console.log(playerInitData)
 				// console.log("will emit")
+				this.createEventListeners(socket)
 				socket.emit("PlayerInitialization", playerInitData)
 			}
 		)
@@ -98,6 +99,7 @@ export class Game {
 		socket: Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>
 	) {
 		socket.on("PlayerJoin", (player: Player) => {
+			console.log(player)
 			if (this.roomManager.joinRoom(player.roomId, player)) {
 				socket.join(player.roomId)
 				this.emitGameState(player.roomId)
@@ -114,7 +116,6 @@ export class Game {
 		socket.on("disconnecting", (reason) => {
 			console.log(`Disconnecting ${socket.id} for "${reason}"`)
 			// const exitRoomId = socket.handshake.auth.roomId
-			console.log(socket.id)
 			const exitRoomId = this.roomManager.handleUserDisconnect(socket.id)
 			this.emitGameState(exitRoomId)
 		})
@@ -126,7 +127,7 @@ export class Game {
 	private emitGameState(roomId: RoomID): void {
 		this.server.to(roomId).emit("GameStateUpdate", {
 			roomId: roomId,
-			participants: this.roomManager.getParticipants(roomId),
+			players: this.roomManager.getParticipants(roomId),
 		})
 	}
 }

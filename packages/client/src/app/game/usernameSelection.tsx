@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react"
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { persistNickname } from "@/lib/utils"
 
 interface UsernameSelectionProps {
 	handleUserJoinGame: (name: string) => void
@@ -13,6 +14,7 @@ const UsernameSelection: React.FC<UsernameSelectionProps> = (props) => {
 		setUsername(e.target.value)
 	}
 	const joinGame = () => {
+		persistNickname(username)
 		props.handleUserJoinGame(username)
 	}
 

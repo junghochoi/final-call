@@ -2,7 +2,7 @@ import { Player, PlayerInitializationPayload } from "./common"
 
 export type GameStateUpdatePayload = {
 	roomId: string
-	participants: Player[]
+	players: Player[]
 }
 
 export interface ServerToClientEvents {
