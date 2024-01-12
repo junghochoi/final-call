@@ -1,12 +1,13 @@
 "use client"
 
+import { useParams } from "next/navigation"
+import { useEffect, useState } from "react"
+import { Socket } from "socket.io-client"
+
 import { getNickname, getSessionId, persistSessionId } from "@/lib/utils"
 import { getSocketConnection } from "./socket"
-import { useEffect, useState } from "react"
 import { PlayerCard } from "./playerCard"
-import { useParams } from "next/navigation"
-
-import { Socket } from "socket.io-client"
+import UsernameSelection from "./usernameSelection"
 
 import {
 	Player,
@@ -15,7 +16,6 @@ import {
 	PlayerInitializationPayload,
 	GameStateUpdatePayload,
 } from "@/types"
-import UsernameSelection from "../usernameSelection"
 
 export type GameState = {
 	currPlayer: Player | undefined
@@ -23,7 +23,6 @@ export type GameState = {
 }
 
 let socket: Socket<ServerToClientEvents, ClientToServerEvents>
-
 async function initializeSocket(roomId: string) {
 	socket = await getSocketConnection(roomId)
 }
@@ -106,20 +105,25 @@ const GamePage = () => {
 
 	if (gameState.currPlayer === undefined) {
 		return <UsernameSelection handleUserJoinGame={handleUserJoinGame} />
+	} else {
+		return (
+			<div className="lg:max-w-screen-lg mx-auto ">
+				<p>Game Page</p>
+
+				<div className="flex">
+					<ul>
+						{gameState.players.map((player) => (
+							<PlayerCard
+								currPlayer={player.sessionId == gameState.currPlayer?.sessionId}
+								nickname={player.nickname}
+								key={player.sessionId}
+							/>
+						))}
+					</ul>
+				</div>
+			</div>
+		)
 	}
-
-	return (
-		<div>
-			<p>Game Page</p>
-			<PlayerCard nickname={gameState.currPlayer?.nickname} />
-
-			<ul>
-				{gameState.players.map((player) => (
-					<li key={player.sessionId}>{player.nickname}</li>
-				))}
-			</ul>
-		</div>
-	)
 }
 
 export default GamePage
