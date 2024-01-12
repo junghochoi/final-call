@@ -24,6 +24,10 @@ export type GameState = {
 
 let socket: Socket<ServerToClientEvents, ClientToServerEvents>
 
+async function initializeSocket(roomId: string) {
+	socket = await getSocketConnection(roomId)
+}
+
 const GamePage = () => {
 	const { roomId } = useParams<{ roomId: string }>()
 
@@ -33,10 +37,14 @@ const GamePage = () => {
 	})
 
 	useEffect(() => {
-		getSocketConnection(roomId).then((socketConnection) => {
-			socket = socketConnection
+		initializeSocket(roomId).then(() => {
 			startGameEventHandlers()
 			socket.connect()
+
+			return () => {
+				socket.disconnect()
+				socket.off("connect")
+			}
 		})
 	}, [])
 
