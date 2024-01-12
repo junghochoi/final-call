@@ -33,18 +33,11 @@ const GamePage = () => {
 	})
 
 	useEffect(() => {
-		getSocketConnection(roomId).then((connection) => {
-			socket = connection
-
+		getSocketConnection(roomId).then((socketConnection) => {
+			socket = socketConnection
 			startGameEventHandlers()
 			socket.connect()
 		})
-
-		return () => {
-			console.log(socket)
-			socket.disconnect()
-			socket.off("connect")
-		}
 	}, [])
 
 	const handleUserJoinGame = async (nickname: string) => {

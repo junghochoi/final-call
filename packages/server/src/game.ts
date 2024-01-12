@@ -115,9 +115,10 @@ export class Game {
 
 		socket.on("disconnecting", (reason) => {
 			console.log(`Disconnecting ${socket.id} for "${reason}"`)
-			const exitRoomId = socket.handshake.auth.roomId
+			const exitRoomId = socket.data.roomId
+
+			this.roomManager.leaveRoom(exitRoomId, socket.data.sessionId)
 			socket.leave(exitRoomId)
-			this.roomManager.leaveRoom(exitRoomId, socket.id)
 			this.emitGameState(exitRoomId)
 		})
 		socket.onAny((event, ...args) => {

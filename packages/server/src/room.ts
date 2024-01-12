@@ -18,7 +18,9 @@ export class Room {
 	}
 
 	removePlayer(sessionId: SessionID): void {
-		this.players.delete(sessionId)
+		const removed = this.players.delete(sessionId)
+		console.log("Attempting to remove player")
+		console.log(removed)
 	}
 
 	getPlayerCount(): number {
