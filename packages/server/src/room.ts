@@ -14,13 +14,24 @@ export class Room {
 	}
 
 	addPlayer(user: Player): void {
+		console.log("Adding Player")
+		console.log(this.getPlayerCount())
+		if (this.getPlayerCount() === 0) {
+			console.log("setting host")
+			user.host = true
+		}
 		this.players.set(user.sessionId, user)
 	}
 
 	removePlayer(sessionId: SessionID): void {
+		const needNewHost = this.players.get(sessionId)?.host
 		const removed = this.players.delete(sessionId)
-		console.log("Attempting to remove player")
-		console.log(removed)
+
+		if (needNewHost && removed && this.getPlayerCount() > 0) {
+			const [id, player] = this.players.entries().next().value
+			player.host = true
+			this.players.set(id, player)
+		}
 	}
 
 	getPlayerCount(): number {

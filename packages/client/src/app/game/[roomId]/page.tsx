@@ -54,20 +54,18 @@ const GamePage = () => {
 		if (sessionId === undefined) {
 			throw new Error("sessionID not defined")
 		} else {
-			socket.emit("PlayerJoin", {
+			const player: Player = {
 				nickname,
 				roomId,
-				sessionId: sessionId,
-			})
+				sessionId,
+				host: false,
+			}
+			socket.emit("PlayerJoin", player)
 
 			setGameState((prev) => {
 				return {
 					...prev,
-					currPlayer: {
-						nickname,
-						roomId,
-						sessionId: sessionId,
-					},
+					currPlayer: player,
 				}
 			})
 		}
@@ -116,8 +114,9 @@ const GamePage = () => {
 						{gameState.players.map((player) => (
 							<PlayerCard
 								currPlayer={player.sessionId == gameState.currPlayer?.sessionId}
-								nickname={player.nickname}
-								key={player.sessionId}
+								player={player}
+								// nickname={player.nickname}
+								// key={player.sessionId}
 							/>
 						))}
 					</ul>

@@ -49,6 +49,7 @@ export class Game {
 			socket.data.sessionId = generateSessionId()
 			socket.data.nickname = nickname // Can be undefined
 			socket.data.roomId = roomId
+			socket.data.host = false
 
 			return next()
 		})
@@ -79,6 +80,7 @@ export class Game {
 									roomId: socket.data.roomId,
 									nickname: socket.data.nickname,
 									sessionId: socket.data.sessionId,
+									host: socket.data.host,
 									// socket: socket,
 								},
 						  }

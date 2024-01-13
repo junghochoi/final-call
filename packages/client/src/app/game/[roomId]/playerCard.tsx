@@ -1,13 +1,15 @@
 import { cn } from "@/lib/utils"
+import { Player } from "@/types"
 import Image from "next/image"
 
 export const PlayerCard = ({
 	currPlayer,
-	nickname,
+	player,
 	key,
 }: {
 	currPlayer: boolean
-	nickname: string | undefined
+	player: Player
+	// nickname: string | undefined
 	key: any
 }) => {
 	const playerCardBorder = currPlayer ? `border-fc-accent` : "border-none"
@@ -20,7 +22,8 @@ export const PlayerCard = ({
 			key={key}
 		>
 			<Image src="/avatar.png" alt="me" width="32" height="32" />
-			<h1 className="w-40">{nickname}</h1>
+			<h1 className="w-40">{player.nickname}</h1>
+			<span>{player.host ? "Host" : "Not Host"}</span>
 		</div>
 	)
 }
