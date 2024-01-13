@@ -47,7 +47,7 @@ export class Game {
 				}
 			}
 			socket.data.sessionId = generateSessionId()
-			socket.data.nickname = nickname // Can be undefined
+			socket.data.nickname = nickname // Can be undefined, used to check if came from link or not
 			socket.data.roomId = roomId
 			socket.data.host = false
 

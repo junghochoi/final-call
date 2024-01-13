@@ -115,8 +115,7 @@ const GamePage = () => {
 							<PlayerCard
 								currPlayer={player.sessionId == gameState.currPlayer?.sessionId}
 								player={player}
-								// nickname={player.nickname}
-								// key={player.sessionId}
+								key={player.sessionId}
 							/>
 						))}
 					</ul>
