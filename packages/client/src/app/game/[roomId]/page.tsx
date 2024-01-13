@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { Socket } from "socket.io-client"
 
 import { getNickname, getSessionId, persistSessionId } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 import { getSocketConnection } from "./socket"
 import { PlayerCard } from "./playerCard"
 import UsernameSelection from "./usernameSelection"
@@ -107,11 +108,11 @@ const GamePage = () => {
 		return <UsernameSelection handleUserJoinGame={handleUserJoinGame} />
 	} else {
 		return (
-			<div className="lg:max-w-screen-lg mx-auto ">
+			<div className="flex justify-center items-center flex-col lg:max-w-screen-lg mx-auto h-screen bg-blue-400">
 				<p>Game Page</p>
 
-				<div className="flex">
-					<ul>
+				<div className="flex w-2/3">
+					<ul className="w-1/2 space-y-2">
 						{gameState.players.map((player) => (
 							<PlayerCard
 								currPlayer={player.sessionId == gameState.currPlayer?.sessionId}
@@ -120,6 +121,13 @@ const GamePage = () => {
 							/>
 						))}
 					</ul>
+
+					<div className="bg-green-200 w-1/2 min-h-80 relative">
+						<h1>Settings</h1>
+						<div>
+							<Button className="absolute bottom-3 w-full">Play</Button>
+						</div>
+					</div>
 				</div>
 			</div>
 		)

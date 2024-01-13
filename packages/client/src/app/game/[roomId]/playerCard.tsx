@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 export const PlayerCard = ({
 	currPlayer,
@@ -13,13 +14,13 @@ export const PlayerCard = ({
 	return (
 		<div
 			className={cn(
-				"p-5 bg-fc-blue border-2 shadow-m border-fc-accent",
+				"flex space-x-3 items-center p-5 bg-fc-blue border-2 shadow-m border-fc-accent",
 				playerCardBorder
 			)}
 			key={key}
 		>
-			<h1>{nickname}</h1>
-			<span>$14</span>
+			<Image src="/avatar.png" alt="me" width="32" height="32" />
+			<h1 className="w-40">{nickname}</h1>
 		</div>
 	)
 }
