@@ -101,12 +101,6 @@ const GamePage = () => {
 			}
 
 			setGameState(gameState)
-
-			// setGameState((prev) => ({
-			// 	...prev,
-			// 	currPlayer,
-			// 	players,
-			// }))
 		})
 	}
 
