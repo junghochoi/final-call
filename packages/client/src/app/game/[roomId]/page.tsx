@@ -32,6 +32,7 @@ async function initializeSocket(roomId: string) {
 const GamePage = () => {
 	const { roomId } = useParams<{ roomId: string }>()
 
+	const [connected, setConnected] = useState<boolean>(false)
 	const [gameState, setGameState] = useState<GameState>({
 		currPlayer: undefined,
 		players: [],
@@ -66,20 +67,12 @@ const GamePage = () => {
 				host: false,
 			}
 			socket.emit("PlayerJoin", player)
-
-			setGameState((prev) => {
-				return {
-					...prev,
-					currPlayer: player,
-				}
-			})
 		}
 	}
 
 	const startGameEventHandlers = () => {
 		socket.on("PlayerInitialization", ({ sessionId, playerData }: PlayerInitializationPayload) => {
 			if (playerData) {
-				console.log(playerData)
 				setGameState((prevGameState) => ({
 					...prevGameState,
 					currPlayer: playerData,
@@ -87,6 +80,7 @@ const GamePage = () => {
 				socket.emit("PlayerJoin", playerData)
 			}
 			persistSessionId(sessionId)
+			setConnected(true)
 		})
 
 		socket.on("GameStateUpdate", ({ roomId, players }: GameStateUpdatePayload) => {
@@ -97,6 +91,10 @@ const GamePage = () => {
 				players,
 			}))
 		})
+	}
+
+	if (!connected) {
+		return <div>Connecting...</div>
 	}
 
 	if (gameState.currPlayer === undefined) {
