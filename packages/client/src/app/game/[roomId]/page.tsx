@@ -6,7 +6,7 @@ import { Socket } from "socket.io-client"
 
 import { getNickname, getSessionId, persistSessionId } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { getSocketConnection } from "./socket"
+import { getSocketConnection } from "./socketUtils"
 import { PlayerCard } from "./playerCard"
 import UsernameSelection from "./usernameSelection"
 import { Lobby, Game } from "./_stages"
@@ -73,7 +73,6 @@ const GamePage = () => {
 			socket.emit("PlayerJoin", player)
 		}
 	}
-
 	const handleStartGame = () => {
 		socket.emit("StageChange", { stage: Stage.Bidding })
 	}
@@ -92,14 +91,11 @@ const GamePage = () => {
 		})
 
 		socket.on("GameStateUpdate", (gameStateUpdate: GameStateUpdatePayload) => {
-			console.log("game State Update")
 			const currPlayer = gameStateUpdate.players.find((player) => player.sessionId === getSessionId())
-
 			const gameState: GameState = {
 				...gameStateUpdate,
 				currPlayer: currPlayer,
 			}
-
 			setGameState(gameState)
 		})
 	}
