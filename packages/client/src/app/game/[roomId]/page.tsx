@@ -24,6 +24,7 @@ export type GameState = {
 }
 
 let socket: Socket<ServerToClientEvents, ClientToServerEvents>
+
 async function initializeSocket(roomId: string) {
 	socket = await getSocketConnection(roomId)
 }
@@ -76,34 +77,26 @@ const GamePage = () => {
 	}
 
 	const startGameEventHandlers = () => {
-		socket.on(
-			"PlayerInitialization",
-			({ sessionId, playerData }: PlayerInitializationPayload) => {
-				if (playerData) {
-					setGameState((prevGameState) => {
-						return {
-							...prevGameState,
-							currPlayer: playerData,
-						}
-					})
-					socket.emit("PlayerJoin", playerData)
-				}
-				persistSessionId(sessionId)
+		socket.on("PlayerInitialization", ({ sessionId, playerData }: PlayerInitializationPayload) => {
+			if (playerData) {
+				console.log(playerData)
+				setGameState((prevGameState) => ({
+					...prevGameState,
+					currPlayer: playerData,
+				}))
+				socket.emit("PlayerJoin", playerData)
 			}
-		)
+			persistSessionId(sessionId)
+		})
 
-		socket.on(
-			"GameStateUpdate",
-			({ roomId, players }: GameStateUpdatePayload) => {
-				console.log("game state update received")
-				setGameState((prev) => {
-					return {
-						...prev,
-						players,
-					}
-				})
-			}
-		)
+		socket.on("GameStateUpdate", ({ roomId, players }: GameStateUpdatePayload) => {
+			const currPlayer = players.find((player) => player.sessionId === getSessionId())
+
+			setGameState((prev) => ({
+				currPlayer,
+				players,
+			}))
+		})
 	}
 
 	if (gameState.currPlayer === undefined) {
@@ -127,7 +120,9 @@ const GamePage = () => {
 					<div className="bg-green-200 w-1/2 min-h-80 relative">
 						<h1>Settings</h1>
 						<div>
-							<Button className="absolute bottom-3 w-full">Play</Button>
+							{gameState.currPlayer.host && <Button className="absolute bottom-3 w-full">Play</Button>}
+
+							{!gameState.currPlayer.host && <Button className="absolute bottom-3 w-full">Waiting for host...</Button>}
 						</div>
 					</div>
 				</div>
