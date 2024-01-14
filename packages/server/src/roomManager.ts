@@ -1,4 +1,4 @@
-import { Player, RoomID, SessionID } from "./types"
+import { GameStateUpdatePayload, Player, RoomID, SessionID, Stage } from "./types"
 import { Room } from "./room"
 
 export class RoomManager {
@@ -6,6 +6,18 @@ export class RoomManager {
 
 	constructor() {
 		this.rooms = new Map()
+	}
+
+	getRoomGameState(roomId: RoomID): GameStateUpdatePayload | undefined {
+		const room = this.rooms.get(roomId)
+
+		if (room) {
+			return room.getGameState()
+		}
+
+		console.log(`getRoomState: ROOM NOT FOUND: "${roomId}"`)
+		console.log("get room state")
+		return undefined
 	}
 
 	createRoom(roomId: RoomID): Room {
@@ -16,6 +28,7 @@ export class RoomManager {
 	}
 
 	deleteRoom(roomId: RoomID): void {
+		console.log(`DELETING ROOM - "${roomId}"`)
 		this.rooms.delete(roomId)
 	}
 
@@ -48,21 +61,12 @@ export class RoomManager {
 		return false
 	}
 
-	// handleUserDisconnect(roomId: RoomID, sessionId: SessionID): boolean {
-	// 	const room = this.rooms.get(roomId)
-	// 	if (room && room.hasParticipant(sessionId)) {
-	// 		return this.leaveRoom(roomId, sessionId)
-	// 	}
-
-	// 	return false
-	// }
-
 	getParticipant(roomId: RoomID, sessionId: SessionID): Player | undefined {
 		const room = this.rooms.get(roomId)
 		if (room) {
 			return room.getParticipant(sessionId)
 		}
-		console.log(`ROOM NOT FOUND: "${roomId}"`)
+		console.log(`getParticipant: ROOM NOT FOUND: "${roomId}"`)
 		return undefined
 	}
 
@@ -72,7 +76,16 @@ export class RoomManager {
 			return room.getPlayers()
 		}
 
-		console.log(`ROOM NOT FOUND: "${roomId}"`)
+		console.log(`getParticipants: ROOM NOT FOUND: "${roomId}"`)
 		return []
+	}
+
+	changeStage(roomId: RoomID, stage: Stage) {
+		const room = this.rooms.get(roomId)
+		if (room) {
+			room.changeStage(stage)
+			return
+		}
+		console.log(`changeStage: ROOM NOT FOUND: "${roomId}"`)
 	}
 }

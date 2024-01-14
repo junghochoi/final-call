@@ -8,6 +8,7 @@ import {
 	PlayerInitializationPayload,
 	RoomID,
 	Player,
+	Stage,
 } from "./types"
 
 import { RoomManager } from "./roomManager"
@@ -17,14 +18,7 @@ export class Game {
 	private sessionStore: SessionStore
 	private roomManager: RoomManager
 
-	constructor(
-		private server: Server<
-			ClientToServerEvents,
-			ServerToClientEvents,
-			{},
-			SocketData
-		>
-	) {
+	constructor(private server: Server<ClientToServerEvents, ServerToClientEvents, {}, SocketData>) {
 		this.sessionStore = new SessionStore()
 		this.roomManager = new RoomManager()
 		this.initialize()
@@ -54,52 +48,34 @@ export class Game {
 			return next()
 		})
 
-		this.server.on(
-			"connect",
-			(
-				socket: Socket<
-					ClientToServerEvents,
-					ServerToClientEvents,
-					{},
-					SocketData
-				>
-			) => {
-				/**
-				 * Establish Sessions for all Web Socket Connections
-				 */
-				// this.sessionStore.saveSession(socket.data.sessionId, {
-				// 	nickname: socket.data.nickname,
-				// 	connected: true,
-				// })
+		this.server.on("connect", (socket: Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>) => {
+			/**
+			 * Establish Sessions for all Web Socket Connections
+			 */
 
-				const playerInitData: PlayerInitializationPayload =
-					socket.data.nickname !== undefined
-						? {
+			const playerInitData: PlayerInitializationPayload =
+				socket.data.nickname !== undefined
+					? {
+							sessionId: socket.data.sessionId,
+							playerData: {
+								roomId: socket.data.roomId,
+								nickname: socket.data.nickname,
 								sessionId: socket.data.sessionId,
-								playerData: {
-									roomId: socket.data.roomId,
-									nickname: socket.data.nickname,
-									sessionId: socket.data.sessionId,
-									host: socket.data.host,
-									// socket: socket,
-								},
-						  }
-						: {
-								sessionId: socket.data.sessionId,
-								playerData: undefined,
-						  }
+								host: socket.data.host,
+								// socket: socket,
+							},
+					  }
+					: {
+							sessionId: socket.data.sessionId,
+							playerData: undefined,
+					  }
 
-				// console.log(playerInitData)
-				// console.log("will emit")
-				this.createEventListeners(socket)
-				socket.emit("PlayerInitialization", playerInitData)
-			}
-		)
+			this.createEventListeners(socket)
+			socket.emit("PlayerInitialization", playerInitData)
+		})
 	}
 
-	private createEventListeners(
-		socket: Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>
-	) {
+	private createEventListeners(socket: Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>) {
 		socket.on("PlayerJoin", (player: Player) => {
 			if (this.roomManager.joinRoom(player.roomId, player)) {
 				socket.join(player.roomId)
@@ -114,6 +90,10 @@ export class Game {
 			socket.join(payload.roomId)
 			this.emitGameState(payload.roomId)
 		})
+		socket.on("StageChange", (payload: { stage: Stage }) => {
+			this.roomManager.changeStage(socket.data.roomId, payload.stage)
+			this.emitGameState(socket.data.roomId)
+		})
 
 		socket.on("disconnecting", (reason) => {
 			console.log(`Disconnecting ${socket.id} for "${reason}"`)
@@ -123,15 +103,20 @@ export class Game {
 			socket.leave(exitRoomId)
 			this.emitGameState(exitRoomId)
 		})
+
 		socket.onAny((event, ...args) => {
 			console.log(event, args)
 		})
 	}
 
 	private emitGameState(roomId: RoomID): void {
-		this.server.to(roomId).emit("GameStateUpdate", {
-			roomId: roomId,
-			players: this.roomManager.getParticipants(roomId),
-		})
+		const gameState = this.roomManager.getRoomGameState(roomId)
+
+		console.log(roomId)
+		console.log(gameState)
+
+		if (gameState) {
+			this.server.to(roomId).emit("GameStateUpdate", gameState)
+		}
 	}
 }

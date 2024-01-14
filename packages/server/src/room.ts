@@ -1,12 +1,22 @@
-import { Player, RoomID, SessionID } from "./types"
+import { GameStateUpdatePayload, Player, RoomID, SessionID, Stage } from "./types"
 
 export class Room {
 	private roomId: RoomID
 	private players: Map<SessionID, Player>
+	private stage: Stage
 
 	constructor(roomId: string) {
 		this.roomId = roomId
 		this.players = new Map()
+		this.stage = Stage.Lobby
+	}
+
+	getGameState(): GameStateUpdatePayload {
+		return {
+			roomId: this.roomId,
+			players: this.getPlayers(),
+			stage: this.stage,
+		}
 	}
 
 	getRoomId(): string {
@@ -14,10 +24,8 @@ export class Room {
 	}
 
 	addPlayer(user: Player): void {
-		console.log("Adding Player")
 		console.log(this.getPlayerCount())
 		if (this.getPlayerCount() === 0) {
-			console.log("setting host")
 			user.host = true
 		}
 		this.players.set(user.sessionId, user)
@@ -45,5 +53,9 @@ export class Room {
 	}
 	getParticipant(sessionId: SessionID): Player | undefined {
 		return this.players.get(sessionId)
+	}
+
+	changeStage(stage: Stage) {
+		this.stage = stage
 	}
 }
