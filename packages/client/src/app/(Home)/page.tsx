@@ -35,7 +35,7 @@ export default function Home() {
 						}}
 					/>
 
-					<div className="flex justify-between space-x-2">
+					<div className="flex flex-col space-y-3 justify-between items-center lg:flex-row lg:space-y-0 lg:space-x-2">
 						<Button className="w-fit">Join Public game</Button>
 						{/* <Separator className="bg-fc-accent px-4" /> */}
 						<Button onClick={createPrivateGame} className="w-fit">
@@ -44,9 +44,7 @@ export default function Home() {
 					</div>
 				</div>
 
-				<div className="p-6 rounded w-full lg:w-1/2 bg-fc-blue-dark">
-					How to Play
-				</div>
+				<div className="p-6 rounded w-full lg:w-1/2 bg-fc-blue-dark">How to Play</div>
 			</div>
 		</div>
 	)
