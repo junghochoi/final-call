@@ -6,6 +6,7 @@ export type Player = {
 	roomId: RoomID
 	sessionId: SessionID
 	host: boolean
+	socket: Socket
 }
 
 export type PlayerInitializationPayload = {

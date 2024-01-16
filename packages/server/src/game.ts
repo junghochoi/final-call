@@ -104,6 +104,8 @@ export class Game {
 			this.emitGameState(exitRoomId)
 		})
 
+		// ------------ Game Related Events -----------------
+
 		socket.onAny((event, ...args) => {
 			console.log(event, args)
 		})
@@ -111,9 +113,6 @@ export class Game {
 
 	private emitGameState(roomId: RoomID): void {
 		const gameState = this.roomManager.getRoomGameState(roomId)
-
-		console.log(roomId)
-		console.log(gameState)
 
 		if (gameState) {
 			this.server.to(roomId).emit("GameStateUpdate", gameState)

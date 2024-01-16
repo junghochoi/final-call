@@ -41,7 +41,6 @@ export class Room {
 			this.players.set(id, player)
 		}
 	}
-
 	getPlayerCount(): number {
 		return this.players.size
 	}
