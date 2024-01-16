@@ -25,6 +25,7 @@ export class Game {
 	}
 
 	private initialize() {
+		this.server.sockets.sockets.get("hello world")
 		this.server.use((socket: Socket, next) => {
 			const roomId = socket.handshake.auth.roomId
 			const nickname = socket.handshake.auth.nickname
@@ -62,7 +63,7 @@ export class Game {
 								nickname: socket.data.nickname,
 								sessionId: socket.data.sessionId,
 								host: socket.data.host,
-								// socket: socket,
+								socketId: socket.id,
 							},
 					  }
 					: {

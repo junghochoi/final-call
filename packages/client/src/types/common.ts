@@ -3,10 +3,10 @@ export type RoomID = string
 
 export type Player = {
 	nickname: string
+	socketId: string
 	roomId: RoomID
 	sessionId: SessionID
 	host: boolean
-	socket: Socket
 }
 
 export type PlayerInitializationPayload = {

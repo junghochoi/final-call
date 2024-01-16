@@ -63,12 +63,17 @@ const GamePage = () => {
 
 		if (sessionId === undefined) {
 			throw new Error("sessionID not defined")
+		} else if (socket === undefined) {
+			throw new Error("socket not defined")
+		} else if (!socket.connected) {
+			throw new Error("socket is not connected")
 		} else {
 			const player: Player = {
 				nickname,
 				roomId,
 				sessionId,
 				host: false,
+				socketId: socket.id!,
 			}
 			socket.emit("PlayerJoin", player)
 		}
