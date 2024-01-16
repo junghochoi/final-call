@@ -22,3 +22,19 @@ export enum Stage {
 	Auctioning,
 	Result,
 }
+
+export type Action = BidAction | PassAction
+
+export type BidAction = {
+	player: Player
+}
+
+export type PassAction = {
+	player: Player
+}
+
+export type BidState = {
+	round: number
+	players: Player[]
+	turn: number
+}

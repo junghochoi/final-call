@@ -79,7 +79,7 @@ const GamePage = () => {
 		}
 	}
 	const handleStartGame = () => {
-		socket.emit("StageChange", { stage: Stage.Bidding })
+		socket.emit("StageChange", { roomId: roomId, stage: Stage.Bidding })
 	}
 
 	const startGameEventHandlers = () => {

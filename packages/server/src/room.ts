@@ -1,14 +1,17 @@
-import { GameStateUpdatePayload, Player, RoomID, SessionID, Stage } from "./types"
+import { BidState, GameStateUpdatePayload, Player, RoomID, SessionID, Stage } from "./types"
 
 export class Room {
 	private roomId: RoomID
 	private players: Map<SessionID, Player>
 	private stage: Stage
+	private bidState: BidState | null
 
 	constructor(roomId: string) {
 		this.roomId = roomId
 		this.players = new Map()
 		this.stage = Stage.Lobby
+
+		this.bidState = null
 	}
 
 	getGameState(): GameStateUpdatePayload {
@@ -55,6 +58,20 @@ export class Room {
 	}
 
 	changeStage(stage: Stage) {
+		if (stage == Stage.Bidding) {
+			// Initialize BidState
+			this.bidState = {
+				round: 0,
+				players: Array.from(this.players.values()),
+				turn: Math.floor(Math.random() * this.players.size),
+			}
+		} else if (stage == Stage.Auctioning) {
+			// Deinitialize Bidstate
+			// Initialize AuctionState
+		} else if (stage == Stage.Result) {
+			// Deinitialize AuctionState
+			// Initialize Results Page
+		}
 		this.stage = stage
 	}
 }
