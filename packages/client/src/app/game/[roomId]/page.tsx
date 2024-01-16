@@ -108,7 +108,7 @@ const GamePage = () => {
 	} else if (gameState.stage == Stage.Lobby) {
 		return <Lobby gameState={gameState} handleStartGame={handleStartGame} />
 	} else if (gameState.stage == Stage.Bidding || gameState.stage == Stage.Auctioning) {
-		return <Game />
+		return <Game gameState={gameState} />
 	} else {
 		return <div>Hello</div>
 	}
