@@ -55,9 +55,9 @@ export const ActionBar = ({ bid, pass }: ActionBarProps) => {
 				<>
 					<div className="w-7/12 bg-blue-300 p-4 flex justify-around">
 						<div className=" bg-green-500 p-4 ">
-							<p className="text-2xl text-center p-2 w-14">${bidAmount}</p>
+							<p className="text-2xl text-center p-2 w-3/5 lg:w-2/5">${bidAmount}</p>
 						</div>
-						<div className="space-y-1 flex items-center flex-col lg:bg-pink-500 lg:flex-row w-3/5 lg:space-y-0">
+						<div className="space-y-1 space-y-reverse flex flex-col-reverse items-center justify-around lg:bg-pink-500 lg:flex-row w-2/5 lg:w-3/5 lg:space-y-0">
 							<Button onClick={handleBidDecrease} className="m-0 p-0 h-10 w-10 lg:rounded-r-none">
 								<Minus />
 							</Button>

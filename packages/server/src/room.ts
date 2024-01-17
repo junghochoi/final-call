@@ -1,4 +1,5 @@
 import { BidState, GameStateUpdatePayload, Player, RoomID, SessionID, Stage } from "./types"
+import { shuffle } from "./lib/utils"
 
 export class Room {
 	private roomId: RoomID
@@ -62,7 +63,8 @@ export class Room {
 			// Initialize BidState
 			this.bidState = {
 				round: 0,
-				players: Array.from(this.players.values()),
+				players: shuffle(Array.from(this.players.values())),
+				playerBanks: new Map(Array.from(this.players.keys()).map((key) => [key, 14])),
 				turn: Math.floor(Math.random() * this.players.size),
 			}
 		} else if (stage == Stage.Auctioning) {

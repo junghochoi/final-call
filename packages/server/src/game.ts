@@ -25,7 +25,7 @@ export class Game {
 	}
 
 	private initialize() {
-		this.server.sockets.sockets.get("hello world")
+		// this.server.sockets.sockets.get("hello world")
 		this.server.use((socket: Socket, next) => {
 			const roomId = socket.handshake.auth.roomId
 			const nickname = socket.handshake.auth.nickname
