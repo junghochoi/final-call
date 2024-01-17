@@ -32,6 +32,7 @@ export type BidAction = {
 }
 
 export type PassAction = {
+	roomId: RoomID
 	player: Player
 }
 

@@ -18,6 +18,7 @@ import {
 	PlayerInitializationPayload,
 	GameStateUpdatePayload,
 	Stage,
+	Action,
 } from "@/types"
 
 export type GameState = {
@@ -82,11 +83,8 @@ const GamePage = () => {
 		socket.emit("StageChange", { roomId: roomId, stage: Stage.Bidding })
 	}
 
-	const handlePlayerAction = (player: Player, amount: number) => {
-		console.log("hello world")
-		// socket.emit("GameAction", {
-		// 	roomId,
-		// })
+	const handleAction = (action: Action) => {
+		console.log(action)
 	}
 
 	const startGameEventHandlers = () => {
@@ -120,7 +118,7 @@ const GamePage = () => {
 	} else if (gameState.stage == Stage.Lobby) {
 		return <Lobby gameState={gameState} handleStartGame={handleStartGame} />
 	} else if (gameState.stage == Stage.Bidding || gameState.stage == Stage.Auctioning) {
-		return <Game gameState={gameState} />
+		return <Game roomId={roomId} gameState={gameState} handleAction={handleAction} />
 	} else {
 		return <div>Hello</div>
 	}

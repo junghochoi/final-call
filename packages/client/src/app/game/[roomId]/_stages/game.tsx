@@ -3,10 +3,12 @@ import { ActionBar } from "./_components/actionBar"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { PlayerBox } from "./_components/playerBox"
 import { getNickname } from "@/lib/utils"
+import { Action, BidAction, PassAction, RoomID } from "@/types"
 
 interface GameProps {
 	gameState: GameState
-	// handleGameAction: () => void
+	roomId: RoomID
+	handleAction: (action: Action) => void
 }
 
 const playerBoxPositions = [
@@ -20,13 +22,22 @@ const playerBoxPositions = [
 
 const playerPresent = "bg-blue-300"
 const playerAbsent = "bg-gray-300"
-export const Game = ({ gameState }: GameProps) => {
-	const handleBid = () => {
-		console.log()
+export const Game = ({ gameState, roomId, handleAction }: GameProps) => {
+	const handleBidAction = (amount: number) => {
+		const action: BidAction = {
+			roomId: roomId,
+			player: gameState.currPlayer!,
+			amount,
+		}
+		handleAction(action)
 	}
 
-	const handlePass = () => {
-		console.log()
+	const handlePassAction = () => {
+		const action: PassAction = {
+			roomId: roomId,
+			player: gameState.currPlayer!,
+		}
+		handleAction(action)
 	}
 	return (
 		<div className="bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">
@@ -47,7 +58,7 @@ export const Game = ({ gameState }: GameProps) => {
 					)
 				})}
 			</div>
-			<ActionBar bid={handleBid} pass={handlePass} />
+			<ActionBar bid={handleBidAction} pass={handlePassAction} />
 		</div>
 	)
 }
