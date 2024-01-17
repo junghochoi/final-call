@@ -32,11 +32,14 @@ export class Game {
 			const sessionId = socket.handshake.auth.sessionId
 
 			if (sessionId) {
+				console.log("Session ID was found")
 				const session = this.sessionStore.findSession(sessionId)
 				if (session) {
+					console.log("session was found")
 					socket.data.sessionId = sessionId
 					socket.data.nickname = session.nickname
 					socket.data.roomId = roomId
+					socket.data.host = false
 
 					return next()
 				}
@@ -81,11 +84,21 @@ export class Game {
 			if (this.roomManager.joinRoom(player.roomId, player)) {
 				socket.join(player.roomId)
 				this.emitGameState(player.roomId)
+
+				this.sessionStore.saveSession(socket.data.sessionId, {
+					nickname: socket.data.nickname!,
+					connected: true,
+				})
 			}
 		})
 		socket.on("PlayerLeave", (payload: Player) => {
 			socket.leave(payload.roomId)
 			this.emitGameState(payload.roomId)
+
+			this.sessionStore.saveSession(socket.data.sessionId, {
+				nickname: socket.data.nickname!,
+				connected: false,
+			})
 		})
 		socket.on("PlayerReconnect", (payload: Player) => {
 			socket.join(payload.roomId)
