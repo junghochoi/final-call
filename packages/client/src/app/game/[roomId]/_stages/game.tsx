@@ -20,8 +20,9 @@ const playerBoxPositions = [
 	"right-[0.5rem] bottom-[20%]",
 ]
 
-const playerPresent = "bg-blue-300"
-const playerAbsent = "bg-gray-300"
+const playerPresentStyle = "bg-blue-300"
+const playerAbsentStyle = "bg-gray-300"
+const currPlayerStyle = "border-fc-accent border-2"
 export const Game = ({ gameState, roomId, handleAction }: GameProps) => {
 	const handleBidAction = (amount: number) => {
 		const action: BidAction = {
@@ -40,18 +41,23 @@ export const Game = ({ gameState, roomId, handleAction }: GameProps) => {
 		handleAction(action)
 	}
 	return (
-		<div className="bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">
+		<div className=" bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">
 			<div className="relative h-[calc(100%-7em)]">
 				<div className=" absolute h-14 w-full bg-slate-400 top-[calc(50%-1.75rem)]">Community Cards</div>
 				{playerBoxPositions.map((pos, ind) => {
 					const name = ind < gameState.players.length ? gameState.players[ind].nickname : `empty`
 					// const id = gameState.players[ind].sessionId
-					const presence = ind < gameState.players.length ? playerPresent : playerAbsent
+					const presence = ind < gameState.players.length ? playerPresentStyle : playerAbsentStyle
+					const currPlayer =
+						ind < gameState.players.length && gameState.currPlayer?.sessionId == gameState.players[ind].sessionId
+							? currPlayerStyle
+							: ""
 
 					return (
 						<PlayerBox
 							positionTailwindStyle={pos}
 							playerPresenceTailwindStyle={presence}
+							currPlayerTailwindStyle={currPlayer}
 							nickname={name}
 							key={`player${ind + 1}`}
 						/>
