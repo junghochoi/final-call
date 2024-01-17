@@ -82,6 +82,13 @@ const GamePage = () => {
 		socket.emit("StageChange", { roomId: roomId, stage: Stage.Bidding })
 	}
 
+	const handlePlayerAction = (player: Player, amount: number) => {
+		console.log("hello world")
+		// socket.emit("GameAction", {
+		// 	roomId,
+		// })
+	}
+
 	const startGameEventHandlers = () => {
 		socket.on("PlayerInitialization", ({ sessionId, playerData }: PlayerInitializationPayload) => {
 			if (playerData) {

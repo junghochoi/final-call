@@ -5,10 +5,31 @@ import { useState } from "react"
 import { Slider } from "@/components/ui/slider"
 import { Plus, Minus } from "lucide-react"
 
-export const ActionBar = () => {
+interface ActionBarProps {
+	bid: () => void
+	pass: () => void
+}
+export const ActionBar = ({ bid, pass }: ActionBarProps) => {
+	const [bank, setBank] = useState<number>(14)
 	const [bidMenuOpen, setBidMenuOpen] = useState<boolean>(false)
 
-	const handleBidClick = () => {
+	const bidClick = () => {}
+
+	const passClick = () => {}
+
+	const handleBidIncrease = () => {
+		setBank((prev) => Math.min(14, prev + 1))
+	}
+
+	const handleBidDecrease = () => {
+		setBank((prev) => Math.max(0, prev - 1))
+	}
+
+	const handleSliderValueChange = (values: number[]) => {
+		setBank(values[0])
+	}
+
+	const handleMenu = () => {
 		setBidMenuOpen((prev) => !prev)
 	}
 
@@ -20,8 +41,10 @@ export const ActionBar = () => {
 						<p>Cards</p>
 					</div>
 					<div className="w-5/12 flex justify-around items-center">
-						<Button className="m-0 p-0 h-2/3 lg:h-3/4 w-5/12">Pass</Button>
-						<Button onClick={handleBidClick} className="m-0 p-0 h-2/3 lg:h-3/4 w-5/12">
+						<Button onClick={pass} className="m-0 p-0 h-2/3 lg:h-3/4 w-5/12">
+							Pass
+						</Button>
+						<Button onClick={handleMenu} className="m-0 p-0 h-2/3 lg:h-3/4 w-5/12">
 							Bid
 						</Button>
 					</div>
@@ -32,21 +55,31 @@ export const ActionBar = () => {
 				<>
 					<div className="w-7/12 bg-blue-300 p-4 flex justify-around">
 						<div className=" bg-green-500 p-4 ">
-							<p className="text-2xl text-center p-2">$14</p>
+							<p className="text-2xl text-center p-2">${bank}</p>
 						</div>
 						<div className="space-y-1 flex items-center flex-col lg:bg-pink-500 lg:flex-row w-3/5 lg:space-y-0">
-							<Button className="m-0 p-0 h-10 w-10 lg:rounded-r-none">
-								<Plus />
-							</Button>
-							<Slider className="hidden lg:inline-flex bg-gray-600 h-10 px-1" defaultValue={[33]} max={100} step={1} />
-							<Button className="m-0 p-0 h-10 w-10 lg:rounded-l-none">
+							<Button onClick={handleBidDecrease} className="m-0 p-0 h-10 w-10 lg:rounded-r-none">
 								<Minus />
+							</Button>
+
+							<Slider
+								value={[bank]}
+								onValueChange={handleSliderValueChange}
+								className="hidden lg:inline-flex bg-gray-600 h-10 px-1"
+								// defaultValue={[bank]}
+								max={14}
+								step={1}
+							/>
+							<Button onClick={handleBidIncrease} className="m-0 p-0 h-10 w-10 lg:rounded-l-none">
+								<Plus />
 							</Button>
 						</div>
 					</div>
 					<div className="w-5/12 flex justify-around items-center">
-						<Button className="m-0 p-0 h-2/3 lg:h-3/4 w-5/12">Bid</Button>
-						<Button onClick={handleBidClick} className="m-0 p-0 h-2/3 lg:h-3/4 w-5/12">
+						<Button onClick={bidClick} className="m-0 p-0 h-2/3 lg:h-3/4 w-5/12">
+							Bid
+						</Button>
+						<Button onClick={handleMenu} className="m-0 p-0 h-2/3 lg:h-3/4 w-5/12">
 							Cancel
 						</Button>
 					</div>

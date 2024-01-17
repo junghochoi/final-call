@@ -26,7 +26,9 @@ export enum Stage {
 export type Action = BidAction | PassAction
 
 export type BidAction = {
+	roomId: RoomID
 	player: Player
+	amount: number
 }
 
 export type PassAction = {
