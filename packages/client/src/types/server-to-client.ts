@@ -1,9 +1,10 @@
-import { Player, Stage, PlayerInitializationPayload } from "./common"
+import { Player, Stage, PlayerInitializationPayload, SessionID, ClientBidState } from "./common"
 
 export type GameStateUpdatePayload = {
 	roomId: string
 	players: Player[]
 	stage: Stage
+	bidState: ClientBidState | undefined
 }
 
 export interface ServerToClientEvents {

@@ -9,8 +9,6 @@ export type Player = {
 	socketId: string
 }
 
-export type InternalGameState = {}
-
 export type PlayerInitializationPayload = {
 	sessionId: string
 	playerData?: Player
@@ -33,9 +31,10 @@ export type PassAction = {
 	player: Player
 }
 
-export type BidState = {
+export type ServerBidState = {
 	round: number
 	players: Player[]
 	playerBanks: Map<SessionID, number>
+	currentBids: Map<SessionID, number>
 	turn: number
 }

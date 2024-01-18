@@ -36,8 +36,10 @@ export type PassAction = {
 	player: Player
 }
 
-export type BidState = {
+export type ClientBidState = {
 	round: number
 	players: Player[]
+	// playerBanks: Map<SessionID, number> Client does not have access to playerBanks
+	currentBids: Map<SessionID, number>
 	turn: number
 }

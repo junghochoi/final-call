@@ -19,14 +19,15 @@ import {
 	GameStateUpdatePayload,
 	Stage,
 	Action,
+	ClientBidState,
 } from "@/types"
 
 export type GameState = {
 	stage: Stage
 	currPlayer: Player | undefined
 	players: Player[]
+	bidState: ClientBidState | undefined
 }
-
 let socket: Socket<ServerToClientEvents, ClientToServerEvents>
 
 async function initializeSocket(roomId: string) {
@@ -41,6 +42,7 @@ const GamePage = () => {
 		stage: Stage.Lobby,
 		currPlayer: undefined,
 		players: [],
+		bidState: undefined,
 	})
 
 	useEffect(() => {
