@@ -3,11 +3,13 @@ import { ActionBar } from "./_components/actionBar"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { PlayerBox } from "./_components/playerBox"
 import { getNickname } from "@/lib/utils"
-import { Action, BidAction, PassAction, RoomID } from "@/types"
+import { Action, BidAction, PassAction, RoomID, ServerToClientEvents, ClientToServerEvents } from "@/types"
 
+import { Socket } from "socket.io"
 interface GameProps {
 	gameState: GameState
 	roomId: RoomID
+	socket: Socket<ServerToClientEvents, ClientToServerEvents>
 	handleAction: (action: Action) => void
 }
 
@@ -23,13 +25,15 @@ const playerBoxPositions = [
 const playerPresentStyle = "bg-blue-300"
 const playerAbsentStyle = "bg-gray-300"
 const currPlayerStyle = "border-fc-accent border-2"
-export const Game = ({ gameState, roomId, handleAction }: GameProps) => {
+export const Game = ({ gameState, roomId, handleAction, socket }: GameProps) => {
 	const handleBidAction = (amount: number) => {
 		const action: BidAction = {
 			roomId: roomId,
 			player: gameState.currPlayer!,
 			amount,
 		}
+
+		console.log(socket)
 		handleAction(action)
 	}
 

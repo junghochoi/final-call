@@ -120,7 +120,7 @@ const GamePage = () => {
 	} else if (gameState.stage == Stage.Lobby) {
 		return <Lobby gameState={gameState} handleStartGame={handleStartGame} />
 	} else if (gameState.stage == Stage.Bidding || gameState.stage == Stage.Auctioning) {
-		return <Game roomId={roomId} gameState={gameState} handleAction={handleAction} />
+		return <Game roomId={roomId} gameState={gameState} handleAction={handleAction} socket={socket} />
 	} else {
 		return <div>Hello</div>
 	}
