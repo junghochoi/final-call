@@ -9,7 +9,7 @@ import { ActionBar } from "./_components/actionBar"
 interface GameProps {
 	gameState: GameState
 	roomId: RoomID
-	socket: Socket<ServerToClientEvents, ClientToServerEvents>
+	// socket: Socket<ServerToClientEvents, ClientToServerEvents>
 	// handleAction: (action: Action) => void
 }
 
@@ -25,7 +25,7 @@ const playerBoxPositions = [
 const playerPresentStyle = "bg-blue-300"
 const playerAbsentStyle = "bg-gray-300"
 const currPlayerStyle = "border-fc-accent border-2"
-export const Game = ({ gameState, roomId, socket }: GameProps) => {
+export const Game = ({ gameState, roomId }: GameProps) => {
 	const handleBidAction = (amount: number) => {
 		const action: BidAction = {
 			roomId: roomId,

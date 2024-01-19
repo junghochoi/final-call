@@ -32,10 +32,8 @@ export class Game {
 			const sessionId = socket.handshake.auth.sessionId
 
 			if (sessionId) {
-				console.log("Session ID was found")
 				const session = this.sessionStore.findSession(sessionId)
 				if (session) {
-					console.log("session was found")
 					socket.data.sessionId = sessionId
 					socket.data.nickname = session.nickname
 					socket.data.roomId = roomId
@@ -109,7 +107,7 @@ export class Game {
 			this.emitGameState(socket.data.roomId)
 		})
 
-		socket.on("disconnecting", (reason) => {
+		socket.on("disconnect", (reason) => {
 			console.log(`Disconnecting ${socket.id} for "${reason}"`)
 			const exitRoomId = socket.data.roomId
 

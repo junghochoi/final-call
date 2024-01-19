@@ -4,12 +4,12 @@ export type GameStateUpdatePayload = {
 	roomId: string
 	players: Player[]
 	stage: Stage
-	bidState: {
-		round: number
-		players: Player[]
-		currentBids: Map<SessionID, number>
-		turn: number
-	}
+	// bidState: {
+	// 	round: number
+	// 	players: Player[]
+	// 	currentBids: Map<SessionID, number>
+	// 	turn: number
+	// }
 }
 
 export interface ServerToClientEvents {

@@ -20,7 +20,7 @@ export class Room {
 			roomId: this.roomId,
 			players: this.getPlayers(),
 			stage: this.stage,
-			bidState: this.bidState,
+			// bidState: this.bidState,
 		}
 	}
 
@@ -29,14 +29,15 @@ export class Room {
 	}
 
 	addPlayer(user: Player): void {
-		console.log(this.getPlayerCount())
 		if (this.getPlayerCount() === 0) {
+			console.log("setting host")
 			user.host = true
 		}
 		this.players.set(user.sessionId, user)
 	}
 
 	removePlayer(sessionId: SessionID): void {
+		console.log(`removing ${sessionId}`)
 		const needNewHost = this.players.get(sessionId)?.host
 		const removed = this.players.delete(sessionId)
 

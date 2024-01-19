@@ -1,11 +1,13 @@
+"use client"
+
 import React, { createContext, useContext, useEffect, useState } from "react"
 import { Socket } from "socket.io-client"
 import { ServerToClientEvents, ClientToServerEvents } from "@/types" // Replace with your actual import
 import { getSocketConnection } from "@/lib/socketUtils"
+import { useParams } from "next/navigation"
 
 interface SocketContextProps {
-	socket?: Socket<ServerToClientEvents, ClientToServerEvents>
-	initializeSocket: (roomId: string) => void
+	socket: Socket<ServerToClientEvents, ClientToServerEvents>
 }
 
 const SocketContext = createContext<SocketContextProps | undefined>(undefined)
@@ -19,25 +21,38 @@ export const useSocket = () => {
 }
 
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
-	const [socket, setSocket] = useState<Socket<ServerToClientEvents, ClientToServerEvents> | undefined>(undefined)
+	const [socket, setSocket] = useState<Socket<ServerToClientEvents, ClientToServerEvents>>()
+	const [socketLoading, setSocketLoading] = useState<boolean>(true)
+	const { roomId } = useParams<{ roomId: string }>()
 
-	const initializeSocket = async (roomId: string) => {
-		const s = await getSocketConnection(roomId)
-
-		setSocket(s)
+	const initializeSocket = async () => {
+		return await getSocketConnection(roomId)
 	}
 
 	useEffect(() => {
-		// If needed, perform any cleanup when the component unmounts
+		let cancel = false
+
+		initializeSocket().then((s: Socket) => {
+			if (cancel) {
+				console.log("socket is disconnecting")
+				s.disconnect()
+			} else {
+				setSocket(s)
+				setSocketLoading(false)
+			}
+		})
 		return () => {
-			socket?.disconnect()
+			cancel = true
 		}
 	}, [])
 
-	const contextValue: SocketContextProps = {
-		socket,
-		initializeSocket,
+	if (!socket) {
+		return <div>Connecting...</div>
 	}
 
-	return <SocketContext.Provider value={contextValue}>{children}</SocketContext.Provider>
+	const contextValue = {
+		socket,
+	}
+
+	return (<SocketContext.Provider value={contextValue}>{children}</SocketContext.Provider>) as JSX.Element
 }

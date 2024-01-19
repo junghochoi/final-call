@@ -23,15 +23,15 @@ import {
 	GameState,
 } from "@/types"
 
-let socket: Socket<ServerToClientEvents, ClientToServerEvents>
+// let socket: Socket<ServerToClientEvents, ClientToServerEvents>
 
-async function initializeSocket(roomId: string) {
-	socket = await getSocketConnection(roomId)
-}
+// async function initializeSocket(roomId: string) {
+// 	socket = await getSocketConnection(roomId)
+// }
 
 const GamePage = () => {
+	const { socket } = useSocket()
 	const { roomId } = useParams<{ roomId: string }>()
-	const { socket, initializeSocket } = useSocket()
 
 	const [connected, setConnected] = useState<boolean>(false)
 	const [gameState, setGameState] = useState<GameState>({
@@ -40,30 +40,10 @@ const GamePage = () => {
 		players: [],
 		bidState: undefined,
 	})
-	useEffect(() => {
-		// Access the socket and connect to the server using the roomID
-		if (socket) {
-			startGameEventHandlers()
-			socket.connect()
-		} else {
-			// Connect to the server with the appropriate roomID
-			initializeSocket(roomId)
-		}
-	}, [socket, initializeSocket])
 
 	useEffect(() => {
-		let cancel = false
-
-		if (cancel) {
-			socket.disconnect()
-			return
-		}
 		startGameEventHandlers()
 		socket.connect()
-
-		return () => {
-			cancel = true
-		}
 	}, [])
 
 	const handleUserJoinGame = async (nickname: string) => {
@@ -87,7 +67,9 @@ const GamePage = () => {
 		}
 	}
 	const handleStartGame = () => {
-		socket.emit("StageChange", { roomId: roomId, stage: Stage.Bidding })
+		if (socket) {
+			socket.emit("StageChange", { roomId: roomId, stage: Stage.Bidding })
+		}
 	}
 
 	// const handleAction = (action: Action) => {
@@ -95,6 +77,7 @@ const GamePage = () => {
 	// }
 
 	const startGameEventHandlers = () => {
+		if (!socket) return
 		socket.on("PlayerInitialization", ({ sessionId, playerData }: PlayerInitializationPayload) => {
 			if (playerData) {
 				setGameState((prevGameState) => ({
@@ -125,11 +108,7 @@ const GamePage = () => {
 	} else if (gameState.stage == Stage.Lobby) {
 		return <Lobby gameState={gameState} handleStartGame={handleStartGame} />
 	} else if (gameState.stage == Stage.Bidding || gameState.stage == Stage.Auctioning) {
-<<<<<<< Updated upstream
-		return <Game roomId={roomId} gameState={gameState} handleAction={handleAction} socket={socket} />
-=======
 		return <Game roomId={roomId} gameState={gameState} />
->>>>>>> Stashed changes
 	} else {
 		return <div>Hello</div>
 	}

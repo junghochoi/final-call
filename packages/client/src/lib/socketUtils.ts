@@ -4,7 +4,6 @@ import { USE_LOCAL_WS } from "@/config"
 import { getConnectionInfo } from "@/api/room"
 import { getNickname, getSessionId, persistSessionId } from "@/lib/utils"
 import { RoomID } from "@/types"
-import { GameState } from "@/types"
 
 export async function getSocketConnection(roomId: RoomID) {
 	const connectionInfo = await getConnectionInfo(roomId)

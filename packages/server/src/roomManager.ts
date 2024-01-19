@@ -16,7 +16,6 @@ export class RoomManager {
 		}
 
 		console.log(`getRoomState: ROOM NOT FOUND: "${roomId}"`)
-		console.log("get room state")
 		return undefined
 	}
 
