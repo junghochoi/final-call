@@ -44,6 +44,10 @@ const GamePage = () => {
 	useEffect(() => {
 		startGameEventHandlers()
 		socket.connect()
+
+		return () => {
+			socket.disconnect()
+		}
 	}, [])
 
 	const handleUserJoinGame = async (nickname: string) => {
