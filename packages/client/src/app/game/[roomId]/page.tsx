@@ -5,11 +5,11 @@ import { useEffect, useState } from "react"
 import { Socket } from "socket.io-client"
 
 import { getNickname, getSessionId, persistSessionId } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { getSocketConnection } from "./socketUtils"
-import { PlayerCard } from "./playerCard"
+import { getSocketConnection } from "@/lib/socketUtils"
 import UsernameSelection from "./usernameSelection"
 import { Lobby, Game } from "./_stages"
+
+import { useSocket } from "@/contexts/SocketContext"
 
 import {
 	Player,
@@ -20,14 +20,9 @@ import {
 	Stage,
 	Action,
 	ClientBidState,
+	GameState,
 } from "@/types"
 
-export type GameState = {
-	stage: Stage
-	currPlayer: Player | undefined
-	players: Player[]
-	bidState: ClientBidState | undefined
-}
 let socket: Socket<ServerToClientEvents, ClientToServerEvents>
 
 async function initializeSocket(roomId: string) {
@@ -36,6 +31,7 @@ async function initializeSocket(roomId: string) {
 
 const GamePage = () => {
 	const { roomId } = useParams<{ roomId: string }>()
+	const { socket, initializeSocket } = useSocket()
 
 	const [connected, setConnected] = useState<boolean>(false)
 	const [gameState, setGameState] = useState<GameState>({
@@ -44,17 +40,26 @@ const GamePage = () => {
 		players: [],
 		bidState: undefined,
 	})
+	useEffect(() => {
+		// Access the socket and connect to the server using the roomID
+		if (socket) {
+			startGameEventHandlers()
+			socket.connect()
+		} else {
+			// Connect to the server with the appropriate roomID
+			initializeSocket(roomId)
+		}
+	}, [socket, initializeSocket])
 
 	useEffect(() => {
 		let cancel = false
-		initializeSocket(roomId).then(() => {
-			if (cancel) {
-				socket.disconnect()
-				return
-			}
-			startGameEventHandlers()
-			socket.connect()
-		})
+
+		if (cancel) {
+			socket.disconnect()
+			return
+		}
+		startGameEventHandlers()
+		socket.connect()
 
 		return () => {
 			cancel = true
@@ -85,9 +90,9 @@ const GamePage = () => {
 		socket.emit("StageChange", { roomId: roomId, stage: Stage.Bidding })
 	}
 
-	const handleAction = (action: Action) => {
-		console.log(action)
-	}
+	// const handleAction = (action: Action) => {
+	// 	console.log(action)
+	// }
 
 	const startGameEventHandlers = () => {
 		socket.on("PlayerInitialization", ({ sessionId, playerData }: PlayerInitializationPayload) => {
@@ -112,7 +117,7 @@ const GamePage = () => {
 		})
 	}
 
-	if (!connected) {
+	if (!connected || !socket) {
 		return <div>Connecting...</div>
 	}
 	if (gameState.currPlayer === undefined) {
@@ -120,7 +125,11 @@ const GamePage = () => {
 	} else if (gameState.stage == Stage.Lobby) {
 		return <Lobby gameState={gameState} handleStartGame={handleStartGame} />
 	} else if (gameState.stage == Stage.Bidding || gameState.stage == Stage.Auctioning) {
+<<<<<<< Updated upstream
 		return <Game roomId={roomId} gameState={gameState} handleAction={handleAction} socket={socket} />
+=======
+		return <Game roomId={roomId} gameState={gameState} />
+>>>>>>> Stashed changes
 	} else {
 		return <div>Hello</div>
 	}

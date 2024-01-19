@@ -1,16 +1,16 @@
-import { GameState } from "../page"
-import { ActionBar } from "./_components/actionBar"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { PlayerBox } from "./_components/playerBox"
+import { Socket } from "socket.io"
+
+import { GameState } from "@/types"
 import { getNickname } from "@/lib/utils"
 import { Action, BidAction, PassAction, RoomID, ServerToClientEvents, ClientToServerEvents } from "@/types"
-
-import { Socket } from "socket.io"
+import { AspectRatio } from "@/components/ui/aspect-ratio"
+import { PlayerBox } from "./_components/playerBox"
+import { ActionBar } from "./_components/actionBar"
 interface GameProps {
 	gameState: GameState
 	roomId: RoomID
 	socket: Socket<ServerToClientEvents, ClientToServerEvents>
-	handleAction: (action: Action) => void
+	// handleAction: (action: Action) => void
 }
 
 const playerBoxPositions = [
@@ -25,16 +25,13 @@ const playerBoxPositions = [
 const playerPresentStyle = "bg-blue-300"
 const playerAbsentStyle = "bg-gray-300"
 const currPlayerStyle = "border-fc-accent border-2"
-export const Game = ({ gameState, roomId, handleAction, socket }: GameProps) => {
+export const Game = ({ gameState, roomId, socket }: GameProps) => {
 	const handleBidAction = (amount: number) => {
 		const action: BidAction = {
 			roomId: roomId,
 			player: gameState.currPlayer!,
 			amount,
 		}
-
-		console.log(socket)
-		handleAction(action)
 	}
 
 	const handlePassAction = () => {
@@ -42,7 +39,6 @@ export const Game = ({ gameState, roomId, handleAction, socket }: GameProps) => 
 			roomId: roomId,
 			player: gameState.currPlayer!,
 		}
-		handleAction(action)
 	}
 	return (
 		<div className=" bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">

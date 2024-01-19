@@ -9,7 +9,12 @@ export type Player = {
 	socketId: string
 }
 
-export type InternalGameState = {}
+export type GameState = {
+	stage: Stage
+	currPlayer: Player | undefined
+	players: Player[]
+	bidState: ClientBidState | undefined
+}
 
 export type PlayerInitializationPayload = {
 	sessionId: string
