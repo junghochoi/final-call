@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation"
 import { useEffect, useState, useCallback } from "react"
 
-import { Player, GameStateUpdatePayload, Stage, GameState, PlayerInit } from "@/types"
+import { Player, GameStateUpdatePayload, Stage, GameState, PlayerInit } from "@final-call/shared"
 import { getNickname, getSessionId, persistSessionId } from "@/lib/utils"
 import { useSocket } from "@/contexts/SocketContext"
 import UsernameSelection from "./usernameSelection"
@@ -61,6 +61,7 @@ const GamePage = () => {
 			const currPlayer = gameStateUpdate.players.find((player) => player.sessionId === getSessionId())
 			const gameState: GameState = {
 				...gameStateUpdate,
+				bidState: undefined,
 				currPlayer: currPlayer,
 			}
 			setGameState(gameState)

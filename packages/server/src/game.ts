@@ -11,7 +11,7 @@ import {
 	Stage,
 	PlayerInitializationCallback,
 	PlayerInit,
-} from "./types"
+} from "@final-call/shared"
 
 import { RoomManager } from "./roomManager"
 import { InMemorySessionStore as SessionStore } from "./sessionManager"

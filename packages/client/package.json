@@ -9,6 +9,7 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@final-call/shared": "*",
 		"@hathora/cloud-sdk-typescript": "^2.2.4",
 		"@radix-ui/react-aspect-ratio": "^1.0.3",
 		"@radix-ui/react-separator": "^1.0.3",

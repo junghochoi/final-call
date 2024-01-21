@@ -1,9 +1,5 @@
-import { Socket } from "socket.io"
-
-import { GameState } from "@/types"
-import { getNickname } from "@/lib/utils"
-import { Action, BidAction, PassAction, RoomID, ServerToClientEvents, ClientToServerEvents } from "@/types"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
+import { GameState } from "@final-call/shared"
+import { BidAction, PassAction, RoomID } from "@final-call/shared"
 import { PlayerBox } from "./_components/playerBox"
 import { ActionBar } from "./_components/actionBar"
 interface GameProps {

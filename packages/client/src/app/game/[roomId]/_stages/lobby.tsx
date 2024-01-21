@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { PlayerCard } from "../playerCard"
-import { GameState } from "@/types"
-import { Player } from "@/types"
+import { GameState } from "@final-call/shared"
+import { Player } from "@final-call/shared"
 
 interface LobbyProps {
 	gameState: GameState

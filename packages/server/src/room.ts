@@ -1,18 +1,18 @@
-import { ServerBidState, GameStateUpdatePayload, Player, RoomID, SessionID, Stage } from "./types"
+import { GameStateUpdatePayload, Player, RoomID, SessionID, Stage } from "@final-call/shared"
 import { shuffle } from "./lib/utils"
 
 export class Room {
 	private roomId: RoomID
 	private players: Map<SessionID, Player>
 	private stage: Stage
-	private bidState: ServerBidState | null
+	// private bidState: ServerBidState | null
 
 	constructor(roomId: string) {
 		this.roomId = roomId
 		this.players = new Map()
 		this.stage = Stage.Lobby
 
-		this.bidState = null
+		// this.bidState = null
 	}
 
 	getGameState(): GameStateUpdatePayload {
@@ -66,13 +66,13 @@ export class Room {
 
 			const sessionids: SessionID[] = Array.from(this.players.keys())
 
-			this.bidState = {
-				round: 0,
-				players: shuffle(Array.from(this.players.values())),
-				playerBanks: new Map(sessionids.map((key) => [key, 14])),
-				currentBids: new Map(sessionids.map((key) => [key, 0])),
-				turn: Math.floor(Math.random() * this.players.size),
-			}
+			// this.bidState = {
+			// 	round: 0,
+			// 	players: shuffle(Array.from(this.players.values())),
+			// 	playerBanks: new Map(sessionids.map((key) => [key, 14])),
+			// 	currentBids: new Map(sessionids.map((key) => [key, 0])),
+			// 	turn: Math.floor(Math.random() * this.players.size),
+			// }
 		} else if (stage == Stage.Auctioning) {
 			// Deinitialize Bidstate
 			// Initialize AuctionState

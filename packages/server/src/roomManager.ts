@@ -1,4 +1,4 @@
-import { GameStateUpdatePayload, Player, RoomID, SessionID, Stage } from "./types"
+import { GameStateUpdatePayload, Player, RoomID, SessionID, Stage } from "@final-call/shared"
 import { Room } from "./room"
 
 export class RoomManager {
