@@ -7,27 +7,27 @@ export class BidStateManager {
 
 	private round: number
 	private playerTurn: number
-	private playerOrder: SessionID[]
+	private playerOrder: Player[]
 	private playerBanks: Map<SessionID, number>
 	private playerBids: Map<SessionID, number>
 
-	constructor(sessionIds: SessionID[]) {
+	constructor() {
 		this.allCards = []
 		this.roundCards = []
 		this.round = 0
 		this.playerTurn = 0
-		this.playerOrder = sessionIds
+		this.playerOrder = []
 		this.playerBanks = new Map()
 		this.playerBids = new Map()
 	}
 
-	startBidStage() {
+	initialize(players: Player[]) {
 		this.allCards = this.#createDeck(30)
 		this.roundCards = this.#drawCards(6)
 		this.round = 0
 		this.playerTurn = 0
-		this.playerOrder = shuffle(this.playerOrder)
-		this.playerBanks = new Map(this.playerOrder.map((key) => [key, 14]))
+		this.playerOrder = shuffle(players)
+		this.playerBanks = new Map(players.map((player) => [player.sessionId, 14]))
 	}
 
 	/*

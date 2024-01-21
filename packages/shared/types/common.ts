@@ -51,7 +51,7 @@ export type PassAction = {
 export type BidState = {
 	round: number
 	roundCards: number[]
-	playerOrder: SessionID[]
+	playerOrder: Player[]
 	playerBids: Map<SessionID, number>
 	playerTurn: number
 }

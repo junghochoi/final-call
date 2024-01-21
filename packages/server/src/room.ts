@@ -13,7 +13,7 @@ export class Room {
 		this.players = new Map()
 		this.stage = Stage.Lobby
 
-		this.bidStateManager = new BidStateManager(Array.from(this.players.keys()))
+		this.bidStateManager = new BidStateManager()
 	}
 
 	getGameState(): GameStateUpdatePayload {
@@ -63,7 +63,7 @@ export class Room {
 
 	changeStage(stage: Stage) {
 		if (stage == Stage.Bidding) {
-			this.bidStateManager.startBidStage()
+			this.bidStateManager.initialize(Array.from(this.players.values()))
 		} else if (stage == Stage.Auctioning) {
 			// Deinitialize Bidstate
 			// Initialize AuctionState
