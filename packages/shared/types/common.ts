@@ -21,7 +21,7 @@ export type GameState = {
 	stage: Stage
 	currPlayer: Player | undefined
 	players: Player[]
-	bidState: ClientBidState | undefined
+	bidState: BidState | undefined
 }
 
 export type PlayerInitializationPayload = {
@@ -48,10 +48,18 @@ export type PassAction = {
 	player: Player
 }
 
-export type ClientBidState = {
+export type BidState = {
 	round: number
-	players: Player[]
-	// playerBanks: Map<SessionID, number> Client does not have access to playerBanks
-	currentBids: Map<SessionID, number>
-	turn: number
+	roundCards: number[]
+	playerOrder: SessionID[]
+	playerBids: Map<SessionID, number>
+	playerTurn: number
 }
+
+// export type ServerBidState = {
+// 	round: number
+// 	players: Player[]
+// 	playerBanks: Map<SessionID, number> // Client does not have access to playerBanks
+// 	currentBids: Map<SessionID, number>
+// 	turn: number
+// }

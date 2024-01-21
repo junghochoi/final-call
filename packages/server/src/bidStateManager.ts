@@ -1,0 +1,60 @@
+import { Player, BidState, SessionID } from "@final-call/shared"
+import { shuffle } from "./lib/utils"
+
+export class BidStateManager {
+	private allCards: number[]
+	private roundCards: number[]
+
+	private round: number
+	private playerTurn: number
+	private playerOrder: SessionID[]
+	private playerBanks: Map<SessionID, number>
+	private playerBids: Map<SessionID, number>
+
+	constructor(sessionIds: SessionID[]) {
+		this.allCards = []
+		this.roundCards = []
+		this.round = 0
+		this.playerTurn = 0
+		this.playerOrder = sessionIds
+		this.playerBanks = new Map()
+		this.playerBids = new Map()
+	}
+
+	startBidStage() {
+		this.allCards = this.#createDeck(30)
+		this.roundCards = this.#drawCards(6)
+		this.round = 0
+		this.playerTurn = 0
+		this.playerOrder = shuffle(this.playerOrder)
+		this.playerBanks = new Map(this.playerOrder.map((key) => [key, 14]))
+	}
+
+	/*
+export type ServerBidState = {
+	round: number
+	players: Player[]
+	playerBanks: Map<SessionID, number> // Client does not have access to playerBanks
+	currentBids: Map<SessionID, number>
+	turn: number
+}
+	*/
+
+	getBidState(): BidState {
+		return {
+			round: this.round,
+			roundCards: this.roundCards,
+			playerOrder: this.playerOrder,
+			playerBids: this.playerBids,
+			playerTurn: this.playerTurn,
+		}
+	}
+
+	// Helper Functions
+	#createDeck(numCards: number) {
+		return shuffle(Array.from({ length: numCards }, (_, index) => index + 1))
+	}
+	#drawCards(numCards: number) {
+		return this.allCards.splice(-numCards)
+	}
+}
