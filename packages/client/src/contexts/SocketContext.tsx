@@ -31,24 +31,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 	}
 
 	useEffect(() => {
-		console.log(`useEffect - socket:${socket !== undefined}`)
-
 		initializeSocket()
-
-		// let cancel = false
-
-		// initializeSocket().then((s: Socket) => {
-		// 	if (cancel) {
-		// 		console.log("socket is disconnecting")
-		// 		s.disconnect()
-		// 	} else {
-		// 		setSocket(s)
-		// 		setSocketLoading(false)
-		// 	}
-		// })
-		// return () => {
-		// 	cancel = true
-		// }
 	}, [])
 
 	if (!socket) {

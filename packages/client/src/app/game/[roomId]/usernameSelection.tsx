@@ -20,7 +20,7 @@ const UsernameSelection: React.FC<UsernameSelectionProps> = (props) => {
 
 	return (
 		<div>
-			<h1>username needs to be defined</h1>
+			<h1>User Name needs to be Defined</h1>
 			<Input onChange={handleUsernameChange} value={username} />
 			<Button onClick={joinGame}>Join Game</Button>
 		</div>

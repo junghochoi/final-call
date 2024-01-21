@@ -41,7 +41,9 @@ function useNickname() {
 const GamePage = () => {
 	const { socket } = useSocket()
 	const { roomId } = useParams<{ roomId: string }>()
-	const nickname = useNickname()
+	// const nickname = useNickname()
+
+	const [name, setName] = useState<string | undefined>(getNickname())
 
 	const [connected, setConnected] = useState<boolean>(false)
 	const [gameState, setGameState] = useState<GameState>({
@@ -52,7 +54,6 @@ const GamePage = () => {
 	})
 
 	const playerInitializationCallback = useCallback((playerData: Player) => {
-		console.log(playerData)
 		setGameState((prevGameState) => ({
 			...prevGameState,
 			currPlayer: playerData,
@@ -61,16 +62,16 @@ const GamePage = () => {
 
 		persistSessionId(playerData.sessionId)
 		setConnected(true)
+		// setTimeout(() => {}, 1000)
 	}, [])
 
 	useEffect(() => {
 		socket.on("connect", () => {
 			startGameEventHandlers()
 
-			console.log(nickname)
-			if (nickname !== undefined) {
+			if (name !== undefined) {
 				const playerInit: PlayerInit = {
-					nickname,
+					nickname: name,
 					roomId,
 					sessionId: getSessionId(),
 					host: true,
@@ -79,13 +80,19 @@ const GamePage = () => {
 				socket.emit("PlayerInitialization", playerInit, playerInitializationCallback)
 			}
 		})
-	}, [nickname])
 
-	const handleUserJoinGame = async (nickname: string) => {
+		return () => {
+			socket.off("connect")
+		}
+	}, [name])
+
+	const handleUserJoinGame = () => {
 		const sessionId = getSessionId()
+		const nickname = getNickname()
+		setName(nickname)
 
 		const player: PlayerInit = {
-			nickname,
+			nickname: getNickname() as string,
 			roomId,
 			sessionId,
 			host: false,
@@ -94,9 +101,7 @@ const GamePage = () => {
 		socket.emit("PlayerInitialization", player, playerInitializationCallback)
 	}
 	const handleStartGame = () => {
-		if (socket) {
-			socket.emit("StageChange", { roomId: roomId, stage: Stage.Bidding })
-		}
+		socket.emit("StageChange", { roomId: roomId, stage: Stage.Bidding })
 	}
 	const startGameEventHandlers = () => {
 		socket.on("GameStateUpdate", (gameStateUpdate: GameStateUpdatePayload) => {
@@ -109,7 +114,7 @@ const GamePage = () => {
 		})
 	}
 
-	if (gameState.currPlayer === undefined) {
+	if (name === undefined) {
 		return <UsernameSelection handleUserJoinGame={handleUserJoinGame} />
 	} else if (gameState.stage == Stage.Lobby) {
 		return <Lobby gameState={gameState} handleStartGame={handleStartGame} />
