@@ -16,6 +16,10 @@ class InMemorySessionStore extends SessionStore {
 		this.sessions = new Map()
 	}
 
+	hasSession(sessionId: SessionID): boolean {
+		return this.sessions.has(sessionId)
+	}
+
 	findSession(sessionId: SessionID): SessionData | undefined {
 		return this.sessions.get(sessionId)
 	}

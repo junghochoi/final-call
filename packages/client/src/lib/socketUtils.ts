@@ -17,12 +17,12 @@ export async function getSocketConnection(roomId: RoomID) {
 	const socket = io(websocketUrl, {
 		transports: ["websocket"],
 		upgrade: false,
-		autoConnect: false,
-		auth: {
-			roomId: roomId,
-			nickname: getNickname(),
-			sessionId: getSessionId(),
-		},
+		autoConnect: true,
+		// auth: {
+		// 	roomId: roomId,
+		// 	nickname: getNickname(),
+		// 	sessionId: getSessionId(),
+		// },
 	})
 
 	return socket

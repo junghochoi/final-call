@@ -1,6 +1,13 @@
 export type SessionID = string
 export type RoomID = string
 
+export type PlayerInit = {
+	nickname: string
+	roomId: RoomID
+	sessionId: SessionID | undefined
+	host: boolean
+	socketId: string
+}
 export type Player = {
 	nickname: string
 	roomId: RoomID
@@ -10,8 +17,7 @@ export type Player = {
 }
 
 export type PlayerInitializationPayload = {
-	sessionId: string
-	playerData?: Player
+	playerData: Player
 }
 
 export enum Stage {

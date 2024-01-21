@@ -1,7 +1,7 @@
 "use client"
 
 import { useParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { Socket } from "socket.io-client"
 
 import { getNickname, getSessionId, persistSessionId } from "@/lib/utils"
@@ -21,6 +21,7 @@ import {
 	Action,
 	ClientBidState,
 	GameState,
+	PlayerInit,
 } from "@/types"
 
 // let socket: Socket<ServerToClientEvents, ClientToServerEvents>
@@ -29,9 +30,18 @@ import {
 // 	socket = await getSocketConnection(roomId)
 // }
 
+function useNickname() {
+	const [nickname, setNickname] = useState<string | undefined>()
+	useEffect(() => {
+		setNickname(getNickname())
+	}, [])
+	return nickname
+}
+
 const GamePage = () => {
 	const { socket } = useSocket()
 	const { roomId } = useParams<{ roomId: string }>()
+	const nickname = useNickname()
 
 	const [connected, setConnected] = useState<boolean>(false)
 	const [gameState, setGameState] = useState<GameState>({
@@ -41,59 +51,54 @@ const GamePage = () => {
 		bidState: undefined,
 	})
 
-	useEffect(() => {
-		startGameEventHandlers()
-		socket.connect()
+	const playerInitializationCallback = useCallback((playerData: Player) => {
+		console.log(playerData)
+		setGameState((prevGameState) => ({
+			...prevGameState,
+			currPlayer: playerData,
+		}))
+		socket.emit("PlayerJoin", playerData)
 
-		return () => {
-			socket.disconnect()
-		}
+		persistSessionId(playerData.sessionId)
+		setConnected(true)
 	}, [])
+
+	useEffect(() => {
+		socket.on("connect", () => {
+			startGameEventHandlers()
+
+			console.log(nickname)
+			if (nickname !== undefined) {
+				const playerInit: PlayerInit = {
+					nickname,
+					roomId,
+					sessionId: getSessionId(),
+					host: true,
+					socketId: socket.id!,
+				}
+				socket.emit("PlayerInitialization", playerInit, playerInitializationCallback)
+			}
+		})
+	}, [nickname])
 
 	const handleUserJoinGame = async (nickname: string) => {
 		const sessionId = getSessionId()
 
-		if (sessionId === undefined) {
-			throw new Error("sessionID not defined")
-		} else if (socket === undefined) {
-			throw new Error("socket not defined")
-		} else if (!socket.connected) {
-			throw new Error("socket is not connected")
-		} else {
-			const player: Player = {
-				nickname,
-				roomId,
-				sessionId,
-				host: false,
-				socketId: socket.id!,
-			}
-			socket.emit("PlayerJoin", player)
+		const player: PlayerInit = {
+			nickname,
+			roomId,
+			sessionId,
+			host: false,
+			socketId: socket.id!,
 		}
+		socket.emit("PlayerInitialization", player, playerInitializationCallback)
 	}
 	const handleStartGame = () => {
 		if (socket) {
 			socket.emit("StageChange", { roomId: roomId, stage: Stage.Bidding })
 		}
 	}
-
-	// const handleAction = (action: Action) => {
-	// 	console.log(action)
-	// }
-
 	const startGameEventHandlers = () => {
-		if (!socket) return
-		socket.on("PlayerInitialization", ({ sessionId, playerData }: PlayerInitializationPayload) => {
-			if (playerData) {
-				setGameState((prevGameState) => ({
-					...prevGameState,
-					currPlayer: playerData,
-				}))
-				socket.emit("PlayerJoin", playerData)
-			}
-			persistSessionId(sessionId)
-			setConnected(true)
-		})
-
 		socket.on("GameStateUpdate", (gameStateUpdate: GameStateUpdatePayload) => {
 			const currPlayer = gameStateUpdate.players.find((player) => player.sessionId === getSessionId())
 			const gameState: GameState = {
@@ -104,9 +109,6 @@ const GamePage = () => {
 		})
 	}
 
-	if (!connected || !socket) {
-		return <div>Connecting...</div>
-	}
 	if (gameState.currPlayer === undefined) {
 		return <UsernameSelection handleUserJoinGame={handleUserJoinGame} />
 	} else if (gameState.stage == Stage.Lobby) {

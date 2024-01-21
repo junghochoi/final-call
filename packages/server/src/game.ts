@@ -9,6 +9,8 @@ import {
 	RoomID,
 	Player,
 	Stage,
+	PlayerInitializationCallback,
+	PlayerInit,
 } from "./types"
 
 import { RoomManager } from "./roomManager"
@@ -26,63 +28,86 @@ export class Game {
 
 	private initialize() {
 		// this.server.sockets.sockets.get("hello world")
-		this.server.use((socket: Socket, next) => {
-			const roomId = socket.handshake.auth.roomId
-			const nickname = socket.handshake.auth.nickname
-			const sessionId = socket.handshake.auth.sessionId
+		// this.server.use((socket: Socket, next) => {
+		// 	const roomId = socket.handshake.auth.roomId
+		// 	const nickname = socket.handshake.auth.nickname
+		// 	const sessionId = socket.handshake.auth.sessionId
 
-			if (sessionId) {
-				const session = this.sessionStore.findSession(sessionId)
-				if (session) {
-					socket.data.sessionId = sessionId
-					socket.data.nickname = session.nickname
-					socket.data.roomId = roomId
-					socket.data.host = false
+		// 	if (sessionId) {
+		// 		console.log(sessionId)
+		// 		const session = this.sessionStore.findSession(sessionId)
+		// 		console.log(session)
+		// 		if (session) {
+		// 			socket.data.sessionId = sessionId
+		// 			socket.data.nickname = session.nickname
+		// 			socket.data.roomId = roomId
 
-					return next()
-				}
-			}
-			socket.data.sessionId = generateSessionId()
-			socket.data.nickname = nickname // Can be undefined, used to check if came from link or not
-			socket.data.roomId = roomId
-			socket.data.host = false
+		// 			return next()
+		// 		}
+		// 	}
+		// 	socket.data.sessionId = generateSessionId()
+		// 	socket.data.nickname = nickname // Can be undefined, used to check if came from link or not
+		// 	socket.data.roomId = roomId
 
-			return next()
-		})
+		// 	return next()
+		// })
 
 		this.server.on("connect", (socket: Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>) => {
-			/**
-			 * Establish Sessions for all Web Socket Connections
-			 */
-
-			const playerInitData: PlayerInitializationPayload =
-				socket.data.nickname !== undefined
-					? {
-							sessionId: socket.data.sessionId,
-							playerData: {
-								roomId: socket.data.roomId,
-								nickname: socket.data.nickname,
-								sessionId: socket.data.sessionId,
-								host: socket.data.host,
-								socketId: socket.id,
-							},
-					  }
-					: {
-							sessionId: socket.data.sessionId,
-							playerData: undefined,
-					  }
-
 			this.createEventListeners(socket)
-			socket.emit("PlayerInitialization", playerInitData)
 		})
 	}
 
 	private createEventListeners(socket: Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>) {
+		socket.on("PlayerInitialization", (playerInitData: PlayerInit, callback: PlayerInitializationCallback) => {
+			const { sessionId, roomId, host, nickname, socketId } = playerInitData
+
+			if (sessionId && this.sessionStore.hasSession(sessionId)) {
+				const session = this.sessionStore.findSession(sessionId)
+				socket.data.sessionId = sessionId
+			} else {
+				socket.data.sessionId = generateSessionId()
+			}
+
+			socket.data.nickname = nickname
+			socket.data.roomId = roomId
+
+			// const playerInitData: PlayerInitializationPayload =
+			// 	socket.data.nickname !== undefined
+			// 		? {
+			// 				sessionId: socket.data.sessionId,
+			// 				playerData: {
+			// 					roomId: socket.data.roomId,
+			// 					nickname: socket.data.nickname,
+			// 					sessionId: socket.data.sessionId,
+			// 					host: socket.data.host,
+			// 					socketId: socket.id,
+			// 				},
+			// 		  }
+			// 		: {
+			// 				sessionId: socket.data.sessionId,
+			// 				playerData: undefined,
+			// 		  }
+
+			const playerData: Player = {
+				nickname: socket.data.nickname,
+				roomId,
+				sessionId: socket.data.sessionId,
+				host: false,
+				socketId: socket.id,
+			}
+
+			callback(playerData)
+
+			// const data = callback(data)
+
+			// socket.emit("PlayerInitializationResponse", playerInitData)
+		})
 		socket.on("PlayerJoin", (player: Player) => {
 			if (this.roomManager.joinRoom(player.roomId, player)) {
 				socket.join(player.roomId)
 				this.emitGameState(player.roomId)
 
+				console.log(`Storing in SessionStore ${socket.data.sessionId}`)
 				this.sessionStore.saveSession(socket.data.sessionId, {
 					nickname: socket.data.nickname!,
 					connected: true,

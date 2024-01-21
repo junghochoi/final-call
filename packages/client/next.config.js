@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ['@common/*'],
-  reactStrictMode: true,
+  reactStrictMode: true
 }
 
 

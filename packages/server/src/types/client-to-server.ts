@@ -1,6 +1,8 @@
-import { Action, Player, RoomID, Stage } from "./common"
+import { Action, Player, PlayerInit, RoomID, Stage } from "./common"
 
+export type PlayerInitializationCallback = (payload: Player) => void
 export interface ClientToServerEvents {
+	PlayerInitialization: (payload: PlayerInit, callback: PlayerInitializationCallback) => void
 	PlayerJoin: (payload: Player) => void
 	PlayerLeave: (payload: Player) => void
 	PlayerReconnect: (payload: Player) => void
