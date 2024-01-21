@@ -2,6 +2,7 @@ import { GameState } from "@final-call/shared"
 import { BidAction, PassAction, RoomID } from "@final-call/shared"
 import { PlayerBox } from "./_components/playerBox"
 import { ActionBar } from "./_components/actionBar"
+import { Card } from "./_components/card"
 interface GameProps {
 	gameState: GameState
 	roomId: RoomID
@@ -39,7 +40,11 @@ export const Game = ({ gameState, roomId }: GameProps) => {
 	return (
 		<div className=" bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">
 			<div className="relative h-[calc(100%-7em)]">
-				<div className=" absolute h-14 w-full bg-slate-400 top-[calc(50%-1.75rem)]">Community Cards</div>
+				<div className="flex justify-center space-x-2 absolute h-14 w-full bg-slate-400 top-[calc(50%-1.75rem)]">
+					{gameState.bidState?.roundCards.map((num: number) => (
+						<Card value={num} />
+					))}
+				</div>
 				{playerBoxPositions.map((pos, ind) => {
 					const name = ind < gameState.players.length ? gameState.players[ind].nickname : `empty`
 					// const id = gameState.players[ind].sessionId

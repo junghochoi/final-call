@@ -4,7 +4,7 @@ export type GameStateUpdatePayload = {
 	roomId: string
 	players: Player[]
 	stage: Stage
-	bidState: BidState | null
+	bidState: BidState
 }
 
 export interface ServerToClientEvents {

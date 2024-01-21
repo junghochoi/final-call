@@ -61,7 +61,7 @@ const GamePage = () => {
 			const currPlayer = gameStateUpdate.players.find((player) => player.sessionId === getSessionId())
 			const gameState: GameState = {
 				...gameStateUpdate,
-				bidState: undefined,
+				bidState: gameStateUpdate.bidState,
 				currPlayer: currPlayer,
 			}
 			setGameState(gameState)

@@ -63,8 +63,7 @@ export class Room {
 
 	changeStage(stage: Stage) {
 		if (stage == Stage.Bidding) {
-			// Initialize BidState
-			this.#initializeBidState()
+			this.bidStateManager.startBidStage()
 		} else if (stage == Stage.Auctioning) {
 			// Deinitialize Bidstate
 			// Initialize AuctionState
@@ -73,9 +72,5 @@ export class Room {
 			// Initialize Results Page
 		}
 		this.stage = stage
-	}
-
-	#initializeBidState() {
-		const sessionids: SessionID[] = Array.from(this.players.keys())
 	}
 }
