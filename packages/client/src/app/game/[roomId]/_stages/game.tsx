@@ -13,21 +13,21 @@ interface GameProps {
 }
 
 const playerBoxPositions = [
-	"left-[calc(50%-2.5rem)] bottom-[0.5rem]",
+	"left-[calc(50%-2.5rem)] md:left-[calc(50%-3.5rem)] bottom-[0.5rem]",
 	"left-[0.5rem] bottom-[20%]",
 	"left-[0.5rem] top-[20%]",
-	"left-[calc(50%-2.5rem)] top-[0.5rem]",
+	"left-[calc(50%-2.5rem)] md:left-[calc(50%-3.5rem)] top-[0.5rem]",
 	"right-[0.5rem] top-[20%]",
 	"right-[0.5rem] bottom-[20%]",
 ]
 
 const playerBidPositions = [
-	"left-[calc(50%)] bottom-[4.5rem]",
-	"left-[8rem] bottom-[calc(20%+1rem)]",
-	"left-[8rem] top-[calc(20%+1rem)]",
-	"left-[calc(50%)] top-[4.5rem]",
-	"right-[8rem] top-[calc(20%+1rem)]",
-	"right-[8rem] bottom-[calc(20%+1rem)]",
+	"left-[calc(50%-0.75rem)] bottom-[4.5rem]",
+	"left-[6.5rem] md:left-[8rem] bottom-[calc(20%+1rem)]",
+	"left-[6.5rem] md:left-[8rem] top-[calc(20%+1rem)]",
+	"left-[calc(50%-0.75rem)] top-[4.5rem]",
+	"right-[6.5rem] md:right-[8rem] top-[calc(20%+1rem)]",
+	"right-[6.5rem] md:right-[8rem] bottom-[calc(20%+1rem)]",
 ]
 
 const playerPresentStyle = "bg-blue-300"
@@ -58,7 +58,7 @@ export const Game = ({ gameState, roomId }: GameProps) => {
 		return (
 			<div className=" bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">
 				<div className="relative h-[calc(100%-7em)]">
-					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-1.75rem)]">
+					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
 						{gameState.bidState.roundCards.map((num: number) => (
 							<Card value={num} />
 						))}
@@ -85,7 +85,7 @@ export const Game = ({ gameState, roomId }: GameProps) => {
 
 					{playerBidPositions.map((pos, ind) => {
 						return (
-							<div key={ind} className={cn("absolute h-5 w-5 bg-cyan-300 text-center", pos)}>
+							<div key={ind} className={cn("absolute rounded h-7 w-6 text-sm bg-cyan-300 text-center p-1", pos)}>
 								{ind}
 							</div>
 						)
