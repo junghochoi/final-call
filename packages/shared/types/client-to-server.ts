@@ -8,6 +8,6 @@ export interface ClientToServerEvents {
 	PlayerReconnect: (payload: Player) => void
 	StageChange: (payload: { roomId: RoomID; stage: Stage }) => void
 
-	GameAction: (payload: { roomId: RoomID; player: Player; action: Action }) => void
+	GameAction: (payload: { roomId: RoomID; action: Action }) => void
 	// Bid: (payload: { player: Player; amount: number }) => void
 }

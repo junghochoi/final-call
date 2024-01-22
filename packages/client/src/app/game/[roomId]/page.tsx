@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation"
 import { useEffect, useState, useCallback } from "react"
 
-import { Player, GameStateUpdatePayload, Stage, GameState, PlayerInit, BidState } from "@final-call/shared"
+import { Player, GameStateUpdatePayload, Stage, GameState, PlayerInit, BidState, Action } from "@final-call/shared"
 import { getNickname, getSessionId, persistSessionId } from "@/lib/utils"
 import { useSocket } from "@/contexts/SocketContext"
 import UsernameSelection from "./usernameSelection"
@@ -91,12 +91,19 @@ const GamePage = () => {
 		socket.emit("StageChange", { roomId: roomId, stage: Stage.Bidding })
 	}
 
+	const handleGameAction = (action: Action) => {
+		socket.emit("GameAction", {
+			roomId,
+			action,
+		})
+	}
+
 	if (!pickedName) {
 		return <UsernameSelection handleUserJoinGame={handleUserJoinGame} />
 	} else if (gameState.stage == Stage.Lobby) {
 		return <Lobby gameState={gameState} handleStartGame={handleStartGame} />
 	} else if (gameState.stage == Stage.Bidding || gameState.stage == Stage.Auctioning) {
-		return <Game roomId={roomId} gameState={gameState} />
+		return <Game roomId={roomId} gameState={gameState} handleGameAction={handleGameAction} />
 	} else {
 		return <div>Hello</div>
 	}

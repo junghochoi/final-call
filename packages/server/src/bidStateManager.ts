@@ -51,6 +51,19 @@ export type ServerBidState = {
 		}
 	}
 
+	makePlayerBid(player: Player, amount: number) {
+		const sessionId = player.sessionId
+		const bank = this.playerBanks.get(sessionId)
+		if (bank === undefined || amount > bank) {
+			return false
+		}
+
+		this.playerBanks.set(sessionId, bank - amount)
+		this.playerBids.set(sessionId, amount)
+
+		return true
+	}
+
 	// Helper Functions
 	#createDeck(numCards: number) {
 		return shuffle(Array.from({ length: numCards }, (_, index) => index + 1))

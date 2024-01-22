@@ -87,4 +87,12 @@ export class RoomManager {
 		}
 		console.log(`changeStage: ROOM NOT FOUND: "${roomId}"`)
 	}
+
+	makePlayerBid(roomId: RoomID, sessionId: SessionID, amount: number): boolean {
+		const room = this.rooms.get(roomId)
+
+		if (!room) return false
+
+		return room.makePlayerBid(sessionId, amount)
+	}
 }

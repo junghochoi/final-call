@@ -1,5 +1,5 @@
 import { GameState } from "@final-call/shared"
-import { BidAction, PassAction, RoomID } from "@final-call/shared"
+import { BidAction, PassAction, RoomID, Action } from "@final-call/shared"
 import { PlayerBox } from "./_components/playerBox"
 import { ActionBar } from "./_components/actionBar"
 import { Card } from "./_components/card"
@@ -9,7 +9,7 @@ interface GameProps {
 	gameState: GameState
 	roomId: RoomID
 	// socket: Socket<ServerToClientEvents, ClientToServerEvents>
-	// handleAction: (action: Action) => void
+	handleGameAction: (action: Action) => void
 }
 
 const playerBoxPositions = [
@@ -34,20 +34,24 @@ const playerPresentStyle = "bg-blue-300"
 const playerAbsentStyle = "bg-gray-300"
 const currPlayerStyle = "text-white"
 const playerTurnStyle = "border-fc-accent border-2"
-export const Game = ({ gameState, roomId }: GameProps) => {
+export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 	const handleBidAction = (amount: number) => {
 		const action: BidAction = {
+			name: "bid",
 			roomId: roomId,
 			player: gameState.currPlayer!,
 			amount,
 		}
+		handleGameAction(action)
 	}
 
 	const handlePassAction = () => {
 		const action: PassAction = {
+			name: "pass",
 			roomId: roomId,
 			player: gameState.currPlayer!,
 		}
+		handleGameAction(action)
 	}
 
 	if (gameState.bidState === undefined) {

@@ -73,4 +73,12 @@ export class Room {
 		}
 		this.stage = stage
 	}
+
+	makePlayerBid(sessionId: SessionID, amount: number): boolean {
+		const player = this.getParticipant(sessionId)
+
+		if (!player) return false
+
+		return this.bidStateManager.makePlayerBid(player, amount)
+	}
 }

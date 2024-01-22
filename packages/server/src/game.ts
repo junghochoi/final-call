@@ -11,6 +11,8 @@ import {
 	Stage,
 	PlayerInitializationCallback,
 	PlayerInit,
+	BidAction,
+	PassAction,
 } from "@final-call/shared"
 
 import { RoomManager } from "./roomManager"
@@ -139,6 +141,20 @@ export class Game {
 			this.roomManager.leaveRoom(exitRoomId, socket.data.sessionId)
 			socket.leave(exitRoomId)
 			this.emitGameState(exitRoomId)
+		})
+
+		socket.on("GameAction", (payload) => {
+			const { roomId, action } = payload
+
+			switch (action.name) {
+				case "bid":
+					this.roomManager.makePlayerBid(socket.data.roomId, action.player.sessionId, action.amount)
+					break
+				case "pass":
+					console.log("making pass action")
+			}
+
+			this.emitGameState(socket.data.roomId)
 		})
 
 		// ------------ Game Related Events -----------------
