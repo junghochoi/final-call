@@ -48,6 +48,14 @@ export type PassAction = {
 	player: Player
 }
 
+export type BidStateSerialized = {
+	round: number
+	roundCards: number[]
+	playerOrder: Player[]
+	playerBids: [string, number][]
+	playerTurn: number
+}
+
 export type BidState = {
 	round: number
 	roundCards: number[]

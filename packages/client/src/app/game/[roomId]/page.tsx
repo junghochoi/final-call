@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation"
 import { useEffect, useState, useCallback } from "react"
 
-import { Player, GameStateUpdatePayload, Stage, GameState, PlayerInit } from "@final-call/shared"
+import { Player, GameStateUpdatePayload, Stage, GameState, PlayerInit, BidState } from "@final-call/shared"
 import { getNickname, getSessionId, persistSessionId } from "@/lib/utils"
 import { useSocket } from "@/contexts/SocketContext"
 import UsernameSelection from "./usernameSelection"
@@ -59,9 +59,16 @@ const GamePage = () => {
 	const startGameEventHandlers = () => {
 		socket.on("GameStateUpdate", (gameStateUpdate: GameStateUpdatePayload) => {
 			const currPlayer = gameStateUpdate.players.find((player) => player.sessionId === getSessionId())
+
+			console.log(gameStateUpdate.bidState?.playerBids)
+			const bidState: BidState = {
+				...gameStateUpdate.bidState,
+				playerBids: new Map(gameStateUpdate.bidState?.playerBids),
+			}
+
 			const gameState: GameState = {
 				...gameStateUpdate,
-				bidState: gameStateUpdate.bidState,
+				bidState: bidState,
 				currPlayer: currPlayer,
 			}
 			setGameState(gameState)

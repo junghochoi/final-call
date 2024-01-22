@@ -50,11 +50,10 @@ export const Game = ({ gameState, roomId }: GameProps) => {
 		}
 	}
 
-	console.log(gameState.bidState)
-
 	if (gameState.bidState === undefined) {
 		return <p>Game State Loading</p>
 	} else {
+		console.log(gameState.bidState)
 		return (
 			<div className=" bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">
 				<div className="relative h-[calc(100%-7em)]">
@@ -63,6 +62,22 @@ export const Game = ({ gameState, roomId }: GameProps) => {
 							<Card value={num} />
 						))}
 					</div>
+
+					{/* {gameState.bidState.playerOrder.map((player, ind) => {
+						const pos = playerBoxPositions[ind]
+						const currPlayer = player.sessionId === gameState.currPlayer?.sessionId ? currPlayerStyle : ""
+						return (
+							<PlayerBox
+								positionTailwindStyle={pos}
+								playerPresenceTailwindStyle={playerPresentStyle}
+								currPlayerTailwindStyle={currPlayer}
+								nickname={player.nickname}
+								key={player.sessionId}
+							/>
+						)
+						
+					})} */}
+
 					{playerBoxPositions.map((pos, ind) => {
 						const name = ind < gameState.players.length ? gameState.bidState?.playerOrder[ind].nickname! : `empty`
 						// const id = gameState.players[ind].sessionId
@@ -83,13 +98,30 @@ export const Game = ({ gameState, roomId }: GameProps) => {
 						)
 					})}
 
+					{gameState.bidState.playerOrder.map((player, ind) => {
+						const bid = gameState.bidState?.playerBids.get(player.sessionId)
+						const visible = bid === 0 ? "hidden" : ""
+						return (
+							<div
+								key={player.sessionId}
+								className={cn(
+									"absolute rounded h-7 w-6 text-sm bg-cyan-300 text-center p-1",
+									playerBidPositions[ind],
+									visible
+								)}
+							>
+								{bid}
+							</div>
+						)
+					})}
+					{/* 
 					{playerBidPositions.map((pos, ind) => {
 						return (
 							<div key={ind} className={cn("absolute rounded h-7 w-6 text-sm bg-cyan-300 text-center p-1", pos)}>
 								{ind}
 							</div>
 						)
-					})}
+					})} */}
 				</div>
 				<ActionBar bid={handleBidAction} pass={handlePassAction} />
 			</div>

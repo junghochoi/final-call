@@ -1,4 +1,4 @@
-import { Player, BidState, SessionID } from "@final-call/shared"
+import { Player, SessionID, BidStateSerialized } from "@final-call/shared"
 import { shuffle } from "./lib/utils"
 
 export class BidStateManager {
@@ -28,6 +28,7 @@ export class BidStateManager {
 		this.playerTurn = 0
 		this.playerOrder = shuffle(players)
 		this.playerBanks = new Map(players.map((player) => [player.sessionId, 14]))
+		this.playerBids = new Map(players.map((player) => [player.sessionId, 0]))
 	}
 
 	/*
@@ -40,12 +41,12 @@ export type ServerBidState = {
 }
 	*/
 
-	getBidState(): BidState {
+	getBidState(): BidStateSerialized {
 		return {
 			round: this.round,
 			roundCards: this.roundCards,
 			playerOrder: this.playerOrder,
-			playerBids: this.playerBids,
+			playerBids: [...this.playerBids.entries()],
 			playerTurn: this.playerTurn,
 		}
 	}
