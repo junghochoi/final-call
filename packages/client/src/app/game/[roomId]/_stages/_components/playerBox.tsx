@@ -6,6 +6,7 @@ interface PlayerBoxProps {
 	currPlayerTailwindStyle?: string
 	bidPositionTailwindStyle?: string
 	playerTurnTailwindStyle?: string
+	currPlayerBank?: number
 
 	nickname?: string
 	bid?: number
@@ -19,6 +20,7 @@ export const PlayerBox = ({
 	currPlayerTailwindStyle,
 	nickname,
 	bid,
+	currPlayerBank,
 }: PlayerBoxProps) => {
 	return (
 		<>
@@ -31,7 +33,7 @@ export const PlayerBox = ({
 					currPlayerTailwindStyle
 				)}
 			>
-				{nickname}
+				{nickname} - {currPlayerBank}
 			</div>
 
 			<div

@@ -42,17 +42,23 @@ const playerTurnStyle = "border-fc-accent border-2"
 
 export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 	const [currPlayerTurnIndex, setCurrPlayerTurnIndex] = useState<number>(0)
+	const [currPlayerBank, setCurrPlayerBank] = useState<number>(14)
+	const [highestBid, setHighestBid] = useState<number>(0)
 
 	useEffect(() => {
 		const ind = gameState.bidState?.playerOrder.findIndex(
 			(player) => player.sessionId === gameState.currPlayer?.sessionId
 		)
-
 		if (ind === undefined) {
 			throw new Error("currplayer not found in bidstate")
 		}
 		setCurrPlayerTurnIndex(ind || 0)
-	}, [gameState.bidState?.playerOrder])
+
+		const highest = Math.max(...Array.from(gameState.bidState!.playerBids.values()))
+		console.log(highest)
+		setHighestBid(highest)
+	}, [gameState.bidState])
+
 	const handleBidAction = (amount: number) => {
 		const action: BidAction = {
 			name: "bid",
@@ -60,6 +66,7 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 			player: gameState.currPlayer!,
 			amount,
 		}
+		setCurrPlayerBank((prev) => prev - amount)
 		handleGameAction(action)
 	}
 
@@ -93,8 +100,11 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 								bidPositionTailwindStyle={playerPositions[ind][BID_POSITION]}
 								playerPresenceTailwindStyle={playerPresentStyle}
 								playerTurnTailwindStyle={gameState.bidState!.playerTurn === ind ? playerTurnStyle : undefined}
-								currPlayerTailwindStyle={player.sessionId === gameState.currPlayer?.sessionId ? currPlayerStyle : ""}
+								currPlayerTailwindStyle={
+									player.sessionId === gameState.currPlayer?.sessionId ? currPlayerStyle : undefined
+								}
 								nickname={player.nickname}
+								currPlayerBank={player.sessionId === gameState.currPlayer?.sessionId ? currPlayerBank : undefined}
 								key={player.sessionId}
 								bid={gameState.bidState!.playerBids.get(player.sessionId) ?? 0}
 							/>
@@ -111,6 +121,8 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 				<ActionBar
 					bid={handleBidAction}
 					pass={handlePassAction}
+					currPlayerBank={currPlayerBank}
+					highestBid={highestBid}
 					yourTurn={currPlayerTurnIndex === gameState.bidState.playerTurn}
 				/>
 			</div>
