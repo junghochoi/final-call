@@ -1,14 +1,14 @@
+import { useState, useEffect } from "react"
+
 import { GameState } from "@final-call/shared"
-import { BidAction, PassAction, RoomID, Action } from "@final-call/shared"
+import { BidAction, PassAction, RoomID, Action, Player } from "@final-call/shared"
 import { PlayerBox } from "./_components/playerBox"
 import { ActionBar } from "./_components/actionBar"
 import { Card } from "./_components/card"
-import { Bird } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn, zip } from "@/lib/utils"
 interface GameProps {
 	gameState: GameState
 	roomId: RoomID
-	// socket: Socket<ServerToClientEvents, ClientToServerEvents>
 	handleGameAction: (action: Action) => void
 }
 
@@ -30,11 +30,29 @@ const playerBidPositions = [
 	"right-[6.5rem] md:right-[8rem] bottom-[calc(20%+1rem)]",
 ]
 
+const BOX_POSITION = 0
+const BID_POSITION = 1
+
+const playerPositions = zip(playerBoxPositions, playerBidPositions)
+
 const playerPresentStyle = "bg-blue-300"
 const playerAbsentStyle = "bg-gray-300"
 const currPlayerStyle = "text-white"
 const playerTurnStyle = "border-fc-accent border-2"
+
 export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
+	const [currPlayerTurnIndex, setCurrPlayerTurnIndex] = useState<number>(0)
+
+	useEffect(() => {
+		const ind = gameState.bidState?.playerOrder.findIndex(
+			(player) => player.sessionId === gameState.currPlayer?.sessionId
+		)
+
+		if (ind === undefined) {
+			throw new Error("currplayer not found in bidstate")
+		}
+		setCurrPlayerTurnIndex(ind || 0)
+	}, [gameState.bidState?.playerOrder])
 	const handleBidAction = (amount: number) => {
 		const action: BidAction = {
 			name: "bid",
@@ -61,73 +79,40 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 		return (
 			<div className=" bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">
 				<div className="relative h-[calc(100%-7em)]">
+					{/* Community Cards */}
 					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
 						{gameState.bidState.roundCards.map((num: number) => (
 							<Card value={num} />
 						))}
 					</div>
 
-					{/* {gameState.bidState.playerOrder.map((player, ind) => {
-						const pos = playerBoxPositions[ind]
-						const currPlayer = player.sessionId === gameState.currPlayer?.sessionId ? currPlayerStyle : ""
+					{gameState.bidState.playerOrder.map((player, ind) => {
 						return (
 							<PlayerBox
-								positionTailwindStyle={pos}
+								positionTailwindStyle={playerPositions[ind][BOX_POSITION]}
+								bidPositionTailwindStyle={playerPositions[ind][BID_POSITION]}
 								playerPresenceTailwindStyle={playerPresentStyle}
-								currPlayerTailwindStyle={currPlayer}
+								playerTurnTailwindStyle={gameState.bidState!.playerTurn === ind ? playerTurnStyle : undefined}
+								currPlayerTailwindStyle={player.sessionId === gameState.currPlayer?.sessionId ? currPlayerStyle : ""}
 								nickname={player.nickname}
 								key={player.sessionId}
-							/>
-						)
-						
-					})} */}
-
-					{playerBoxPositions.map((pos, ind) => {
-						const name = ind < gameState.players.length ? gameState.bidState?.playerOrder[ind].nickname! : `empty`
-						// const id = gameState.players[ind].sessionId
-						const presence = ind < gameState.players.length ? playerPresentStyle : playerAbsentStyle
-						const currPlayer =
-							ind < gameState.players.length && gameState.currPlayer?.sessionId == gameState.players[ind].sessionId
-								? currPlayerStyle
-								: ""
-
-						return (
-							<PlayerBox
-								positionTailwindStyle={pos}
-								playerPresenceTailwindStyle={presence}
-								currPlayerTailwindStyle={currPlayer}
-								nickname={name}
-								key={`player${ind + 1}`}
+								bid={gameState.bidState!.playerBids.get(player.sessionId) ?? 0}
 							/>
 						)
 					})}
-
-					{gameState.bidState.playerOrder.map((player, ind) => {
-						const bid = gameState.bidState?.playerBids.get(player.sessionId)
-						const visible = bid === 0 ? "hidden" : ""
-						return (
-							<div
-								key={player.sessionId}
-								className={cn(
-									"absolute rounded h-7 w-6 text-sm bg-cyan-300 text-center p-1",
-									playerBidPositions[ind],
-									visible
-								)}
-							>
-								{bid}
-							</div>
-						)
-					})}
-					{/* 
-					{playerBidPositions.map((pos, ind) => {
-						return (
-							<div key={ind} className={cn("absolute rounded h-7 w-6 text-sm bg-cyan-300 text-center p-1", pos)}>
-								{ind}
-							</div>
-						)
-					})} */}
+					{Array.from({ length: 6 - (gameState.bidState.playerOrder.length || 0) }).map((_, ind) => (
+						<PlayerBox
+							positionTailwindStyle={playerPositions[ind + gameState.bidState!.playerOrder.length][BOX_POSITION]}
+							playerPresenceTailwindStyle={playerAbsentStyle}
+							key={ind}
+						/>
+					))}
 				</div>
-				<ActionBar bid={handleBidAction} pass={handlePassAction} />
+				<ActionBar
+					bid={handleBidAction}
+					pass={handlePassAction}
+					yourTurn={currPlayerTurnIndex === gameState.bidState.playerTurn}
+				/>
 			</div>
 		)
 	}

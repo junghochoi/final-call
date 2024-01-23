@@ -2,10 +2,9 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react"
 import { Socket } from "socket.io-client"
-import { ServerToClientEvents, ClientToServerEvents } from "@/types" // Replace with your actual import
+import { ServerToClientEvents, ClientToServerEvents } from "@final-call/shared"
 import { getSocketConnection } from "@/lib/socketUtils"
 import { useParams } from "next/navigation"
-import { SessionID } from "@shared/index"
 
 interface SocketContextProps {
 	socket: Socket<ServerToClientEvents, ClientToServerEvents>

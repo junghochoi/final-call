@@ -60,6 +60,7 @@ export type ServerBidState = {
 
 		this.playerBanks.set(sessionId, bank - amount)
 		this.playerBids.set(sessionId, amount)
+		this.playerTurn = (this.playerTurn + 1) % this.playerOrder.length
 
 		return true
 	}
