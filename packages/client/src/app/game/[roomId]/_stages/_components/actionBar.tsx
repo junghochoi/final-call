@@ -19,10 +19,11 @@ export const ActionBar = ({ bid, pass, yourTurn, currPlayerBank, highestBid }: A
 	const [bidMenuOpen, setBidMenuOpen] = useState<boolean>(false)
 
 	useEffect(() => {
-		setBidAmount(highestBid)
+		setBidAmount(Math.min(highestBid, currPlayerBank))
 	}, [highestBid])
 
 	const bidClick = () => {
+		setBidMenuOpen(false)
 		bid(bidAmount)
 	}
 
@@ -63,7 +64,7 @@ export const ActionBar = ({ bid, pass, yourTurn, currPlayerBank, highestBid }: A
 							Pass
 						</Button>
 						<Button
-							disabled={!yourTurn}
+							disabled={!yourTurn || currPlayerBank < highestBid}
 							onClick={handleMenu}
 							className={cn("m-0 p-0 h-2/3 lg:h-3/4 w-5/12", actionEnabledStyles)}
 						>
