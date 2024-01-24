@@ -70,6 +70,8 @@ export type ServerBidState = {
 		return shuffle(Array.from({ length: numCards }, (_, index) => index + 1))
 	}
 	#drawCards(numCards: number) {
-		return this.allCards.splice(-numCards)
+		const cards = this.allCards.splice(-numCards).sort((a, b) => a - b)
+		console.log(cards)
+		return cards
 	}
 }
