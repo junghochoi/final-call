@@ -95,4 +95,12 @@ export class RoomManager {
 
 		return room.makePlayerBid(sessionId, amount)
 	}
+
+	makePlayerPass(roomId: RoomID, sessionId: SessionID): boolean {
+		const room = this.rooms.get(roomId)
+
+		if (!room) return false
+
+		return room.makePlayerPass(sessionId)
+	}
 }

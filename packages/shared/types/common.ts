@@ -55,6 +55,7 @@ export type BidStateSerialized = {
 	roundCards: number[]
 	playerOrder: Player[]
 	playerBids: [string, number][]
+	playerPropertyCards: [string, number[]][]
 	playerTurn: number
 }
 

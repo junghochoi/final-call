@@ -10,6 +10,10 @@ export class BidStateManager {
 	private playerOrder: Player[]
 	private playerBanks: Map<SessionID, number>
 	private playerBids: Map<SessionID, number>
+	private playerPropertyCards: Map<SessionID, number[]>
+
+	private numPlayersPassed: number
+	private playersPassed: Map<SessionID, boolean>
 
 	constructor() {
 		this.allCards = []
@@ -19,6 +23,10 @@ export class BidStateManager {
 		this.playerOrder = []
 		this.playerBanks = new Map()
 		this.playerBids = new Map()
+		this.playerPropertyCards = new Map()
+
+		this.numPlayersPassed = 0
+		this.playersPassed = new Map()
 	}
 
 	initialize(players: Player[]) {
@@ -29,6 +37,10 @@ export class BidStateManager {
 		this.playerOrder = shuffle(players)
 		this.playerBanks = new Map(players.map((player) => [player.sessionId, 14]))
 		this.playerBids = new Map(players.map((player) => [player.sessionId, 0]))
+		this.playerPropertyCards = new Map(players.map((player) => [player.sessionId, []]))
+
+		this.numPlayersPassed = 0
+		this.playersPassed = new Map(players.map((player) => [player.sessionId, false]))
 	}
 
 	/*
@@ -44,11 +56,30 @@ export type ServerBidState = {
 	getBidState(): BidStateSerialized {
 		return {
 			round: this.round,
+			playerTurn: this.playerTurn,
 			roundCards: this.roundCards,
 			playerOrder: this.playerOrder,
 			playerBids: [...this.playerBids.entries()],
-			playerTurn: this.playerTurn,
+			playerPropertyCards: [...this.playerPropertyCards.entries()],
 		}
+	}
+
+	makePlayerPass(player: Player) {
+		this.numPlayersPassed += 1
+		this.playersPassed.set(player.sessionId, true)
+
+		const propertyCard = this.roundCards.pop()
+		const playerPropertyHand = this.playerPropertyCards.get(player.sessionId)
+
+		if (propertyCard === undefined || playerPropertyHand === undefined) {
+			return false
+		}
+
+		playerPropertyHand.push(propertyCard!)
+		this.playerPropertyCards.set(player.sessionId, playerPropertyHand)
+		this.playerTurn = (this.playerTurn + 1) % this.playerOrder.length
+
+		return true
 	}
 
 	makePlayerBid(player: Player, amount: number) {
@@ -70,7 +101,7 @@ export type ServerBidState = {
 		return shuffle(Array.from({ length: numCards }, (_, index) => index + 1))
 	}
 	#drawCards(numCards: number) {
-		const cards = this.allCards.splice(-numCards).sort((a, b) => a - b)
+		const cards = this.allCards.splice(-numCards).sort((a, b) => b - a)
 		console.log(cards)
 		return cards
 	}

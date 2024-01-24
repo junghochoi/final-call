@@ -60,7 +60,6 @@ const GamePage = () => {
 		socket.on("GameStateUpdate", (gameStateUpdate: GameStateUpdatePayload) => {
 			const currPlayer = gameStateUpdate.players.find((player) => player.sessionId === getSessionId())
 
-			console.log(gameStateUpdate.bidState?.playerBids)
 			const bidState: BidState = {
 				...gameStateUpdate.bidState,
 				playerBids: new Map(gameStateUpdate.bidState?.playerBids),

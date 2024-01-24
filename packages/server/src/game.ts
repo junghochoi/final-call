@@ -151,6 +151,7 @@ export class Game {
 					this.roomManager.makePlayerBid(socket.data.roomId, action.player.sessionId, action.amount)
 					break
 				case "pass":
+					this.roomManager.makePlayerPass(socket.data.roomId, action.player.sessionId)
 					console.log("making pass action")
 			}
 

@@ -81,4 +81,12 @@ export class Room {
 
 		return this.bidStateManager.makePlayerBid(player, amount)
 	}
+
+	makePlayerPass(sessionId: SessionID) {
+		const player = this.getParticipant(sessionId)
+
+		if (!player) return false
+
+		return this.bidStateManager.makePlayerPass(player)
+	}
 }

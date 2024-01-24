@@ -55,7 +55,6 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 		setCurrPlayerTurnIndex(ind || 0)
 
 		const highest = Math.max(...Array.from(gameState.bidState!.playerBids.values()))
-		console.log(highest)
 		setHighestBid(highest)
 	}, [gameState.bidState])
 
@@ -82,14 +81,13 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 	if (gameState.bidState === undefined) {
 		return <p>Game State Loading</p>
 	} else {
-		console.log(gameState.bidState)
 		return (
 			<div className=" bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">
 				<div className="relative h-[calc(100%-7em)]">
 					{/* Community Cards */}
 					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
 						{gameState.bidState.roundCards.map((num: number) => (
-							<Card value={num} />
+							<Card key={num} value={num} />
 						))}
 					</div>
 
