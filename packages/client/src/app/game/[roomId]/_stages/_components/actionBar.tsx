@@ -15,19 +15,26 @@ interface ActionBarProps {
 }
 
 export const ActionBar = ({ bid, pass, yourTurn, currPlayerBank, highestBid }: ActionBarProps) => {
-	const [bidAmount, setBidAmount] = useState<number>(Math.min(highestBid, currPlayerBank))
+	const [bidAmount, setBidAmount] = useState<number>(Math.min(highestBid + 1, currPlayerBank))
 	const [bidMenuOpen, setBidMenuOpen] = useState<boolean>(false)
 
 	useEffect(() => {
-		setBidAmount(Math.min(highestBid, currPlayerBank))
-	}, [highestBid])
+		console.log("useEffect")
+		console.log(highestBid + 1)
+		console.log(currPlayerBank)
+		console.log(Math.min(highestBid + 1, currPlayerBank))
+		setBidAmount(Math.min(highestBid + 1, currPlayerBank))
+	}, [highestBid, currPlayerBank])
 
 	const bidClick = () => {
 		setBidMenuOpen(false)
 		bid(bidAmount)
 	}
 
-	const passClick = () => {}
+	const passClick = () => {
+		setBidMenuOpen(false)
+		pass()
+	}
 
 	const handleBidIncrease = () => {
 		// if (bidAmount >= currPlayerBank) return
@@ -58,7 +65,7 @@ export const ActionBar = ({ bid, pass, yourTurn, currPlayerBank, highestBid }: A
 					<div className="w-5/12 flex justify-around items-center">
 						<Button
 							disabled={!yourTurn}
-							onClick={pass}
+							onClick={passClick}
 							className={cn("m-0 p-0 h-2/3 lg:h-3/4 w-5/12", actionEnabledStyles)}
 						>
 							Pass
