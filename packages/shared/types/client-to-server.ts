@@ -1,7 +1,8 @@
-import { Action, IndividualGameState, Player, PlayerInit, PlayerInitializationPayload, RoomID, Stage } from "./common"
+import { Action, Player, PlayerInit, RoomID, Stage } from "./common"
+import { IndividualGameStateUpdatePayload } from "./server-to-client"
 
 export type PlayerInitializationCallback = (payload: Player) => void
-export type IndividualGameStateCallback = (payload: IndividualGameState) => void
+export type IndividualGameStateCallback = (payload: IndividualGameStateUpdatePayload) => void
 export interface ClientToServerEvents {
 	PlayerInitialization: (payload: PlayerInit, callback: PlayerInitializationCallback) => void
 	PlayerJoin: (payload: Player) => void
@@ -9,5 +10,5 @@ export interface ClientToServerEvents {
 	PlayerReconnect: (payload: Player) => void
 	StageChange: (payload: { roomId: RoomID; stage: Stage }) => void
 	GameAction: (payload: { roomId: RoomID; action: Action }) => void
-	IndividualGameState: (player: Player, callback: IndividualGameStateCallback) => void
+	IndividualGameStateInitialization: (player: Player, callback: IndividualGameStateCallback) => void
 }

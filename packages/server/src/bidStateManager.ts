@@ -1,4 +1,4 @@
-import { Player, SessionID, BidStateSerialized, IndividualBidState } from "@final-call/shared"
+import { Player, SessionID, BidStateSerialized, IndividualBidStateUploadPayload, Stage } from "@final-call/shared"
 import { shuffle } from "./lib/utils"
 
 export class BidStateManager {
@@ -30,8 +30,10 @@ export class BidStateManager {
 	}
 
 	initialize(players: Player[]) {
+		const deckSize = players.length === 2 ? 20 : 30
+
 		this.allCards = this.#createDeck(30)
-		this.roundCards = this.#drawCards(6)
+		this.roundCards = this.#drawCards(players.length)
 		this.round = 0
 		this.playerTurn = 0
 		this.playerOrder = shuffle(players)
@@ -63,12 +65,12 @@ export type ServerBidState = {
 			playerPropertyCards: [...this.playerPropertyCards.entries()],
 		}
 	}
-	getIndividualBidState(sessionId: SessionID): IndividualBidState {
+	getIndividualBidState(sessionId: SessionID): IndividualBidStateUploadPayload {
 		const bank = this.playerBanks.get(sessionId)
 		const propertyCards = this.playerPropertyCards.get(sessionId)
 
 		return {
-			name: "bid",
+			stage: Stage.Bidding,
 			bank: bank!,
 			propertyCards: propertyCards!,
 		}

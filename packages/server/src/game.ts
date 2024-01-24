@@ -13,10 +13,12 @@ import {
 	PlayerInit,
 	BidAction,
 	PassAction,
+	SessionID,
 } from "@final-call/shared"
 
 import { RoomManager } from "./roomManager"
 import { InMemorySessionStore as SessionStore } from "./sessionManager"
+import { Room } from "./room"
 
 export class Game {
 	private sessionStore: SessionStore
@@ -156,9 +158,16 @@ export class Game {
 			}
 
 			this.emitGameState(socket.data.roomId)
+
+			const individualGameState = this.roomManager.getRoomIndividualGameState(roomId, socket.data.sessionId)
+			if (individualGameState) {
+				socket.emit("IndividualGameStateUpdate", individualGameState)
+			}
+
+			// this.emitIndividualGameState(socket)
 		})
 
-		socket.on("IndividualGameState", (player, callback) => {
+		socket.on("IndividualGameStateInitialization", (player, callback) => {
 			const { roomId, sessionId } = player
 			const individualGameState = this.roomManager.getRoomIndividualGameState(socket.data.roomId, socket.data.sessionId)
 
@@ -181,4 +190,6 @@ export class Game {
 			this.server.to(roomId).emit("GameStateUpdate", gameState)
 		}
 	}
+
+	private emitIndividualGameState(socket: Socket) {}
 }

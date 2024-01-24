@@ -10,19 +10,23 @@ interface ActionBarProps {
 	yourTurn: boolean
 	currPlayerBank: number
 	highestBid: number
+	currPlayerPropertyCards: number[]
 	bid: (amount: number) => void
 	pass: () => void
 }
 
-export const ActionBar = ({ bid, pass, yourTurn, currPlayerBank, highestBid }: ActionBarProps) => {
+export const ActionBar = ({
+	bid,
+	pass,
+	yourTurn,
+	currPlayerBank,
+	highestBid,
+	currPlayerPropertyCards,
+}: ActionBarProps) => {
 	const [bidAmount, setBidAmount] = useState<number>(Math.min(highestBid + 1, currPlayerBank))
 	const [bidMenuOpen, setBidMenuOpen] = useState<boolean>(false)
 
 	useEffect(() => {
-		console.log("useEffect")
-		console.log(highestBid + 1)
-		console.log(currPlayerBank)
-		console.log(Math.min(highestBid + 1, currPlayerBank))
 		setBidAmount(Math.min(highestBid + 1, currPlayerBank))
 	}, [highestBid, currPlayerBank])
 
@@ -59,8 +63,12 @@ export const ActionBar = ({ bid, pass, yourTurn, currPlayerBank, highestBid }: A
 		<div className="h-28 mx-auto w-full bg-red-200 absolute bottom-0 flex justify-between">
 			{!bidMenuOpen && (
 				<>
-					<div className="w-7/12 bg-blue-300">
-						<p>Cards</p>
+					<div className="w-7/12 px-5 lg:px-10 bg-blue-300 flex justify-start items-center">
+						{currPlayerPropertyCards.map((card) => (
+							<div key={card} className="p-4 border-2 border-black">
+								{card}
+							</div>
+						))}
 					</div>
 					<div className="w-5/12 flex justify-around items-center">
 						<Button

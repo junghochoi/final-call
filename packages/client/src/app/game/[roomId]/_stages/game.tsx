@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react"
 
-import { GameState, IndividualGameState } from "@final-call/shared"
+import { GameState, IndividualGameStateUpdatePayload, Stage } from "@final-call/shared"
 import { BidAction, PassAction, RoomID, Action, Player } from "@final-call/shared"
 import { PlayerBox } from "./_components/playerBox"
 import { ActionBar } from "./_components/actionBar"
@@ -61,21 +61,24 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 		setHighestBid(highest)
 	}, [gameState.bidState])
 
-	const individualGameStateCallback = useCallback((individualState: IndividualGameState) => {
-		switch (individualState.name) {
-			case "bid":
-				console.log(individualState.bank)
+	const individualGameStateCallback = useCallback((individualState: IndividualGameStateUpdatePayload) => {
+		console.log("individualgamestatecallback")
+		switch (individualState.stage) {
+			case Stage.Bidding:
+				console.log("Bidding")
 				setCurrPlayerBank(individualState.bank)
 				setCurrPlayerPropertyCards(individualState.propertyCards)
-				console.log("IndividaulGameState - Bid called")
-				return
-			case "auction":
-				console.log("IndividualGameStateCallback")
+				break
+			case Stage.Auctioning:
+				console.log("individual Game state Update")
 		}
 	}, [])
 
 	useEffect(() => {
-		socket.emit("IndividualGameState", gameState.currPlayer!, individualGameStateCallback)
+		socket.on("IndividualGameStateUpdate", (payload: IndividualGameStateUpdatePayload) => {
+			individualGameStateCallback(payload)
+		})
+		socket.emit("IndividualGameStateInitialization", gameState.currPlayer!, individualGameStateCallback)
 	}, [])
 
 	const handleBidAction = (amount: number) => {
@@ -104,6 +107,7 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 			roomId,
 			action,
 		})
+		// socket.emit("IndividualGameState", gameState.currPlayer!, individualGameStateCallback)
 	}
 
 	if (gameState.bidState === undefined) {
@@ -148,6 +152,7 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 					bid={handleBidAction}
 					pass={handlePassAction}
 					currPlayerBank={currPlayerBank}
+					currPlayerPropertyCards={currPlayerPropertyCards}
 					highestBid={highestBid}
 					yourTurn={currPlayerTurnIndex === gameState.bidState.playerTurn}
 				/>

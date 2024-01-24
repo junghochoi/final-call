@@ -1,7 +1,6 @@
 import {
 	GameStateUpdatePayload,
-	IndividualBidState,
-	IndividualGameState,
+	IndividualGameStateUpdatePayload,
 	Player,
 	RoomID,
 	SessionID,
@@ -32,7 +31,7 @@ export class Room {
 			bidState: this.bidStateManager.getBidState(),
 		}
 	}
-	getIndividualGameState(sessionId: SessionID): IndividualGameState {
+	getIndividualGameState(sessionId: SessionID): IndividualGameStateUpdatePayload {
 		return this.bidStateManager.getIndividualBidState(sessionId)
 		// if (this.stage === Stage.Bidding) {
 		// 	return this.bidStateManager.getIndividualBidState(sessionId)
