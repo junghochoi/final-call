@@ -149,12 +149,15 @@ export class Game {
 			const { roomId, action } = payload
 
 			switch (action.name) {
-				case "bid":
+				case "bid": {
 					this.roomManager.makePlayerBid(socket.data.roomId, action.player.sessionId, action.amount)
 					break
-				case "pass":
+				}
+
+				case "pass": {
 					this.roomManager.makePlayerPass(socket.data.roomId, action.player.sessionId)
-					console.log("making pass action")
+					break
+				}
 			}
 
 			this.emitGameState(socket.data.roomId)

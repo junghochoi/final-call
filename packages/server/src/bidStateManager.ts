@@ -2,6 +2,7 @@ import { Player, SessionID, BidStateSerialized, IndividualBidStateUploadPayload,
 import { shuffle } from "./lib/utils"
 
 export class BidStateManager {
+	private numPlayers: number
 	private allCards: number[]
 	private roundCards: number[]
 
@@ -16,6 +17,7 @@ export class BidStateManager {
 	private playersPassed: Map<SessionID, boolean>
 
 	constructor() {
+		this.numPlayers = 0
 		this.allCards = []
 		this.roundCards = []
 		this.round = 0
@@ -32,7 +34,8 @@ export class BidStateManager {
 	initialize(players: Player[]) {
 		const deckSize = players.length === 2 ? 20 : 30
 
-		this.allCards = this.#createDeck(30)
+		this.numPlayers = players.length
+		this.allCards = this.#createDeck(deckSize)
 		this.roundCards = this.#drawCards(players.length)
 		this.round = 0
 		this.playerTurn = 0
@@ -89,9 +92,10 @@ export type ServerBidState = {
 
 		playerPropertyHand.push(propertyCard!)
 		this.playerPropertyCards.set(player.sessionId, playerPropertyHand)
-		this.playerTurn = (this.playerTurn + 1) % this.playerOrder.length
+		this.#setNextPlayerTurn()
 
 		return true
+		// if (this.numPlayersPassed == this.playerOrder.length) return true
 	}
 
 	makePlayerBid(player: Player, amount: number) {
@@ -103,11 +107,36 @@ export type ServerBidState = {
 
 		this.playerBanks.set(sessionId, bank - amount)
 		this.playerBids.set(sessionId, amount)
-		this.playerTurn = (this.playerTurn + 1) % this.playerOrder.length
+		this.#setNextPlayerTurn()
 
 		return true
 	}
 
+	startNewRound() {
+		this.roundCards = this.#drawCards(this.playerOrder.length)
+	}
+
+	#setNextPlayerTurn() {
+		let i = 0
+
+		console.log(this.playerTurn)
+		let nextPlayerTurn = (this.playerTurn + 1) % this.numPlayers
+
+		console.log(nextPlayerTurn)
+
+		console.log(this.playersPassed.get(this.playerOrder[nextPlayerTurn].sessionId))
+
+		while (this.playersPassed.get(this.playerOrder[nextPlayerTurn].sessionId)) {
+			nextPlayerTurn += (this.playerTurn + 1) % this.numPlayers
+			i += 1
+
+			if (i > this.numPlayers) {
+				throw new Error("Infinite Loop in #setNextPlayerTurn")
+			}
+		}
+
+		this.playerTurn = nextPlayerTurn
+	}
 	// Helper Functions
 	#createDeck(numCards: number) {
 		return shuffle(Array.from({ length: numCards }, (_, index) => index + 1))
