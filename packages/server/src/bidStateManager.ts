@@ -1,4 +1,4 @@
-import { Player, SessionID, BidStateSerialized } from "@final-call/shared"
+import { Player, SessionID, BidStateSerialized, IndividualBidState } from "@final-call/shared"
 import { shuffle } from "./lib/utils"
 
 export class BidStateManager {
@@ -61,6 +61,16 @@ export type ServerBidState = {
 			playerOrder: this.playerOrder,
 			playerBids: [...this.playerBids.entries()],
 			playerPropertyCards: [...this.playerPropertyCards.entries()],
+		}
+	}
+	getIndividualBidState(sessionId: SessionID): IndividualBidState {
+		const bank = this.playerBanks.get(sessionId)
+		const propertyCards = this.playerPropertyCards.get(sessionId)
+
+		return {
+			name: "bid",
+			bank: bank!,
+			propertyCards: propertyCards!,
 		}
 	}
 

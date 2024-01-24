@@ -1,4 +1,4 @@
-import { GameStateUpdatePayload, Player, RoomID, SessionID, Stage } from "@final-call/shared"
+import { GameStateUpdatePayload, IndividualGameState, Player, RoomID, SessionID, Stage } from "@final-call/shared"
 import { Room } from "./room"
 
 export class RoomManager {
@@ -16,6 +16,16 @@ export class RoomManager {
 		}
 
 		console.log(`getRoomState: ROOM NOT FOUND: "${roomId}"`)
+		return undefined
+	}
+	getRoomIndividualGameState(roomId: RoomID, sessionId: SessionID): IndividualGameState | undefined {
+		const room = this.rooms.get(roomId)
+
+		if (room) {
+			return room.getIndividualGameState(sessionId)
+		}
+
+		console.log(`getRoomIndividualGameState: ROOM NOT FOUND: "${roomId}"`)
 		return undefined
 	}
 

@@ -1,4 +1,12 @@
-import { GameStateUpdatePayload, Player, RoomID, SessionID, Stage } from "@final-call/shared"
+import {
+	GameStateUpdatePayload,
+	IndividualBidState,
+	IndividualGameState,
+	Player,
+	RoomID,
+	SessionID,
+	Stage,
+} from "@final-call/shared"
 import { BidStateManager } from "./bidStateManager"
 
 export class Room {
@@ -23,6 +31,14 @@ export class Room {
 			stage: this.stage,
 			bidState: this.bidStateManager.getBidState(),
 		}
+	}
+	getIndividualGameState(sessionId: SessionID): IndividualGameState {
+		return this.bidStateManager.getIndividualBidState(sessionId)
+		// if (this.stage === Stage.Bidding) {
+		// 	return this.bidStateManager.getIndividualBidState(sessionId)
+		// } else if (this.stage === Stage.Auctioning) {
+
+		// }
 	}
 
 	getRoomId(): string {

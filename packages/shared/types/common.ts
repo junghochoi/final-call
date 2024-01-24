@@ -67,6 +67,17 @@ export type BidState = {
 	playerTurn: number
 }
 
+export type IndividualGameState = IndividualBidState | IndividualAuctionState
+
+export type IndividualBidState = {
+	name: "bid"
+	propertyCards: number[]
+	bank: number
+}
+
+export type IndividualAuctionState = {
+	name: "auction"
+}
 // export type ServerBidState = {
 // 	round: number
 // 	players: Player[]

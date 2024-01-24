@@ -158,6 +158,15 @@ export class Game {
 			this.emitGameState(socket.data.roomId)
 		})
 
+		socket.on("IndividualGameState", (player, callback) => {
+			const { roomId, sessionId } = player
+			const individualGameState = this.roomManager.getRoomIndividualGameState(socket.data.roomId, socket.data.sessionId)
+
+			if (!individualGameState) return
+
+			callback(individualGameState)
+		})
+
 		// ------------ Game Related Events -----------------
 
 		socket.onAny((event, ...args) => {

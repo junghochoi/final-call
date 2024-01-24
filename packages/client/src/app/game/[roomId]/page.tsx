@@ -90,12 +90,7 @@ const GamePage = () => {
 		socket.emit("StageChange", { roomId: roomId, stage: Stage.Bidding })
 	}
 
-	const handleGameAction = (action: Action) => {
-		socket.emit("GameAction", {
-			roomId,
-			action,
-		})
-	}
+	const handleGameAction = (action: Action) => {}
 
 	if (!pickedName) {
 		return <UsernameSelection handleUserJoinGame={handleUserJoinGame} />

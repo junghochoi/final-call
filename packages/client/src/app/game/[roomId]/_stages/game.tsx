@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 
-import { GameState } from "@final-call/shared"
+import { GameState, IndividualGameState } from "@final-call/shared"
 import { BidAction, PassAction, RoomID, Action, Player } from "@final-call/shared"
 import { PlayerBox } from "./_components/playerBox"
 import { ActionBar } from "./_components/actionBar"
 import { Card } from "./_components/card"
 import { cn, zip } from "@/lib/utils"
+import { useSocket } from "@/contexts/SocketContext"
 interface GameProps {
 	gameState: GameState
 	roomId: RoomID
@@ -41,8 +42,10 @@ const currPlayerStyle = "text-white"
 const playerTurnStyle = "border-fc-accent border-2"
 
 export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
+	const { socket } = useSocket()
 	const [currPlayerTurnIndex, setCurrPlayerTurnIndex] = useState<number>(0)
-	const [currPlayerBank, setCurrPlayerBank] = useState<number>(14)
+	const [currPlayerBank, setCurrPlayerBank] = useState<number>(0)
+	const [currPlayerPropertyCards, setCurrPlayerPropertyCards] = useState<number[]>([])
 	const [highestBid, setHighestBid] = useState<number>(0)
 
 	useEffect(() => {
@@ -58,6 +61,21 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 		setHighestBid(highest)
 	}, [gameState.bidState])
 
+	const individualGameStateCallback = useCallback((individualState: IndividualGameState) => {
+		console.log("invidiaul state game used")
+		switch (individualState.name) {
+			case "bid":
+				setCurrPlayerBank(individualState.bank)
+				setCurrPlayerPropertyCards(individualState.propertyCards)
+			case "auction":
+				console.log("IndividualGameStateCallback")
+		}
+	}, [])
+
+	useEffect(() => {
+		socket.emit("IndividualGameState", gameState.currPlayer!, individualGameStateCallback)
+	}, [])
+
 	const handleBidAction = (amount: number) => {
 		const action: BidAction = {
 			name: "bid",
@@ -65,6 +83,11 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 			player: gameState.currPlayer!,
 			amount,
 		}
+		socket.emit("GameAction", {
+			roomId,
+			action,
+		})
+
 		setCurrPlayerBank((prev) => prev - amount)
 		handleGameAction(action)
 	}
@@ -75,7 +98,10 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 			roomId: roomId,
 			player: gameState.currPlayer!,
 		}
-		handleGameAction(action)
+		socket.emit("GameAction", {
+			roomId,
+			action,
+		})
 	}
 
 	if (gameState.bidState === undefined) {
