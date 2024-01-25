@@ -91,23 +91,15 @@ export type ServerBidState = {
 
 		this.#setNextPlayerTurn()
 
+		console.log(this.numPlayersPassed)
+
 		if (this.numPlayersPassed === this.numPlayers) {
 			// const winnerSessionId = this.playerOrder[this.playerTurn].sessionId
 			// const propertyCard = this.roundCards.pop()!
 
 			// this.#addPropertyCardToPlayerHand(propertyCard, winnerSessionId)
 
-			this.roundCards = this.#drawCards(this.numPlayers)
-
-			this.round += 1
-
-			Array.from(this.playerBids.keys()).forEach((key) => {
-				this.playerBids.set(key, 0)
-			})
-
-			Array.from(this.playersPassed.keys()).forEach((key) => {
-				this.playersPassed.set(key, false)
-			})
+			this.startNewRound()
 		}
 
 		return true
@@ -129,19 +121,29 @@ export type ServerBidState = {
 
 	startNewRound() {
 		this.roundCards = this.#drawCards(this.playerOrder.length)
+
+		this.round += 1
+		this.numPlayersPassed = 0
+
+		Array.from(this.playerBids.keys()).forEach((key) => {
+			this.playerBids.set(key, 0)
+		})
+
+		Array.from(this.playersPassed.keys()).forEach((key) => {
+			this.playersPassed.set(key, false)
+		})
 	}
 
 	#setNextPlayerTurn() {
-		let i = 0
+		let originalPlayerTurn = this.playerTurn
 		let nextPlayerTurn = (this.playerTurn + 1) % this.numPlayers
 
 		while (this.playersPassed.get(this.playerOrder[nextPlayerTurn].sessionId)) {
-			nextPlayerTurn += (this.playerTurn + 1) % this.numPlayers
-			i += 1
-
-			if (i >= this.numPlayers - 1) {
+			if (originalPlayerTurn === nextPlayerTurn) {
 				break
 			}
+
+			nextPlayerTurn = (nextPlayerTurn + 1) % this.numPlayers
 		}
 
 		this.playerTurn = nextPlayerTurn
