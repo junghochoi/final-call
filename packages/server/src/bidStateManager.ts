@@ -88,10 +88,7 @@ export type ServerBidState = {
 		if (!propertyCard) return false
 
 		this.#addPropertyCardToPlayerHand(propertyCard, player.sessionId)
-
 		this.#setNextPlayerTurn()
-
-		console.log(this.numPlayersPassed)
 
 		if (this.numPlayersPassed === this.numPlayers) {
 			// const winnerSessionId = this.playerOrder[this.playerTurn].sessionId
@@ -100,6 +97,10 @@ export type ServerBidState = {
 			// this.#addPropertyCardToPlayerHand(propertyCard, winnerSessionId)
 
 			this.startNewRound()
+		} else {
+			const bank = this.playerBanks.get(player.sessionId)!
+			const bid = this.playerBids.get(player.sessionId)!
+			this.playerBanks.set(player.sessionId, bank + Math.floor(bid / 2))
 		}
 
 		return true
