@@ -84,18 +84,33 @@ export type ServerBidState = {
 		this.playersPassed.set(player.sessionId, true)
 
 		const propertyCard = this.roundCards.pop()
-		const playerPropertyHand = this.playerPropertyCards.get(player.sessionId)
 
-		if (propertyCard === undefined || playerPropertyHand === undefined) {
-			return false
-		}
+		if (!propertyCard) return false
 
-		playerPropertyHand.push(propertyCard!)
-		this.playerPropertyCards.set(player.sessionId, playerPropertyHand)
+		this.#addPropertyCardToPlayerHand(propertyCard, player.sessionId)
+
 		this.#setNextPlayerTurn()
 
+		if (this.numPlayersPassed === this.numPlayers) {
+			// const winnerSessionId = this.playerOrder[this.playerTurn].sessionId
+			// const propertyCard = this.roundCards.pop()!
+
+			// this.#addPropertyCardToPlayerHand(propertyCard, winnerSessionId)
+
+			this.roundCards = this.#drawCards(this.numPlayers)
+
+			this.round += 1
+
+			Array.from(this.playerBids.keys()).forEach((key) => {
+				this.playerBids.set(key, 0)
+			})
+
+			Array.from(this.playersPassed.keys()).forEach((key) => {
+				this.playersPassed.set(key, false)
+			})
+		}
+
 		return true
-		// if (this.numPlayersPassed == this.playerOrder.length) return true
 	}
 
 	makePlayerBid(player: Player, amount: number) {
@@ -118,24 +133,29 @@ export type ServerBidState = {
 
 	#setNextPlayerTurn() {
 		let i = 0
-
-		console.log(this.playerTurn)
 		let nextPlayerTurn = (this.playerTurn + 1) % this.numPlayers
-
-		console.log(nextPlayerTurn)
-
-		console.log(this.playersPassed.get(this.playerOrder[nextPlayerTurn].sessionId))
 
 		while (this.playersPassed.get(this.playerOrder[nextPlayerTurn].sessionId)) {
 			nextPlayerTurn += (this.playerTurn + 1) % this.numPlayers
 			i += 1
 
-			if (i > this.numPlayers) {
-				throw new Error("Infinite Loop in #setNextPlayerTurn")
+			if (i >= this.numPlayers - 1) {
+				break
 			}
 		}
 
 		this.playerTurn = nextPlayerTurn
+	}
+
+	#addPropertyCardToPlayerHand(propertyCard: number, sessionId: SessionID) {
+		const playerPropertyHand = this.playerPropertyCards.get(sessionId)
+
+		if (playerPropertyHand === undefined) {
+			throw new Error("could not find player in playerPropertyCards")
+		}
+
+		playerPropertyHand.push(propertyCard!)
+		this.playerPropertyCards.set(sessionId, playerPropertyHand)
 	}
 	// Helper Functions
 	#createDeck(numCards: number) {
@@ -143,7 +163,6 @@ export type ServerBidState = {
 	}
 	#drawCards(numCards: number) {
 		const cards = this.allCards.splice(-numCards).sort((a, b) => b - a)
-		console.log(cards)
 		return cards
 	}
 }
