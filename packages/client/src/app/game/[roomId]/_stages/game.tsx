@@ -7,6 +7,7 @@ import { ActionBar } from "./_components/actionBar"
 import { Card } from "./_components/card"
 import { cn, zip } from "@/lib/utils"
 import { useSocket } from "@/contexts/SocketContext"
+import { BiddingComponent } from "./_components/biddingComponent"
 interface GameProps {
 	gameState: GameState
 	roomId: RoomID
@@ -108,62 +109,35 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 		})
 		// socket.emit("IndividualGameState", gameState.currPlayer!, individualGameStateCallback)
 	}
-
+	// {gameState.stage === Stage.Bidding && (
+	//
 	if (gameState.bidState === undefined) {
 		return <p>Game State Loading</p>
-	} else {
-		return (
-			<div className=" bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">
-				{gameState.stage === Stage.Bidding && (
-					<>
-						<div className="relative h-[calc(100%-7em)]">
-							{/* Community Cards */}
-							<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
-								{gameState.bidState.roundCards.map((num: number) => (
-									<Card key={num} value={num} />
-								))}
-							</div>
-
-							{gameState.bidState.playerOrder.map((player, ind) => {
-								return (
-									<PlayerBox
-										positionTailwindStyle={playerPositions[ind][BOX_POSITION]}
-										bidPositionTailwindStyle={playerPositions[ind][BID_POSITION]}
-										playerPresenceTailwindStyle={playerPresentStyle}
-										playerTurnTailwindStyle={gameState.bidState!.playerTurn === ind ? playerTurnStyle : undefined}
-										currPlayerTailwindStyle={
-											player.sessionId === gameState.currPlayer?.sessionId ? currPlayerStyle : undefined
-										}
-										nickname={player.nickname}
-										currPlayerBank={player.sessionId === gameState.currPlayer?.sessionId ? currPlayerBank : undefined}
-										key={player.sessionId}
-										bid={gameState.bidState!.playerBids.get(player.sessionId) ?? 0}
-									/>
-								)
-							})}
-							{Array.from({ length: 6 - (gameState.bidState.playerOrder.length || 0) }).map((_, ind) => (
-								<PlayerBox
-									positionTailwindStyle={playerPositions[ind + gameState.bidState!.playerOrder.length][BOX_POSITION]}
-									playerPresenceTailwindStyle={playerAbsentStyle}
-									key={ind}
-								/>
-							))}
-						</div>
-						<ActionBar
-							bid={handleBidAction}
-							pass={handlePassAction}
-							currPlayerBank={currPlayerBank}
-							currPlayerPropertyCards={currPlayerPropertyCards}
-							currPlayerBid={gameState.bidState.playerBids.get(gameState.currPlayer!.sessionId) ?? 0}
-							highestBid={highestBid}
-							communityCards={gameState.bidState.roundCards}
-							yourTurn={currPlayerTurnIndex === gameState.bidState.playerTurn}
-						/>
-					</>
-				)}
-
-				{gameState.stage === Stage.Auctioning && <div> Now Auction</div>}
-			</div>
-		)
+	} else if (gameState.currPlayer === undefined) {
+		return <p>Error: CurrPlayerNot Defined</p>
 	}
+	return (
+		<>
+			{gameState.stage === Stage.Bidding && gameState.bidState && (
+				<BiddingComponent
+					currPlayerBank={currPlayerBank}
+					bidState={gameState.bidState}
+					currPlayer={gameState.currPlayer}
+				/>
+			)}
+
+			{gameState.stage === Stage.Auctioning && <div>This is auctioning</div>}
+
+			<ActionBar
+				bid={handleBidAction}
+				pass={handlePassAction}
+				currPlayerBank={currPlayerBank}
+				currPlayerPropertyCards={currPlayerPropertyCards}
+				currPlayerBid={gameState.bidState.playerBids.get(gameState.currPlayer!.sessionId) ?? 0}
+				highestBid={highestBid}
+				communityCards={gameState.bidState.roundCards}
+				yourTurn={currPlayerTurnIndex === gameState.bidState.playerTurn}
+			/>
+		</>
+	)
 }

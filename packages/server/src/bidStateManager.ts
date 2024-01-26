@@ -34,7 +34,7 @@ export class BidStateManager {
 	}
 
 	initialize(players: Player[]) {
-		this.deckSize = 10
+		this.deckSize = 6
 		this.numPlayers = players.length
 		this.allCards = this.#createDeck(this.deckSize)
 		this.roundCards = this.#drawCards(players.length)
