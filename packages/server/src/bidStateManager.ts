@@ -39,7 +39,7 @@ export class BidStateManager {
 		this.roundCards = this.#drawCards(players.length)
 		this.round = 0
 		this.playerTurn = 0
-		this.playerOrder = shuffle(players)
+		this.playerOrder = players.sort((a, b) => a.nickname.localeCompare(b.nickname))
 		this.playerBanks = new Map(players.map((player) => [player.sessionId, 14]))
 		this.playerBids = new Map(players.map((player) => [player.sessionId, 0]))
 		this.playerPropertyCards = new Map(players.map((player) => [player.sessionId, []]))
@@ -106,15 +106,17 @@ export type ServerBidState = {
 		return true
 	}
 
-	makePlayerBid(player: Player, amount: number) {
+	makePlayerBid(player: Player, bid: number) {
 		const sessionId = player.sessionId
 		const bank = this.playerBanks.get(sessionId)
-		if (bank === undefined || amount > bank) {
+		const amountPutIn = this.playerBids.get(sessionId) ?? 0
+
+		if (bank === undefined || bid > bank + amountPutIn) {
 			return false
 		}
 
-		this.playerBanks.set(sessionId, bank - amount)
-		this.playerBids.set(sessionId, amount)
+		this.playerBanks.set(sessionId, bank - (bid - amountPutIn))
+		this.playerBids.set(sessionId, bid)
 		this.#setNextPlayerTurn()
 
 		return true

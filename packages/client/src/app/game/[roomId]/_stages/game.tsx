@@ -153,6 +153,7 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 					pass={handlePassAction}
 					currPlayerBank={currPlayerBank}
 					currPlayerPropertyCards={currPlayerPropertyCards}
+					currPlayerBid={gameState.bidState.playerBids.get(gameState.currPlayer!.sessionId) ?? 0}
 					highestBid={highestBid}
 					yourTurn={currPlayerTurnIndex === gameState.bidState.playerTurn}
 				/>
