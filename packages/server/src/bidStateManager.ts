@@ -2,6 +2,7 @@ import { Player, SessionID, BidStateSerialized, IndividualBidStateUploadPayload,
 import { shuffle } from "./lib/utils"
 
 export class BidStateManager {
+	private deckSize: number
 	private numPlayers: number
 	private allCards: number[]
 	private roundCards: number[]
@@ -26,16 +27,16 @@ export class BidStateManager {
 		this.playerBanks = new Map()
 		this.playerBids = new Map()
 		this.playerPropertyCards = new Map()
+		this.deckSize = 0
 
 		this.numPlayersPassed = 0
 		this.playersPassed = new Map()
 	}
 
 	initialize(players: Player[]) {
-		const deckSize = players.length === 2 ? 20 : 30
-
+		this.deckSize = 10
 		this.numPlayers = players.length
-		this.allCards = this.#createDeck(deckSize)
+		this.allCards = this.#createDeck(this.deckSize)
 		this.roundCards = this.#drawCards(players.length)
 		this.round = 0
 		this.playerTurn = 0
@@ -101,6 +102,7 @@ export type ServerBidState = {
 			const bank = this.playerBanks.get(player.sessionId)!
 			const bid = this.playerBids.get(player.sessionId)!
 			this.playerBanks.set(player.sessionId, bank + Math.floor(bid / 2))
+			this.playerBids.set(player.sessionId, 0)
 		}
 
 		return true
@@ -169,5 +171,9 @@ export type ServerBidState = {
 	#drawCards(numCards: number) {
 		const cards = this.allCards.splice(-numCards).sort((a, b) => b - a)
 		return cards
+	}
+
+	isGameOver(): boolean {
+		return this.round === Math.ceil(this.deckSize / this.numPlayers)
 	}
 }

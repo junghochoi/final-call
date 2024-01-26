@@ -12,6 +12,7 @@ interface ActionBarProps {
 	currPlayerPropertyCards: number[]
 	currPlayerBid: number
 	highestBid: number
+	communityCards: number[]
 
 	bid: (amount: number) => void
 	pass: () => void
@@ -25,6 +26,7 @@ export const ActionBar = ({
 	highestBid,
 	currPlayerPropertyCards,
 	currPlayerBid,
+	communityCards,
 }: ActionBarProps) => {
 	const [bidAmount, setBidAmount] = useState<number>(Math.min(highestBid + 1, currPlayerBank + currPlayerBid))
 	const [bidMenuOpen, setBidMenuOpen] = useState<boolean>(false)
@@ -88,7 +90,7 @@ export const ActionBar = ({
 							Pass
 						</Button>
 						<Button
-							disabled={!yourTurn || currPlayerBid + currPlayerBank <= highestBid}
+							disabled={!yourTurn || currPlayerBid + currPlayerBank <= highestBid || communityCards.length === 1}
 							onClick={handleMenu}
 							className={cn("m-0 p-0 h-2/3 lg:h-3/4 w-5/12", actionEnabledStyles)}
 						>
@@ -124,7 +126,7 @@ export const ActionBar = ({
 					</div>
 					<div className="w-5/12 flex justify-around items-center">
 						<Button
-							disabled={!yourTurn || currPlayerBid + currPlayerBank <= highestBid}
+							disabled={!yourTurn || currPlayerBid + currPlayerBank <= highestBid || communityCards.length === 1}
 							onClick={bidClick}
 							className={cn("m-0 p-0 h-2/3 lg:h-3/4 w-5/12", actionEnabledStyles)}
 						>

@@ -102,6 +102,12 @@ export class Room {
 
 		if (!player) return false
 
-		return this.bidStateManager.makePlayerPass(player)
+		const playerPassSuccessful = this.bidStateManager.makePlayerPass(player)
+
+		if (this.bidStateManager.isGameOver()) {
+			this.changeStage(Stage.Auctioning)
+		}
+
+		return playerPassSuccessful
 	}
 }
