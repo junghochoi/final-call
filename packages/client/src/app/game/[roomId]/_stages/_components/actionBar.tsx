@@ -30,7 +30,8 @@ export const ActionBar = ({
 	const [bidMenuOpen, setBidMenuOpen] = useState<boolean>(false)
 
 	useEffect(() => {
-		setBidAmount(Math.min(highestBid + 1, currPlayerBank))
+		console.log(highestBid + 1, currPlayerBank + currPlayerBid)
+		setBidAmount(Math.min(highestBid + 1, currPlayerBank + currPlayerBid))
 	}, [highestBid, currPlayerBank])
 
 	const bidClick = () => {
