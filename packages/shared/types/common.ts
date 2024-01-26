@@ -67,26 +67,18 @@ export type BidState = {
 	playerTurn: number
 }
 
-export type AuctionStateSerialized = {}
+export type AuctionStateSerialized = {
+	round: number
+	roundCards: number[]
+	playerPropertyCards: [SessionID, number[]][]
+	playerSellingPropertyCard: [SessionID, number][]
+	playerCashCards: [SessionID, number[]][]
+}
 
-export type AuctionState = {}
-
-// export type IndividualGameState = IndividualBidState | IndividualAuctionState
-
-// export type IndividualBidState = {
-// 	name: "bid"
-// 	propertyCards: number[]
-// 	bank: number
-// }
-
-// export type IndividualAuctionState = {
-// 	name: "auction"
-// }
-
-// export type ServerBidState = {
-// 	round: number
-// 	players: Player[]
-// 	playerBanks: Map<SessionID, number> // Client does not have access to playerBanks
-// 	currentBids: Map<SessionID, number>
-// 	turn: number
-// }
+export type AuctionState = {
+	round: number
+	roundCards: number[]
+	playerPropertyCards: [SessionID, number[]][]
+	playerSellingPropertyCard: Map<SessionID, number>
+	playerCashCards: Map<SessionID, number[]>
+}

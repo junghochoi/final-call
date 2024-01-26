@@ -70,13 +70,13 @@ export type ServerBidState = {
 		}
 	}
 	getIndividualBidState(sessionId: SessionID): IndividualBidStateUploadPayload {
-		const bank = this.playerBanks.get(sessionId)
-		const propertyCards = this.playerPropertyCards.get(sessionId)
+		const bank = this.playerBanks.get(sessionId)!
+		const propertyCards = this.playerPropertyCards.get(sessionId)!
 
 		return {
 			stage: Stage.Bidding,
-			bank: bank!,
-			propertyCards: propertyCards!,
+			bank: bank,
+			propertyCards: propertyCards,
 		}
 	}
 
@@ -92,11 +92,6 @@ export type ServerBidState = {
 		this.#setNextPlayerTurn()
 
 		if (this.numPlayersPassed === this.numPlayers) {
-			// const winnerSessionId = this.playerOrder[this.playerTurn].sessionId
-			// const propertyCard = this.roundCards.pop()!
-
-			// this.#addPropertyCardToPlayerHand(propertyCard, winnerSessionId)
-
 			this.startNewRound()
 		} else {
 			const bank = this.playerBanks.get(player.sessionId)!

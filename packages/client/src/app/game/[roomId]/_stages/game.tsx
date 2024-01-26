@@ -118,15 +118,14 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 	}
 	return (
 		<>
-			{gameState.stage === Stage.Bidding && gameState.bidState && (
-				<BiddingComponent
-					currPlayerBank={currPlayerBank}
-					bidState={gameState.bidState}
-					currPlayer={gameState.currPlayer}
-				/>
-			)}
+			<BiddingComponent
+				stage={gameState.stage}
+				currPlayerBank={currPlayerBank}
+				bidState={gameState.bidState}
+				currPlayer={gameState.currPlayer}
+			/>
 
-			{gameState.stage === Stage.Auctioning && <div>This is auctioning</div>}
+			{/* {gameState.stage === Stage.Auctioning && <div>This is auctioning</div>} */}
 
 			<ActionBar
 				bid={handleBidAction}

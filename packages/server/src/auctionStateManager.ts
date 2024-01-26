@@ -1,10 +1,9 @@
 import {
 	Player,
 	SessionID,
-	BidStateSerialized,
-	IndividualBidStateUploadPayload,
-	Stage,
+	IndividualAuctionStateUploadPayload,
 	AuctionStateSerialized,
+	Stage,
 } from "@final-call/shared"
 import { shuffle } from "./lib/utils"
 
@@ -18,6 +17,7 @@ export class AuctionStateMangager {
 
 	private playerCashCards: Map<SessionID, number[]>
 	private playerPropertyCards: Map<SessionID, number[]>
+	private playerSellingPropertyCard: Map<SessionID, number>
 
 	constructor() {
 		this.numPlayers = 0
@@ -27,6 +27,7 @@ export class AuctionStateMangager {
 
 		this.playerPropertyCards = new Map()
 		this.playerCashCards = new Map()
+		this.playerSellingPropertyCard = new Map()
 		this.deckSize = 0
 	}
 
@@ -40,25 +41,41 @@ export class AuctionStateMangager {
 		this.playerCashCards = new Map(players.map((player) => [player.sessionId, []]))
 	}
 
-	/*
-export type ServerBidState = {
-	round: number
-	players: Player[]
-	playerBanks: Map<SessionID, number> // Client does not have access to playerBanks
-	currentBids: Map<SessionID, number>
-	turn: number
-}
-	*/
+	getAuctionState(): AuctionStateSerialized {
+		return {
+			round: this.round,
+			roundCards: this.roundCards,
+			playerPropertyCards: [...this.playerPropertyCards.entries()],
+			playerCashCards: [...this.playerCashCards.entries()],
+			playerSellingPropertyCard: [...this.playerSellingPropertyCard.entries()],
+		}
+	}
 
-	getAuctionState(): AuctionStateSerialized {}
-	getIndividualAuctionState(sessionId: SessionID): IndividualAuctionStateUploadPayload {}
+	getIndividualAuctionState(sessionId: SessionID): IndividualAuctionStateUploadPayload {
+		const propertyCards = this.playerPropertyCards.get(sessionId)!
+		const cashCards = this.playerCashCards.get(sessionId)!
 
-	makePlayerSellProperty(property: number) {}
+		return {
+			stage: Stage.Auctioning,
+			propertyCards,
+			cashCards,
+		}
+	}
+
+	makePlayerSellProperty(sessionId: SessionID, property: number) {
+		const propertyCards = this.playerPropertyCards.get(sessionId)!
+		const propertyCardsWithRemovedProperty = propertyCards.filter((num) => num !== property)
+		this.playerPropertyCards.set(sessionId, propertyCardsWithRemovedProperty)
+
+		this.playerSellingPropertyCard.set(sessionId, property)
+
+		// Check if all players have selected a card
+	}
 
 	startNewRound() {}
 
 	#addCashCardToPlayerHand(cashCard: number, sessionId: SessionID) {
-		const playerCashCards = this.playerCashCards.get(sessionId)
+		const playerCashCards = this.playerCashCards.get(sessionId)!
 
 		if (playerCashCards === undefined) {
 			throw new Error("could not find player in playerPropertyCards")

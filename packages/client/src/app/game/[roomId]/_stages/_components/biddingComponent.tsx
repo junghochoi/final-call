@@ -1,10 +1,11 @@
-import { BidState, Player } from "@final-call/shared"
+import { BidState, Player, Stage } from "@final-call/shared"
 
 import { PlayerBox } from "./playerBox"
 import { zip } from "@/lib/utils"
 import { Card } from "./card"
 
 interface BiddingComponentProps {
+	stage: Stage
 	bidState: BidState
 	currPlayer: Player
 	currPlayerBank: number
@@ -38,15 +39,14 @@ const playerAbsentStyle = "bg-gray-300"
 const currPlayerStyle = "text-white"
 const playerTurnStyle = "border-fc-accent border-2"
 
-export const BiddingComponent = ({ currPlayer, bidState, currPlayerBank }: BiddingComponentProps) => {
+export const BiddingComponent = ({ stage, currPlayer, bidState, currPlayerBank }: BiddingComponentProps) => {
 	return (
 		<div className=" bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">
 			<div className="relative h-[calc(100%-7em)]">
 				{/* Community Cards */}
+
 				<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
-					{bidState.roundCards.map((num: number) => (
-						<Card key={num} value={num} />
-					))}
+					{stage === Stage.Bidding && bidState.roundCards.map((num: number) => <Card key={num} value={num} />)}
 				</div>
 
 				{bidState.playerOrder.map((player, ind) => {

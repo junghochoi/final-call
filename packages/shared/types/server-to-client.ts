@@ -17,6 +17,8 @@ export type IndividualBidStateUploadPayload = {
 
 export type IndividualAuctionStateUploadPayload = {
 	stage: Stage.Auctioning
+	propertyCards: number[]
+	cashCards: number[]
 }
 
 export interface ServerToClientEvents {
