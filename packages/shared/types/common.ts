@@ -67,6 +67,10 @@ export type BidState = {
 	playerTurn: number
 }
 
+export type AuctionStateSerialized = {}
+
+export type AuctionState = {}
+
 // export type IndividualGameState = IndividualBidState | IndividualAuctionState
 
 // export type IndividualBidState = {
