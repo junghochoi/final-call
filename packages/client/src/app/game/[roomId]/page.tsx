@@ -27,6 +27,7 @@ const GamePage = () => {
 		stage: Stage.Lobby,
 		currPlayer: undefined,
 		players: [],
+		playerOrder: [],
 		bidState: undefined,
 		auctionState: undefined,
 	})

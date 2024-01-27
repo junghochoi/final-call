@@ -7,9 +7,9 @@ export class BidStateManager {
 	private allCards: number[]
 	private roundCards: number[]
 
+	private playerOrder: Player[]
 	private round: number
 	private playerTurn: number
-	private playerOrder: Player[]
 	private playerBanks: Map<SessionID, number>
 	private playerBids: Map<SessionID, number>
 	private playerPropertyCards: Map<SessionID, number[]>
@@ -23,11 +23,11 @@ export class BidStateManager {
 		this.roundCards = []
 		this.round = 0
 		this.playerTurn = 0
-		this.playerOrder = []
 		this.playerBanks = new Map()
 		this.playerBids = new Map()
 		this.playerPropertyCards = new Map()
 		this.deckSize = 0
+		this.playerOrder = []
 
 		this.numPlayersPassed = 0
 		this.playersPassed = new Map()
@@ -39,8 +39,8 @@ export class BidStateManager {
 		this.allCards = this.#createDeck(this.deckSize)
 		this.roundCards = this.#drawCards(players.length)
 		this.round = 0
+		this.playerOrder = players
 		this.playerTurn = 0
-		this.playerOrder = players.sort((a, b) => a.nickname.localeCompare(b.nickname))
 		this.playerBanks = new Map(players.map((player) => [player.sessionId, 14]))
 		this.playerBids = new Map(players.map((player) => [player.sessionId, 0]))
 		this.playerPropertyCards = new Map(players.map((player) => [player.sessionId, []]))
@@ -64,7 +64,6 @@ export type ServerBidState = {
 			round: this.round,
 			playerTurn: this.playerTurn,
 			roundCards: this.roundCards,
-			playerOrder: this.playerOrder,
 			playerBids: [...this.playerBids.entries()],
 			playerPropertyCards: [...this.playerPropertyCards.entries()],
 		}
@@ -138,6 +137,7 @@ export type ServerBidState = {
 		let originalPlayerTurn = this.playerTurn
 		let nextPlayerTurn = (this.playerTurn + 1) % this.numPlayers
 
+		console.log(this.playerOrder)
 		while (this.playersPassed.get(this.playerOrder[nextPlayerTurn].sessionId)) {
 			if (originalPlayerTurn === nextPlayerTurn) {
 				break

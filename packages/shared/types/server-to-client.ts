@@ -3,6 +3,7 @@ import { Player, Stage, PlayerInitializationPayload, BidStateSerialized, Auction
 export type GameStateUpdatePayload = {
 	roomId: string
 	players: Player[]
+	playerOrder: Player[]
 	stage: Stage
 	bidState: BidStateSerialized
 	auctionState: AuctionStateSerialized

@@ -24,6 +24,7 @@ export type GameState = {
 	stage: Stage
 	currPlayer: Player | undefined
 	players: Player[]
+	playerOrder: Player[]
 	bidState: BidState | undefined
 	auctionState: AuctionState | undefined
 }
@@ -64,7 +65,6 @@ export type SellAction = {
 export type BidStateSerialized = {
 	round: number
 	roundCards: number[]
-	playerOrder: Player[]
 	playerBids: [string, number][]
 	playerPropertyCards: [string, number[]][]
 	playerTurn: number
@@ -73,7 +73,6 @@ export type BidStateSerialized = {
 export type BidState = {
 	round: number
 	roundCards: number[]
-	playerOrder: Player[]
 	playerBids: Map<SessionID, number>
 	playerTurn: number
 }

@@ -9,10 +9,12 @@ import {
 } from "@final-call/shared"
 import { BidStateManager } from "./bidStateManager"
 import { AuctionStateManager } from "./auctionStateManager"
+import { shuffle } from "./lib/utils"
 
 export class Room {
 	private roomId: RoomID
 	private players: Map<SessionID, Player>
+	private playerOrder: Player[]
 	private stage: Stage
 
 	private bidStateManager: BidStateManager
@@ -25,12 +27,14 @@ export class Room {
 
 		this.bidStateManager = new BidStateManager()
 		this.auctionStateManager = new AuctionStateManager()
+		this.playerOrder = []
 	}
 
 	getGameState(): GameStateUpdatePayload {
 		return {
 			roomId: this.roomId,
 			players: this.getPlayers(),
+			playerOrder: this.playerOrder,
 			stage: this.stage,
 			bidState: this.bidStateManager.getBidState(),
 			auctionState: this.auctionStateManager.getAuctionState(),
@@ -83,13 +87,13 @@ export class Room {
 
 	changeStage(stage: Stage) {
 		if (stage == Stage.Bidding) {
-			this.bidStateManager.initialize(Array.from(this.players.values()))
+			this.playerOrder = Array.from(this.players.values()).sort((a, b) => a.nickname.localeCompare(b.nickname))
+			this.bidStateManager.initialize(this.playerOrder)
 		} else if (stage == Stage.Auctioning) {
-			console.log("STAGE CHANGING TO AUCTIONING")
 			const propertyCards = new Map(this.bidStateManager.getBidState().playerPropertyCards)
 
 			this.bidStateManager = new BidStateManager()
-			this.auctionStateManager.initialize(Array.from(this.players.values()), propertyCards)
+			this.auctionStateManager.initialize(this.playerOrder, propertyCards)
 		} else if (stage == Stage.Result) {
 			this.auctionStateManager = new AuctionStateManager()
 			// Deinitialize AuctionState
@@ -112,10 +116,6 @@ export class Room {
 		if (!player) return false
 
 		const playerPassSuccessful = this.bidStateManager.makePlayerPass(player)
-
-		// if (this.bidStateManager.isGameOver()) {
-		// 	this.changeStage(Stage.Auctioning) // Changing state causes IndividualGameState to send an Auction Individual Game State instead of a BidGameState
-		// }
 
 		return playerPassSuccessful
 	}

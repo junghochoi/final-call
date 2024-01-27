@@ -53,9 +53,7 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 	const [currPlayerCashCards, setCurrPlayerCashCards] = useState<number[]>([])
 
 	useEffect(() => {
-		const ind = gameState.bidState?.playerOrder.findIndex(
-			(player) => player.sessionId === gameState.currPlayer?.sessionId
-		)
+		const ind = gameState.playerOrder.findIndex((player) => player.sessionId === gameState.currPlayer?.sessionId)
 		if (ind === undefined) {
 			throw new Error("currplayer not found in bidstate")
 		}
@@ -139,6 +137,7 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 			<GameBoard
 				stage={gameState.stage}
 				currPlayerBank={currPlayerBank}
+				playerOrder={gameState.playerOrder}
 				bidState={gameState.bidState!}
 				auctionState={gameState.auctionState!}
 				currPlayer={gameState.currPlayer}

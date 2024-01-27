@@ -9,6 +9,7 @@ import { shuffle } from "./lib/utils"
 
 export class AuctionStateManager {
 	private deckSize: number
+	private playerOrder: Player[]
 	private numPlayers: number
 	private allCards: number[]
 	private roundCards: number[]
@@ -24,21 +25,22 @@ export class AuctionStateManager {
 		this.allCards = []
 		this.roundCards = []
 		this.round = 0
-
+		this.playerOrder = []
 		this.playerPropertyCards = new Map()
 		this.playerCashCards = new Map()
 		this.playerSellingPropertyCard = new Map()
 		this.deckSize = 0
 	}
 
-	initialize(players: Player[], playerPropertyCards: Map<SessionID, number[]>) {
+	initialize(playerOrder: Player[], playerPropertyCards: Map<SessionID, number[]>) {
 		this.deckSize = 6
-		this.numPlayers = players.length
+		this.numPlayers = playerOrder.length
+		this.playerOrder = playerOrder
 		this.allCards = this.#createDeck(this.deckSize)
-		this.roundCards = this.#drawCards(players.length)
+		this.roundCards = this.#drawCards(playerOrder.length)
 		this.round = 0
 		this.playerPropertyCards = playerPropertyCards
-		this.playerCashCards = new Map(players.map((player) => [player.sessionId, []]))
+		this.playerCashCards = new Map(playerOrder.map((player) => [player.sessionId, []]))
 	}
 
 	getAuctionState(): AuctionStateSerialized {

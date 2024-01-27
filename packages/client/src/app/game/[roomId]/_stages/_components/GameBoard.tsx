@@ -7,6 +7,7 @@ import { Card } from "./card"
 interface GameBoardProps {
 	stage: Stage
 	bidState: BidState
+	playerOrder: Player[]
 	auctionState: AuctionState
 	currPlayer: Player
 	currPlayerBank: number
@@ -40,7 +41,15 @@ const playerAbsentStyle = "bg-gray-300"
 const currPlayerStyle = "text-white"
 const playerTurnStyle = "border-fc-accent border-2"
 
-export const GameBoard = ({ stage, currPlayer, bidState, auctionState, currPlayerBank }: GameBoardProps) => {
+export const GameBoard = ({
+	stage,
+	currPlayer,
+	bidState,
+	auctionState,
+	currPlayerBank,
+	playerOrder,
+}: GameBoardProps) => {
+	// const playerOrder = bidState.playerOrder ?? auctionState.playerOrder
 	return (
 		<div className=" bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">
 			<h1 className="absolute">{stage}</h1>
@@ -63,7 +72,7 @@ export const GameBoard = ({ stage, currPlayer, bidState, auctionState, currPlaye
 					</div>
 				)}
 
-				{bidState.playerOrder.map((player, ind) => {
+				{playerOrder.map((player, ind) => {
 					return (
 						<PlayerBox
 							positionTailwindStyle={playerPositions[ind][BOX_POSITION]}
@@ -78,9 +87,9 @@ export const GameBoard = ({ stage, currPlayer, bidState, auctionState, currPlaye
 						/>
 					)
 				})}
-				{Array.from({ length: 6 - (bidState.playerOrder.length || 0) }).map((_, ind) => (
+				{Array.from({ length: 6 - (playerOrder.length || 0) }).map((_, ind) => (
 					<PlayerBox
-						positionTailwindStyle={playerPositions[ind + bidState.playerOrder.length][BOX_POSITION]}
+						positionTailwindStyle={playerPositions[ind + playerOrder.length][BOX_POSITION]}
 						playerPresenceTailwindStyle={playerAbsentStyle}
 						key={ind}
 					/>
