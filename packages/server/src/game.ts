@@ -158,16 +158,15 @@ export class Game {
 					this.roomManager.makePlayerPass(socket.data.roomId, action.player.sessionId)
 					break
 				}
+				case "sell": {
+					this.roomManager.makePlayerSell(socket.data.roomId, action.player.sessionId, action.property)
+					break
+				}
 			}
 
+			this.emitIndividualGameState(socket)
+			this.changeStageIfNeeded(socket.data.roomId)
 			this.emitGameState(socket.data.roomId)
-
-			const individualGameState = this.roomManager.getRoomIndividualGameState(roomId, socket.data.sessionId)
-			if (individualGameState) {
-				socket.emit("IndividualGameStateUpdate", individualGameState)
-			}
-
-			// this.emitIndividualGameState(socket)
 		})
 
 		socket.on("IndividualGameStateInitialization", (player, callback) => {
@@ -194,5 +193,18 @@ export class Game {
 		}
 	}
 
-	private emitIndividualGameState(socket: Socket) {}
+	private emitIndividualGameState(socket: Socket) {
+		const individualGameState = this.roomManager.getRoomIndividualGameState(socket.data.roomId, socket.data.sessionId)
+		if (individualGameState) {
+			socket.emit("IndividualGameStateUpdate", individualGameState)
+		}
+	}
+
+	private changeStageIfNeeded(roomId: RoomID) {
+		const stageChange = this.roomManager.needToChangeStage(roomId)
+
+		console.log(stageChange)
+		if (stageChange === undefined) return
+		this.roomManager.changeStage(roomId, stageChange)
+	}
 }

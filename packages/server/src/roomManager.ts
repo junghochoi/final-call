@@ -2,6 +2,7 @@ import {
 	GameStateUpdatePayload,
 	IndividualGameStateUpdatePayload,
 	Player,
+	Property,
 	RoomID,
 	SessionID,
 	Stage,
@@ -119,5 +120,21 @@ export class RoomManager {
 		if (!room) return false
 
 		return room.makePlayerPass(sessionId)
+	}
+
+	makePlayerSell(roomId: RoomID, sessionId: SessionID, property: Property): boolean {
+		const room = this.rooms.get(roomId)
+
+		if (!room) return false
+
+		return room.makePlayerSell(sessionId, property)
+	}
+
+	needToChangeStage(roomId: RoomID): Stage | undefined {
+		const room = this.rooms.get(roomId)
+
+		if (!room) return undefined
+
+		return room.needToChangeStage()
 	}
 }

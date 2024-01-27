@@ -1,5 +1,5 @@
 interface CardProps {
-	value: number
+	value: string
 }
 
 export const Card = ({ value }: CardProps) => {

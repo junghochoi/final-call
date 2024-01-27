@@ -7,7 +7,7 @@ import {
 } from "@final-call/shared"
 import { shuffle } from "./lib/utils"
 
-export class AuctionStateMangager {
+export class AuctionStateManager {
 	private deckSize: number
 	private numPlayers: number
 	private allCards: number[]
@@ -69,6 +69,7 @@ export class AuctionStateMangager {
 
 		this.playerSellingPropertyCard.set(sessionId, property)
 
+		return true
 		// Check if all players have selected a card
 	}
 
@@ -94,6 +95,6 @@ export class AuctionStateMangager {
 	}
 
 	isGameOver(): boolean {
-		return this.round === Math.ceil(this.deckSize / this.numPlayers)
+		return this.round === this.numPlayers && this.round !== 0
 	}
 }

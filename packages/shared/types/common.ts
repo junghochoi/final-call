@@ -1,6 +1,9 @@
 export type SessionID = string
 export type RoomID = string
 
+export type Property = number
+export type Cash = number
+
 export type PlayerInit = {
 	nickname: string
 	roomId: RoomID
@@ -22,6 +25,7 @@ export type GameState = {
 	currPlayer: Player | undefined
 	players: Player[]
 	bidState: BidState | undefined
+	auctionState: AuctionState | undefined
 }
 
 export type PlayerInitializationPayload = {
@@ -35,7 +39,7 @@ export enum Stage {
 	Result,
 }
 
-export type Action = BidAction | PassAction
+export type Action = BidAction | PassAction | SellAction
 
 export type BidAction = {
 	name: "bid"
@@ -48,6 +52,13 @@ export type PassAction = {
 	name: "pass"
 	roomId: RoomID
 	player: Player
+}
+
+export type SellAction = {
+	name: "sell"
+	roomId: RoomID
+	player: Player
+	property: Property
 }
 
 export type BidStateSerialized = {
@@ -78,7 +89,7 @@ export type AuctionStateSerialized = {
 export type AuctionState = {
 	round: number
 	roundCards: number[]
-	playerPropertyCards: [SessionID, number[]][]
+	playerPropertyCards: Map<SessionID, number[]>
 	playerSellingPropertyCard: Map<SessionID, number>
 	playerCashCards: Map<SessionID, number[]>
 }

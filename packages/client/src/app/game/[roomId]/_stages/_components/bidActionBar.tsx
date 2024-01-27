@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { Slider } from "@/components/ui/slider"
 import { Plus, Minus } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Stage } from "@final-call/shared"
 
 interface ActionBarProps {
 	yourTurn: boolean
@@ -13,12 +14,13 @@ interface ActionBarProps {
 	currPlayerBid: number
 	highestBid: number
 	communityCards: number[]
+	stage: Stage
 
 	bid: (amount: number) => void
 	pass: () => void
 }
 
-export const ActionBar = ({
+export const BidActionBar = ({
 	bid,
 	pass,
 	yourTurn,
@@ -27,12 +29,12 @@ export const ActionBar = ({
 	currPlayerPropertyCards,
 	currPlayerBid,
 	communityCards,
+	stage,
 }: ActionBarProps) => {
 	const [bidAmount, setBidAmount] = useState<number>(Math.min(highestBid + 1, currPlayerBank + currPlayerBid))
 	const [bidMenuOpen, setBidMenuOpen] = useState<boolean>(false)
 
 	useEffect(() => {
-		console.log(highestBid + 1, currPlayerBank + currPlayerBid)
 		setBidAmount(Math.min(highestBid + 1, currPlayerBank + currPlayerBid))
 	}, [highestBid, currPlayerBank])
 
@@ -47,12 +49,6 @@ export const ActionBar = ({
 	}
 
 	const handleBidIncrease = () => {
-		// if (bidAmount >= currPlayerBank) return
-		// setBidAmount(bidAmount)
-		// setBidAmount((prev) => Math.min(currPlayerBank + prev, prev + 1))
-
-		console.log(currPlayerBank)
-		console.log(currPlayerBid)
 		setBidAmount((prev) => Math.min(currPlayerBank + currPlayerBid, prev + 1))
 	}
 	const handleBidDecrease = () => {
@@ -66,6 +62,10 @@ export const ActionBar = ({
 		setBidMenuOpen((prev) => !prev)
 	}
 
+	const handleSellProperty = (card: number) => {
+		console.log(`Selling Property ${card}`)
+	}
+
 	const actionEnabledStyles = yourTurn ? "bg-black" : "bg-gray-400"
 	const validBidStyle =
 		highestBid < bidAmount && bidAmount <= currPlayerBank + currPlayerBid ? "bg-green-500" : "bg-red-500"
@@ -76,12 +76,13 @@ export const ActionBar = ({
 				<>
 					<div className="w-7/12 px-5 lg:px-10 bg-blue-300 flex justify-start items-center">
 						{currPlayerPropertyCards.map((card) => (
-							<div key={card} className="p-4 border-2 border-black">
+							<div key={card} onClick={() => handleSellProperty(card)} className="p-4 border-2 border-black">
 								{card}
 							</div>
 						))}
 					</div>
 					<div className="w-5/12 flex justify-around items-center">
+						{stage === Stage.Bidding && <></>}
 						<Button
 							disabled={!yourTurn}
 							onClick={passClick}
@@ -100,7 +101,7 @@ export const ActionBar = ({
 				</>
 			)}
 
-			{bidMenuOpen && (
+			{bidMenuOpen && stage === Stage.Bidding && (
 				<>
 					<div className="w-7/12 bg-blue-300 p-4 flex justify-around">
 						<div className={cn("p-4", validBidStyle)}>

@@ -169,6 +169,10 @@ export type ServerBidState = {
 	}
 
 	isGameOver(): boolean {
+		console.log(this.round)
+
+		console.log(Math.ceil(this.deckSize / this.numPlayers))
+
 		return this.round === Math.ceil(this.deckSize / this.numPlayers)
 	}
 }

@@ -1,12 +1,13 @@
-import { BidState, Player, Stage } from "@final-call/shared"
+import { AuctionState, BidState, Player, Stage } from "@final-call/shared"
 
 import { PlayerBox } from "./playerBox"
 import { zip } from "@/lib/utils"
 import { Card } from "./card"
 
-interface BiddingComponentProps {
+interface GameBoardProps {
 	stage: Stage
 	bidState: BidState
+	auctionState: AuctionState
 	currPlayer: Player
 	currPlayerBank: number
 }
@@ -39,15 +40,28 @@ const playerAbsentStyle = "bg-gray-300"
 const currPlayerStyle = "text-white"
 const playerTurnStyle = "border-fc-accent border-2"
 
-export const BiddingComponent = ({ stage, currPlayer, bidState, currPlayerBank }: BiddingComponentProps) => {
+export const GameBoard = ({ stage, currPlayer, bidState, auctionState, currPlayerBank }: GameBoardProps) => {
 	return (
 		<div className=" bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">
+			<h1>{stage}</h1>
 			<div className="relative h-[calc(100%-7em)]">
 				{/* Community Cards */}
 
-				<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
-					{stage === Stage.Bidding && bidState.roundCards.map((num: number) => <Card key={num} value={num} />)}
-				</div>
+				{stage === Stage.Bidding && (
+					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
+						{bidState.roundCards.map((num: number) => (
+							<Card key={num} value={`${num}`} />
+						))}
+					</div>
+				)}
+
+				{stage === Stage.Auctioning && (
+					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
+						{auctionState.roundCards.map((num: number) => (
+							<Card key={num} value={`$${num}`} />
+						))}
+					</div>
+				)}
 
 				{bidState.playerOrder.map((player, ind) => {
 					return (
@@ -58,7 +72,7 @@ export const BiddingComponent = ({ stage, currPlayer, bidState, currPlayerBank }
 							playerTurnTailwindStyle={bidState!.playerTurn === ind ? playerTurnStyle : undefined}
 							currPlayerTailwindStyle={player.sessionId === currPlayer.sessionId ? currPlayerStyle : undefined}
 							nickname={player.nickname}
-							currPlayerBank={player.sessionId === currPlayer?.sessionId ? currPlayerBank : undefined}
+							currPlayerBank={player.sessionId === currPlayer.sessionId ? currPlayerBank : undefined}
 							key={player.sessionId}
 							bid={bidState!.playerBids.get(player.sessionId) ?? 0}
 						/>

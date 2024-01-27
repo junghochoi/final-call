@@ -2,11 +2,13 @@ import {
 	GameStateUpdatePayload,
 	IndividualGameStateUpdatePayload,
 	Player,
+	Property,
 	RoomID,
 	SessionID,
 	Stage,
 } from "@final-call/shared"
 import { BidStateManager } from "./bidStateManager"
+import { AuctionStateManager } from "./auctionStateManager"
 
 export class Room {
 	private roomId: RoomID
@@ -14,6 +16,7 @@ export class Room {
 	private stage: Stage
 
 	private bidStateManager: BidStateManager
+	private auctionStateManager: AuctionStateManager
 
 	constructor(roomId: string) {
 		this.roomId = roomId
@@ -21,6 +24,7 @@ export class Room {
 		this.stage = Stage.Lobby
 
 		this.bidStateManager = new BidStateManager()
+		this.auctionStateManager = new AuctionStateManager()
 	}
 
 	getGameState(): GameStateUpdatePayload {
@@ -29,15 +33,16 @@ export class Room {
 			players: this.getPlayers(),
 			stage: this.stage,
 			bidState: this.bidStateManager.getBidState(),
+			auctionState: this.auctionStateManager.getAuctionState(),
 		}
 	}
 	getIndividualGameState(sessionId: SessionID): IndividualGameStateUpdatePayload {
-		return this.bidStateManager.getIndividualBidState(sessionId)
-		// if (this.stage === Stage.Bidding) {
-		// 	return this.bidStateManager.getIndividualBidState(sessionId)
-		// } else if (this.stage === Stage.Auctioning) {
-
-		// }
+		// return this.bidStateManager.getIndividualBidState(sessionId)
+		if (this.stage === Stage.Bidding) {
+			return this.bidStateManager.getIndividualBidState(sessionId)
+		} else {
+			return this.auctionStateManager.getIndividualAuctionState(sessionId)
+		}
 	}
 
 	getRoomId(): string {
@@ -80,9 +85,13 @@ export class Room {
 		if (stage == Stage.Bidding) {
 			this.bidStateManager.initialize(Array.from(this.players.values()))
 		} else if (stage == Stage.Auctioning) {
-			// Deinitialize Bidstate
-			// Initialize AuctionState
+			console.log("STAGE CHANGING TO AUCTIONING")
+			const propertyCards = new Map(this.bidStateManager.getBidState().playerPropertyCards)
+
+			this.bidStateManager = new BidStateManager()
+			this.auctionStateManager.initialize(Array.from(this.players.values()), propertyCards)
 		} else if (stage == Stage.Result) {
+			this.auctionStateManager = new AuctionStateManager()
 			// Deinitialize AuctionState
 			// Initialize Results Page
 		}
@@ -104,10 +113,29 @@ export class Room {
 
 		const playerPassSuccessful = this.bidStateManager.makePlayerPass(player)
 
-		if (this.bidStateManager.isGameOver()) {
-			this.changeStage(Stage.Auctioning)
-		}
+		// if (this.bidStateManager.isGameOver()) {
+		// 	this.changeStage(Stage.Auctioning) // Changing state causes IndividualGameState to send an Auction Individual Game State instead of a BidGameState
+		// }
 
 		return playerPassSuccessful
+	}
+
+	makePlayerSell(sessionId: SessionID, property: Property) {
+		const player = this.getParticipant(sessionId)
+
+		if (!player) return false
+
+		return this.auctionStateManager.makePlayerSellProperty(sessionId, property)
+	}
+
+	needToChangeStage(): Stage | undefined {
+		if (this.bidStateManager.isGameOver()) {
+			console.log("changing to aucitoning")
+			return Stage.Auctioning
+		} else if (this.auctionStateManager.isGameOver()) {
+			return Stage.Result
+		}
+
+		return undefined
 	}
 }
