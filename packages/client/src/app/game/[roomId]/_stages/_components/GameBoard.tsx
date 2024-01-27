@@ -43,7 +43,7 @@ const playerTurnStyle = "border-fc-accent border-2"
 export const GameBoard = ({ stage, currPlayer, bidState, auctionState, currPlayerBank }: GameBoardProps) => {
 	return (
 		<div className=" bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">
-			<h1>{stage}</h1>
+			<h1 className="absolute">{stage}</h1>
 			<div className="relative h-[calc(100%-7em)]">
 				{/* Community Cards */}
 
