@@ -71,6 +71,7 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 				setCurrPlayerPropertyCards(individualState.propertyCards)
 				break
 			case Stage.Auctioning:
+				setCurrPlayerPropertyCards(individualState.propertyCards)
 				break
 		}
 	}, [])

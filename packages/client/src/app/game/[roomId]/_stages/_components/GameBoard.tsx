@@ -80,15 +80,21 @@ export const GameBoard = ({
 							playerPresenceTailwindStyle={playerPresentStyle}
 							playerTurnTailwindStyle={bidState!.playerTurn === ind ? playerTurnStyle : undefined}
 							currPlayerTailwindStyle={player.sessionId === currPlayer.sessionId ? currPlayerStyle : undefined}
+							stage={stage}
 							nickname={player.nickname}
 							currPlayerBank={player.sessionId === currPlayer.sessionId ? currPlayerBank : undefined}
 							key={player.sessionId}
 							bid={bidState!.playerBids.get(player.sessionId) ?? 0}
+							propertyCard={{
+								value: auctionState.playerSellingPropertyCard.get(player.sessionId),
+								visible: auctionState.playerSellingPropertyCard.size === playerOrder.length,
+							}}
 						/>
 					)
 				})}
 				{Array.from({ length: 6 - (playerOrder.length || 0) }).map((_, ind) => (
 					<PlayerBox
+						stage={stage}
 						positionTailwindStyle={playerPositions[ind + playerOrder.length][BOX_POSITION]}
 						playerPresenceTailwindStyle={playerAbsentStyle}
 						key={ind}

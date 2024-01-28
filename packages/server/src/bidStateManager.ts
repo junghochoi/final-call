@@ -136,8 +136,6 @@ export type ServerBidState = {
 	#setNextPlayerTurn() {
 		let originalPlayerTurn = this.playerTurn
 		let nextPlayerTurn = (this.playerTurn + 1) % this.numPlayers
-
-		console.log(this.playerOrder)
 		while (this.playersPassed.get(this.playerOrder[nextPlayerTurn].sessionId)) {
 			if (originalPlayerTurn === nextPlayerTurn) {
 				break
@@ -169,10 +167,6 @@ export type ServerBidState = {
 	}
 
 	isGameOver(): boolean {
-		console.log(this.round)
-
-		console.log(Math.ceil(this.deckSize / this.numPlayers))
-
 		return this.round === Math.ceil(this.deckSize / this.numPlayers)
 	}
 }

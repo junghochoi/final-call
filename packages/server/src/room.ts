@@ -55,14 +55,12 @@ export class Room {
 
 	addPlayer(user: Player): void {
 		if (this.getPlayerCount() === 0) {
-			console.log("setting host")
 			user.host = true
 		}
 		this.players.set(user.sessionId, user)
 	}
 
 	removePlayer(sessionId: SessionID): void {
-		console.log(`removing ${sessionId}`)
 		const needNewHost = this.players.get(sessionId)?.host
 		const removed = this.players.delete(sessionId)
 
@@ -130,7 +128,6 @@ export class Room {
 
 	needToChangeStage(): Stage | undefined {
 		if (this.bidStateManager.isGameOver()) {
-			console.log("changing to aucitoning")
 			return Stage.Auctioning
 		} else if (this.auctionStateManager.isGameOver()) {
 			return Stage.Result

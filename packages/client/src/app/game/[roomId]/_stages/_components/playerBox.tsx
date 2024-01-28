@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+import { Stage } from "@final-call/shared"
 
 interface PlayerBoxProps {
 	positionTailwindStyle: string
@@ -6,10 +7,16 @@ interface PlayerBoxProps {
 	currPlayerTailwindStyle?: string
 	bidPositionTailwindStyle?: string
 	playerTurnTailwindStyle?: string
+
+	stage: Stage
 	currPlayerBank?: number
 
 	nickname?: string
 	bid?: number
+	propertyCard?: {
+		value?: number
+		visible: boolean
+	}
 }
 
 export const PlayerBox = ({
@@ -21,6 +28,8 @@ export const PlayerBox = ({
 	nickname,
 	bid,
 	currPlayerBank,
+	propertyCard,
+	stage,
 }: PlayerBoxProps) => {
 	return (
 		<>
@@ -45,6 +54,12 @@ export const PlayerBox = ({
 			>
 				{bid}
 			</div>
+
+			{stage === Stage.Auctioning && propertyCard?.value !== undefined && (
+				<div className={cn("absolute rounded h-12 w-8 text-sm bg-cyan-300 text-center p-1", bidPositionTailwindStyle)}>
+					{propertyCard?.visible && <p>{propertyCard.value}</p>}
+				</div>
+			)}
 		</>
 	)
 }

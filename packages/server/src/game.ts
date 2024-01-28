@@ -202,8 +202,6 @@ export class Game {
 
 	private changeStageIfNeeded(roomId: RoomID) {
 		const stageChange = this.roomManager.needToChangeStage(roomId)
-
-		console.log(stageChange)
 		if (stageChange === undefined) return
 		this.roomManager.changeStage(roomId, stageChange)
 	}
