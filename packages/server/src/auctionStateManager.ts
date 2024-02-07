@@ -94,7 +94,8 @@ export class AuctionStateManager {
 				this.#addCashCardToPlayerHand(cashCard, userId)
 			})
 
-			// this.playerSellingPropertyCard.clear()
+			this.startNewRound()
+
 			return {
 				success: true,
 				submitAllIndividualStates: true,
@@ -107,7 +108,14 @@ export class AuctionStateManager {
 		}
 	}
 
-	startNewRound() {}
+	startNewRound() {
+		if (!this.isGameOver()) {
+			this.roundCards = this.#drawCards(this.playerOrder.length)
+
+			this.round += 1
+			this.playerSellingPropertyCard.clear()
+		}
+	}
 
 	#addCashCardToPlayerHand(cashCard: number, sessionId: SessionID) {
 		const cashCards = this.playerCashCards.get(sessionId)!
@@ -129,6 +137,7 @@ export class AuctionStateManager {
 	}
 
 	isGameOver(): boolean {
-		return this.round === this.numPlayers && this.round !== 0
+		console.log(this.round, this.numPlayers)
+		return this.round + 1 === this.numPlayers && this.round !== 0
 	}
 }

@@ -16,9 +16,6 @@ export class BidStateManager {
 
 	private numPlayersPassed: number
 	private playersPassed: Map<SessionID, boolean>
-
-	private needToChangeStageCalled: boolean
-
 	constructor() {
 		this.numPlayers = 0
 		this.allCards = []
@@ -33,8 +30,6 @@ export class BidStateManager {
 
 		this.numPlayersPassed = 0
 		this.playersPassed = new Map()
-
-		this.needToChangeStageCalled = false
 	}
 
 	initialize(players: Player[]) {

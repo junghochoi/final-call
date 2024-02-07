@@ -130,9 +130,13 @@ export class Room {
 	}
 
 	needToChangeStage(): Stage | undefined {
-		if (this.bidStateManager.isGameOver()) {
+		console.log("Checking Stage Change for Bidding")
+		if (this.stage == Stage.Bidding && this.bidStateManager.isGameOver()) {
 			return Stage.Auctioning
-		} else if (this.auctionStateManager.isGameOver()) {
+		}
+
+		console.log("Checking Stage Change for Auctioning")
+		if (this.stage == Stage.Auctioning && this.auctionStateManager.isGameOver()) {
 			return Stage.Result
 		}
 
