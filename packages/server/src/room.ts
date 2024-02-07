@@ -8,7 +8,7 @@ import {
 	Stage,
 } from "@final-call/shared"
 import { BidStateManager } from "./bidStateManager"
-import { AuctionStateManager } from "./auctionStateManager"
+import { AuctionStateManager, UpdateInfo } from "./auctionStateManager"
 import { shuffle } from "./lib/utils"
 
 export class Room {
@@ -83,23 +83,6 @@ export class Room {
 		return this.players.get(sessionId)
 	}
 
-	changeStage(stage: Stage) {
-		if (stage == Stage.Bidding) {
-			this.playerOrder = Array.from(this.players.values()).sort((a, b) => a.nickname.localeCompare(b.nickname))
-			this.bidStateManager.initialize(this.playerOrder)
-		} else if (stage == Stage.Auctioning) {
-			const propertyCards = new Map(this.bidStateManager.getBidState().playerPropertyCards)
-
-			this.bidStateManager = new BidStateManager()
-			this.auctionStateManager.initialize(this.playerOrder, propertyCards)
-		} else if (stage == Stage.Result) {
-			this.auctionStateManager = new AuctionStateManager()
-			// Deinitialize AuctionState
-			// Initialize Results Page
-		}
-		this.stage = stage
-	}
-
 	makePlayerBid(sessionId: SessionID, amount: number): boolean {
 		const player = this.getParticipant(sessionId)
 
@@ -118,12 +101,32 @@ export class Room {
 		return playerPassSuccessful
 	}
 
-	makePlayerSell(sessionId: SessionID, property: Property) {
+	makePlayerSell(sessionId: SessionID, property: Property): UpdateInfo {
 		const player = this.getParticipant(sessionId)
 
-		if (!player) return false
+		if (!player) return { success: false, submitAllIndividualStates: false }
 
 		return this.auctionStateManager.makePlayerSellProperty(sessionId, property)
+	}
+
+	changeStage(stage: Stage) {
+		if (stage == Stage.Bidding) {
+			this.playerOrder = Array.from(this.players.values()).sort((a, b) => a.nickname.localeCompare(b.nickname))
+			this.bidStateManager.initialize(this.playerOrder)
+		} else if (stage == Stage.Auctioning) {
+			const propertyCards = new Map(this.bidStateManager.getBidState().playerPropertyCards)
+
+			this.bidStateManager = new BidStateManager()
+			this.auctionStateManager.initialize(this.playerOrder, propertyCards)
+		} else if (stage == Stage.Result) {
+			this.auctionStateManager = new AuctionStateManager()
+			// Deinitialize AuctionState
+			// Initialize Results Page
+		} else if (stage === Stage.Lobby) {
+			this.bidStateManager = new BidStateManager()
+			this.auctionStateManager = new AuctionStateManager()
+		}
+		this.stage = stage
 	}
 
 	needToChangeStage(): Stage | undefined {

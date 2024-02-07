@@ -5,7 +5,12 @@ import {
 	AuctionStateSerialized,
 	Stage,
 } from "@final-call/shared"
-import { shuffle } from "./lib/utils"
+import { shuffle, zip } from "./lib/utils"
+
+export type UpdateInfo = {
+	success: boolean
+	submitAllIndividualStates: boolean
+}
 
 export class AuctionStateManager {
 	private deckSize: number
@@ -54,38 +59,65 @@ export class AuctionStateManager {
 	}
 
 	getIndividualAuctionState(sessionId: SessionID): IndividualAuctionStateUploadPayload {
-		const propertyCards = this.playerPropertyCards.get(sessionId)!
-		const cashCards = this.playerCashCards.get(sessionId)!
+		const propertyCards = this.playerPropertyCards.get(sessionId)
+		const cashCards = this.playerCashCards.get(sessionId)
+
+		console.log("Call from getIndividualAuctionState", this.playerPropertyCards)
 
 		return {
 			stage: Stage.Auctioning,
-			propertyCards,
-			cashCards,
+			propertyCards: propertyCards!,
+			cashCards: cashCards!,
 		}
 	}
 
-	makePlayerSellProperty(sessionId: SessionID, property: number) {
+	makePlayerSellProperty(sessionId: SessionID, property: number): UpdateInfo {
+		console.log("Call from makeSellProperty", this.playerPropertyCards)
 		const propertyCards = this.playerPropertyCards.get(sessionId)!
 		const propertyCardsWithRemovedProperty = propertyCards.filter((num) => num !== property)
 		this.playerPropertyCards.set(sessionId, propertyCardsWithRemovedProperty)
 
 		this.playerSellingPropertyCard.set(sessionId, property)
 
-		return true
-		// Check if all players have selected a card
+		if (this.playerSellingPropertyCard.size === this.numPlayers) {
+			const playersOrdered = [...this.playerSellingPropertyCard.entries()].sort((a, b) => a[1] - b[1]).map((a) => a[0])
+			const cashCardsOrdered = this.roundCards.sort((a, b) => a - b)
+
+			const assignments = zip(playersOrdered, cashCardsOrdered)
+
+			console.log(assignments)
+
+			assignments.forEach((pair) => {
+				const userId = pair[0]
+				const cashCard = pair[1]
+
+				this.#addCashCardToPlayerHand(cashCard, userId)
+			})
+
+			// this.playerSellingPropertyCard.clear()
+			return {
+				success: true,
+				submitAllIndividualStates: true,
+			}
+		}
+
+		return {
+			success: true,
+			submitAllIndividualStates: false,
+		}
 	}
 
 	startNewRound() {}
 
 	#addCashCardToPlayerHand(cashCard: number, sessionId: SessionID) {
-		const playerCashCards = this.playerCashCards.get(sessionId)!
+		const cashCards = this.playerCashCards.get(sessionId)!
 
-		if (playerCashCards === undefined) {
+		if (cashCards === undefined) {
 			throw new Error("could not find player in playerPropertyCards")
 		}
 
-		playerCashCards.push(cashCard)
-		this.playerPropertyCards.set(sessionId, playerCashCards)
+		cashCards.push(cashCard)
+		this.playerCashCards.set(sessionId, cashCards)
 	}
 	// Helper Functions
 	#createDeck(numCards: number) {

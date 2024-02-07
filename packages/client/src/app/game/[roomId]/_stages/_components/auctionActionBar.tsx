@@ -30,7 +30,7 @@ export const AuctionActionBar = ({ currPlayerPropertyCards, currPlayerCashCards,
 			</div>
 			<div className="w-1/3flex justify-around items-center">
 				{currPlayerCashCards.map((card) => (
-					<div key={card} onClick={() => handleSellProperty(card)} className="p-4 border-2 border-black">
+					<div key={card} className="p-4 border-2 border-black">
 						{card}
 					</div>
 				))}

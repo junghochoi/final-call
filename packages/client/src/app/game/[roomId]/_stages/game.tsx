@@ -48,9 +48,8 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 	const [currPlayerTurnIndex, setCurrPlayerTurnIndex] = useState<number>(0)
 	const [currPlayerBank, setCurrPlayerBank] = useState<number>(0)
 	const [currPlayerPropertyCards, setCurrPlayerPropertyCards] = useState<number[]>([])
-	const [highestBid, setHighestBid] = useState<number>(0)
-
 	const [currPlayerCashCards, setCurrPlayerCashCards] = useState<number[]>([])
+	const [highestBid, setHighestBid] = useState<number>(0)
 
 	useEffect(() => {
 		const ind = gameState.playerOrder.findIndex((player) => player.sessionId === gameState.currPlayer?.sessionId)
@@ -72,6 +71,7 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 				break
 			case Stage.Auctioning:
 				setCurrPlayerPropertyCards(individualState.propertyCards)
+				setCurrPlayerCashCards(individualState.cashCards)
 				break
 		}
 	}, [])

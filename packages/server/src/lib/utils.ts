@@ -27,3 +27,5 @@ export function shuffle(array: any[]) {
 
 	return array
 }
+
+export const zip = <K, T>(a: K[], b: T[]): [K, T][] => a.map((k, i) => [k, b[i]])

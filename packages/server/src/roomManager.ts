@@ -8,6 +8,7 @@ import {
 	Stage,
 } from "@final-call/shared"
 import { Room } from "./room"
+import { UpdateInfo } from "./auctionStateManager"
 
 export class RoomManager {
 	private rooms: Map<RoomID, Room>
@@ -122,10 +123,10 @@ export class RoomManager {
 		return room.makePlayerPass(sessionId)
 	}
 
-	makePlayerSell(roomId: RoomID, sessionId: SessionID, property: Property): boolean {
+	makePlayerSell(roomId: RoomID, sessionId: SessionID, property: Property): UpdateInfo {
 		const room = this.rooms.get(roomId)
 
-		if (!room) return false
+		if (!room) return { success: false, submitAllIndividualStates: false }
 
 		return room.makePlayerSell(sessionId, property)
 	}

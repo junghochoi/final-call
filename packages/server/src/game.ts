@@ -151,26 +151,35 @@ export class Game {
 			switch (action.name) {
 				case "bid": {
 					this.roomManager.makePlayerBid(socket.data.roomId, action.player.sessionId, action.amount)
+					this.emitIndividualGameState(socket)
+
 					break
 				}
 
 				case "pass": {
 					this.roomManager.makePlayerPass(socket.data.roomId, action.player.sessionId)
+					this.emitIndividualGameState(socket)
+
 					break
 				}
 				case "sell": {
-					this.roomManager.makePlayerSell(socket.data.roomId, action.player.sessionId, action.property)
+					const info = this.roomManager.makePlayerSell(socket.data.roomId, action.player.sessionId, action.property)
+
+					if (info.submitAllIndividualStates) {
+						this.emitAllIndividualGameState(roomId)
+					} else {
+						this.emitIndividualGameState(socket)
+					}
+
 					break
 				}
 			}
 
-			this.emitIndividualGameState(socket)
 			this.changeStageIfNeeded(socket.data.roomId)
 			this.emitGameState(socket.data.roomId)
 		})
 
 		socket.on("IndividualGameStateInitialization", (player, callback) => {
-			const { roomId, sessionId } = player
 			const individualGameState = this.roomManager.getRoomIndividualGameState(socket.data.roomId, socket.data.sessionId)
 
 			if (!individualGameState) return
@@ -198,6 +207,19 @@ export class Game {
 		if (individualGameState) {
 			socket.emit("IndividualGameStateUpdate", individualGameState)
 		}
+	}
+
+	private async emitAllIndividualGameState(roomId: RoomID) {
+		const roomSockets = await this.server.in(roomId).fetchSockets()
+
+		roomSockets.forEach((s) => {
+			const individualGameState = this.roomManager.getRoomIndividualGameState(s.data.roomId, s.data.sessionId)
+			if (individualGameState) {
+				console.log(individualGameState)
+
+				s.emit("IndividualGameStateUpdate", individualGameState)
+			}
+		})
 	}
 
 	private changeStageIfNeeded(roomId: RoomID) {
