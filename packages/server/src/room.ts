@@ -11,6 +11,11 @@ import { BidStateManager } from "./bidStateManager"
 import { AuctionStateManager, UpdateInfo } from "./auctionStateManager"
 import { shuffle } from "./lib/utils"
 
+type ResultState = {
+	bank: number
+	cashCards: number[]
+}
+
 export class Room {
 	private roomId: RoomID
 	private players: Map<SessionID, Player>
@@ -19,6 +24,7 @@ export class Room {
 
 	private bidStateManager: BidStateManager
 	private auctionStateManager: AuctionStateManager
+	private resultState: Map<SessionID, ResultState>
 
 	constructor(roomId: string) {
 		this.roomId = roomId
@@ -27,6 +33,7 @@ export class Room {
 
 		this.bidStateManager = new BidStateManager()
 		this.auctionStateManager = new AuctionStateManager()
+		this.resultState = new Map()
 		this.playerOrder = []
 	}
 
@@ -38,6 +45,7 @@ export class Room {
 			stage: this.stage,
 			bidState: this.bidStateManager.getBidState(),
 			auctionState: this.auctionStateManager.getAuctionState(),
+			resultState: [...this.resultState.entries()],
 		}
 	}
 	getIndividualGameState(sessionId: SessionID): IndividualGameStateUpdatePayload {
@@ -114,14 +122,29 @@ export class Room {
 			this.playerOrder = Array.from(this.players.values()).sort((a, b) => a.nickname.localeCompare(b.nickname))
 			this.bidStateManager.initialize(this.playerOrder)
 		} else if (stage == Stage.Auctioning) {
+			// Obtain all the Result States from the Bank Stage
+			this.playerOrder.forEach((player: Player) => {
+				const individualBidState = this.bidStateManager.getIndividualBidState(player.sessionId)
+				this.resultState.set(player.sessionId, {
+					bank: individualBidState.bank,
+					cashCards: [],
+				})
+			})
+
 			const propertyCards = new Map(this.bidStateManager.getBidState().playerPropertyCards)
 
+			// Deinitialize BidState
 			this.bidStateManager = new BidStateManager()
 			this.auctionStateManager.initialize(this.playerOrder, propertyCards)
 		} else if (stage == Stage.Result) {
+			this.playerOrder.forEach((player: Player) => {
+				const individualAuctionState = this.auctionStateManager.getIndividualAuctionState(player.sessionId)
+				this.resultState.set(player.sessionId, {
+					bank: this.resultState.get(player.sessionId)?.bank!,
+					cashCards: individualAuctionState.cashCards,
+				})
+			})
 			this.auctionStateManager = new AuctionStateManager()
-			// Deinitialize AuctionState
-			// Initialize Results Page
 		} else if (stage === Stage.Lobby) {
 			this.bidStateManager = new BidStateManager()
 			this.auctionStateManager = new AuctionStateManager()

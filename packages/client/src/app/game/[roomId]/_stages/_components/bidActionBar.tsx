@@ -70,6 +70,8 @@ export const BidActionBar = ({
 	const validBidStyle =
 		highestBid < bidAmount && bidAmount <= currPlayerBank + currPlayerBid ? "bg-green-500" : "bg-red-500"
 
+	console.log(currPlayerBid + currPlayerBank, highestBid)
+
 	return (
 		<div className="h-28 mx-auto w-full bg-red-200 absolute bottom-0 flex justify-between">
 			{!bidMenuOpen && (
@@ -127,7 +129,12 @@ export const BidActionBar = ({
 					</div>
 					<div className="w-5/12 flex justify-around items-center">
 						<Button
-							disabled={!yourTurn || currPlayerBid + currPlayerBank <= highestBid || communityCards.length === 1}
+							disabled={
+								!yourTurn ||
+								currPlayerBid + currPlayerBank <= highestBid ||
+								bidAmount <= highestBid ||
+								communityCards.length === 1
+							}
 							onClick={bidClick}
 							className={cn("m-0 p-0 h-2/3 lg:h-3/4 w-5/12", actionEnabledStyles)}
 						>

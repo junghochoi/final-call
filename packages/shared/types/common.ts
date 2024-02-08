@@ -27,6 +27,7 @@ export type GameState = {
 	playerOrder: Player[]
 	bidState: BidState | undefined
 	auctionState: AuctionState | undefined
+	resultState: Map<SessionID, PlayerResultState> | undefined
 }
 
 export type PlayerInitializationPayload = {
@@ -92,3 +93,10 @@ export type AuctionState = {
 	playerSellingPropertyCard: Map<SessionID, number>
 	playerCashCards: Map<SessionID, number[]>
 }
+
+export type PlayerResultState = {
+	bank: number
+	cashCards: number[]
+}
+
+export type ResultStateSerialized = [SessionID, PlayerResultState][]

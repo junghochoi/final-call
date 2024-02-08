@@ -12,11 +12,12 @@ import {
 	BidState,
 	Action,
 	AuctionState,
+	PlayerResultState,
 } from "@final-call/shared"
 import { getNickname, getSessionId, persistSessionId } from "@/lib/utils"
 import { useSocket } from "@/contexts/SocketContext"
 import UsernameSelection from "./usernameSelection"
-import { Lobby, Game } from "./_stages"
+import { Lobby, Game, Results } from "./_stages"
 
 const GamePage = () => {
 	const { socket } = useSocket()
@@ -30,6 +31,7 @@ const GamePage = () => {
 		playerOrder: [],
 		bidState: undefined,
 		auctionState: undefined,
+		resultState: undefined,
 	})
 
 	const playerInitializationCallback = useCallback((playerData: Player) => {
@@ -83,11 +85,14 @@ const GamePage = () => {
 				playerSellingPropertyCard: new Map(gameStateUpdate.auctionState.playerSellingPropertyCard),
 			}
 
+			const resultState = new Map(gameStateUpdate.resultState)
+
 			const gameState: GameState = {
 				...gameStateUpdate,
 				auctionState: auctionState,
 				bidState: bidState,
 				currPlayer: currPlayer,
+				resultState,
 			}
 			setGameState(gameState)
 		})
@@ -117,6 +122,8 @@ const GamePage = () => {
 		return <Lobby gameState={gameState} handleStartGame={handleStartGame} />
 	} else if (gameState.stage == Stage.Bidding || gameState.stage == Stage.Auctioning) {
 		return <Game roomId={roomId} gameState={gameState} handleGameAction={handleGameAction} />
+	} else if (gameState.stage === Stage.Result) {
+		return <Results gameState={gameState} />
 	} else {
 		return <div>{gameState.stage}</div>
 	}

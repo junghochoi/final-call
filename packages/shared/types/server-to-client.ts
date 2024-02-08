@@ -1,4 +1,12 @@
-import { Player, Stage, PlayerInitializationPayload, BidStateSerialized, AuctionStateSerialized } from "./common"
+import {
+	Player,
+	Stage,
+	PlayerInitializationPayload,
+	BidStateSerialized,
+	AuctionStateSerialized,
+	PlayerResultState,
+	ResultStateSerialized,
+} from "./common"
 
 export type GameStateUpdatePayload = {
 	roomId: string
@@ -7,6 +15,7 @@ export type GameStateUpdatePayload = {
 	stage: Stage
 	bidState: BidStateSerialized
 	auctionState: AuctionStateSerialized
+	resultState: ResultStateSerialized
 }
 
 export type IndividualGameStateUpdatePayload = IndividualBidStateUploadPayload | IndividualAuctionStateUploadPayload

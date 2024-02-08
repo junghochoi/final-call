@@ -106,7 +106,9 @@ export type ServerBidState = {
 		const bank = this.playerBanks.get(sessionId)
 		const amountPutIn = this.playerBids.get(sessionId) ?? 0
 
-		if (bank === undefined || bid > bank + amountPutIn) {
+		// Second Condition: If their bid is greater than what they have and what they put in. Return False
+		// Third Condition: If their bid is less or equal to the maximum bid
+		if (bank === undefined || bid > bank + amountPutIn || bid <= Math.max(...this.playerBids.values())) {
 			return false
 		}
 
