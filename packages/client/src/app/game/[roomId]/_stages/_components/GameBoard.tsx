@@ -3,6 +3,7 @@ import { AuctionState, BidState, Player, Stage } from "@final-call/shared"
 import { PlayerBox } from "./playerBox"
 import { zip } from "@/lib/utils"
 import { Card } from "./card"
+import { AnimatePresence } from "framer-motion"
 
 interface GameBoardProps {
 	stage: Stage
@@ -58,9 +59,11 @@ export const GameBoard = ({
 
 				{stage === Stage.Bidding && (
 					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
-						{bidState.roundCards.map((num: number) => (
-							<Card key={num} value={`${num}`} />
-						))}
+						<AnimatePresence>
+							{bidState.roundCards.map((num: number) => (
+								<Card key={num} value={`${num}`} />
+							))}
+						</AnimatePresence>
 					</div>
 				)}
 
