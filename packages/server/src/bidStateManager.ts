@@ -48,16 +48,6 @@ export class BidStateManager {
 		this.playersPassed = new Map(players.map((player) => [player.sessionId, false]))
 	}
 
-	/*
-export type ServerBidState = {
-	round: number
-	players: Player[]
-	playerBanks: Map<SessionID, number> // Client does not have access to playerBanks
-	currentBids: Map<SessionID, number>
-	turn: number
-}
-	*/
-
 	getBidState(): BidStateSerialized {
 		return {
 			round: this.round,
@@ -78,29 +68,6 @@ export type ServerBidState = {
 		}
 	}
 
-	makePlayerPass(player: Player) {
-		this.numPlayersPassed += 1
-		this.playersPassed.set(player.sessionId, true)
-
-		const propertyCard = this.roundCards.pop()
-
-		if (!propertyCard) return false
-
-		this.#addPropertyCardToPlayerHand(propertyCard, player.sessionId)
-		this.#setNextPlayerTurn()
-
-		if (this.numPlayersPassed === this.numPlayers) {
-			this.startNewRound()
-		} else {
-			const bank = this.playerBanks.get(player.sessionId)!
-			const bid = this.playerBids.get(player.sessionId)!
-			this.playerBanks.set(player.sessionId, bank + Math.floor(bid / 2))
-			this.playerBids.set(player.sessionId, 0)
-		}
-
-		return true
-	}
-
 	makePlayerBid(player: Player, bid: number) {
 		const sessionId = player.sessionId
 		const bank = this.playerBanks.get(sessionId)
@@ -118,6 +85,30 @@ export type ServerBidState = {
 
 		return true
 	}
+	makePlayerPass(player: Player) {
+		this.numPlayersPassed += 1
+		this.playersPassed.set(player.sessionId, true)
+
+		const propertyCard = this.roundCards.pop()
+
+		if (!propertyCard) return false
+
+		this.#addPropertyCardToPlayerHand(propertyCard, player.sessionId)
+		this.#setNextPlayerTurn()
+
+		console.log(this.numPlayersPassed, this.numPlayers)
+		if (this.numPlayersPassed === this.numPlayers - 1) {
+			this.endRound()
+			// this.startNewRound()
+		} else {
+			const bank = this.playerBanks.get(player.sessionId)!
+			const bid = this.playerBids.get(player.sessionId)!
+			this.playerBanks.set(player.sessionId, bank + Math.floor(bid / 2))
+			this.playerBids.set(player.sessionId, 0)
+		}
+
+		return true
+	}
 
 	startNewRound() {
 		this.roundCards = this.#drawCards(this.playerOrder.length)
@@ -132,6 +123,17 @@ export type ServerBidState = {
 		Array.from(this.playersPassed.keys()).forEach((key) => {
 			this.playersPassed.set(key, false)
 		})
+	}
+
+	endRound() {
+		const propertyCard = this.roundCards.pop()
+		if (!propertyCard) return false
+
+		const player = this.playerOrder[this.playerTurn]
+
+		this.#addPropertyCardToPlayerHand(propertyCard, player.sessionId)
+		this.#setNextPlayerTurn()
+		this.startNewRound()
 	}
 
 	#setNextPlayerTurn() {
@@ -155,7 +157,7 @@ export type ServerBidState = {
 			throw new Error("could not find player in playerPropertyCards")
 		}
 
-		playerPropertyHand.push(propertyCard!)
+		playerPropertyHand.push(propertyCard)
 		this.playerPropertyCards.set(sessionId, playerPropertyHand)
 	}
 	// Helper Functions

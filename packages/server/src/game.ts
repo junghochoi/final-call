@@ -158,7 +158,8 @@ export class Game {
 
 				case "pass": {
 					this.roomManager.makePlayerPass(socket.data.roomId, action.player.sessionId)
-					this.emitIndividualGameState(socket)
+					// this.emitIndividualGameState(socket)
+					this.emitAllIndividualGameState(roomId)
 
 					break
 				}
