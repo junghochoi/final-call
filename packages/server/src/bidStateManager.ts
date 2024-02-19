@@ -16,6 +16,9 @@ export class BidStateManager {
 
 	private numPlayersPassed: number
 	private playersPassed: Map<SessionID, boolean>
+
+	private endRoundAnimate: boolean
+	private numAnimationsCompleted: number
 	constructor() {
 		this.numPlayers = 0
 		this.allCards = []
@@ -30,6 +33,9 @@ export class BidStateManager {
 
 		this.numPlayersPassed = 0
 		this.playersPassed = new Map()
+
+		this.endRoundAnimate = false
+		this.numAnimationsCompleted = 0
 	}
 
 	initialize(players: Player[]) {
@@ -46,6 +52,9 @@ export class BidStateManager {
 
 		this.numPlayersPassed = 0
 		this.playersPassed = new Map(players.map((player) => [player.sessionId, false]))
+
+		this.endRoundAnimate = false
+		this.numAnimationsCompleted = 0
 	}
 
 	getBidState(): BidStateSerialized {
@@ -55,6 +64,7 @@ export class BidStateManager {
 			roundCards: this.roundCards,
 			playerBids: [...this.playerBids.entries()],
 			playerPropertyCards: [...this.playerPropertyCards.entries()],
+			endRoundAnimate: this.endRoundAnimate,
 		}
 	}
 	getIndividualBidState(sessionId: SessionID): IndividualBidStateUploadPayload {
@@ -126,14 +136,15 @@ export class BidStateManager {
 	}
 
 	endRound() {
-		const propertyCard = this.roundCards.pop()
-		if (!propertyCard) return false
+		this.endRoundAnimate = true
+		// const propertyCard = this.roundCards.pop()
+		// if (!propertyCard) return false
 
-		const player = this.playerOrder[this.playerTurn]
+		// const player = this.playerOrder[this.playerTurn]
 
-		this.#addPropertyCardToPlayerHand(propertyCard, player.sessionId)
-		this.#setNextPlayerTurn()
-		this.startNewRound()
+		// this.#addPropertyCardToPlayerHand(propertyCard, player.sessionId)
+		// this.#setNextPlayerTurn()
+		// this.startNewRound()
 	}
 
 	#setNextPlayerTurn() {

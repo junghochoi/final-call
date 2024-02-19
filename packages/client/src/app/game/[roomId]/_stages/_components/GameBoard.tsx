@@ -92,6 +92,7 @@ export const GameBoard = ({
 								value: auctionState.playerSellingPropertyCard.get(player.sessionId),
 								visible: auctionState.playerSellingPropertyCard.size === playerOrder.length,
 							}}
+							animateWinner={bidState.endRoundAnimate && bidState.playerTurn === ind}
 						/>
 					)
 				})}
@@ -101,6 +102,7 @@ export const GameBoard = ({
 						positionTailwindStyle={playerPositions[ind + playerOrder.length][BOX_POSITION]}
 						playerPresenceTailwindStyle={playerAbsentStyle}
 						key={ind}
+						animateWinner={false}
 					/>
 				))}
 			</div>

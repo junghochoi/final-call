@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
 import { Stage } from "@final-call/shared"
+import { Variants, motion } from "framer-motion"
 
 interface PlayerBoxProps {
 	positionTailwindStyle: string
@@ -17,6 +18,8 @@ interface PlayerBoxProps {
 		value?: number
 		visible: boolean
 	}
+
+	animateWinner: boolean
 }
 
 export const PlayerBox = ({
@@ -30,10 +33,24 @@ export const PlayerBox = ({
 	currPlayerBank,
 	propertyCard,
 	stage,
+	animateWinner,
 }: PlayerBoxProps) => {
+	const variants: Variants = {
+		initial: { opacity: 1, scale: 1 },
+		animate: {
+			opacity: 1,
+			scale: 1.1,
+			transition: {
+				repeat: 9,
+				// delay: 2,
+				repeatType: "mirror",
+			},
+		},
+	}
+
 	return (
 		<>
-			<div
+			<motion.div
 				className={cn(
 					"absolute w-20 h-14 md:w-28 md:h-18 ",
 					positionTailwindStyle,
@@ -41,9 +58,11 @@ export const PlayerBox = ({
 					playerTurnTailwindStyle,
 					currPlayerTailwindStyle
 				)}
+				variants={variants}
+				animate={animateWinner ? "animate" : "initial"}
 			>
 				{nickname} - {currPlayerBank}
-			</div>
+			</motion.div>
 
 			<div
 				className={cn(
