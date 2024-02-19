@@ -138,4 +138,12 @@ export class RoomManager {
 
 		return room.needToChangeStage()
 	}
+
+	endRoundAnimation(roomId: RoomID) {
+		const room = this.rooms.get(roomId)
+
+		if (!room) return
+
+		room.endRoundAnimation()
+	}
 }

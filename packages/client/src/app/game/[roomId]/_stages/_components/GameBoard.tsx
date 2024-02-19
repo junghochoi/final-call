@@ -3,7 +3,7 @@ import { AuctionState, BidState, Player, Stage } from "@final-call/shared"
 import { PlayerBox } from "./playerBox"
 import { zip } from "@/lib/utils"
 import { Card } from "./card"
-import { AnimatePresence } from "framer-motion"
+import { AnimatePresence, animate } from "framer-motion"
 
 interface GameBoardProps {
 	stage: Stage
@@ -92,6 +92,7 @@ export const GameBoard = ({
 								value: auctionState.playerSellingPropertyCard.get(player.sessionId),
 								visible: auctionState.playerSellingPropertyCard.size === playerOrder.length,
 							}}
+							animateWinner={bidState.endRoundAnimate && bidState.playerTurn === ind}
 						/>
 					)
 				})}
@@ -101,6 +102,7 @@ export const GameBoard = ({
 						positionTailwindStyle={playerPositions[ind + playerOrder.length][BOX_POSITION]}
 						playerPresenceTailwindStyle={playerAbsentStyle}
 						key={ind}
+						animateWinner={false}
 					/>
 				))}
 			</div>

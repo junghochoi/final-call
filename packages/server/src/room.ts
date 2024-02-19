@@ -153,16 +153,24 @@ export class Room {
 	}
 
 	needToChangeStage(): Stage | undefined {
-		console.log("Checking Stage Change for Bidding")
 		if (this.stage == Stage.Bidding && this.bidStateManager.isGameOver()) {
 			return Stage.Auctioning
 		}
 
-		console.log("Checking Stage Change for Auctioning")
 		if (this.stage == Stage.Auctioning && this.auctionStateManager.isGameOver()) {
 			return Stage.Result
 		}
 
 		return undefined
+	}
+
+	endRoundAnimation() {
+		if (this.stage == Stage.Bidding) {
+			this.bidStateManager.endRoundAnimation()
+		}
+
+		// if (this.stage == Stage.Auctioning && this.auctionStateManager.isGameOver()) {
+		// 	return Stage.Result
+		// }
 	}
 }

@@ -188,6 +188,10 @@ export class Game {
 			callback(individualGameState)
 		})
 
+		socket.on("EndRoundAnimation", ({ roomId }) => {
+			this.roomManager.endRoundAnimation(roomId)
+		})
+
 		// ------------ Game Related Events -----------------
 
 		socket.onAny((event, ...args) => {

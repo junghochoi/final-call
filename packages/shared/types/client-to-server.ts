@@ -11,4 +11,5 @@ export interface ClientToServerEvents {
 	StageChange: (payload: { roomId: RoomID; stage: Stage }) => void
 	GameAction: (payload: { roomId: RoomID; action: Action }) => void
 	IndividualGameStateInitialization: (player: Player, callback: IndividualGameStateCallback) => void
+	EndRoundAnimation: (payload: { roomId: RoomID }) => void
 }

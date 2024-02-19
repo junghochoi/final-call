@@ -16,6 +16,9 @@ export class BidStateManager {
 
 	private numPlayersPassed: number
 	private playersPassed: Map<SessionID, boolean>
+
+	private endRoundAnimate: boolean
+	private numAnimationsCompleted: number
 	constructor() {
 		this.numPlayers = 0
 		this.allCards = []
@@ -30,6 +33,9 @@ export class BidStateManager {
 
 		this.numPlayersPassed = 0
 		this.playersPassed = new Map()
+
+		this.endRoundAnimate = false
+		this.numAnimationsCompleted = 0
 	}
 
 	initialize(players: Player[]) {
@@ -46,6 +52,9 @@ export class BidStateManager {
 
 		this.numPlayersPassed = 0
 		this.playersPassed = new Map(players.map((player) => [player.sessionId, false]))
+
+		this.endRoundAnimate = false
+		this.numAnimationsCompleted = 0
 	}
 
 	getBidState(): BidStateSerialized {
@@ -55,6 +64,7 @@ export class BidStateManager {
 			roundCards: this.roundCards,
 			playerBids: [...this.playerBids.entries()],
 			playerPropertyCards: [...this.playerPropertyCards.entries()],
+			endRoundAnimate: this.endRoundAnimate,
 		}
 	}
 	getIndividualBidState(sessionId: SessionID): IndividualBidStateUploadPayload {
@@ -96,9 +106,8 @@ export class BidStateManager {
 		this.#addPropertyCardToPlayerHand(propertyCard, player.sessionId)
 		this.#setNextPlayerTurn()
 
-		console.log(this.numPlayersPassed, this.numPlayers)
 		if (this.numPlayersPassed === this.numPlayers - 1) {
-			this.endRound()
+			this.startEndRound()
 			// this.startNewRound()
 		} else {
 			const bank = this.playerBanks.get(player.sessionId)!
@@ -115,6 +124,7 @@ export class BidStateManager {
 
 		this.round += 1
 		this.numPlayersPassed = 0
+		this.numAnimationsCompleted = 0
 
 		Array.from(this.playerBids.keys()).forEach((key) => {
 			this.playerBids.set(key, 0)
@@ -125,7 +135,11 @@ export class BidStateManager {
 		})
 	}
 
-	endRound() {
+	startEndRound() {
+		this.endRoundAnimate = true
+		// this.startNewRound()
+	}
+	finishEndRound() {
 		const propertyCard = this.roundCards.pop()
 		if (!propertyCard) return false
 
@@ -172,5 +186,15 @@ export class BidStateManager {
 	isGameOver(): boolean {
 		const res = this.round === Math.ceil(this.deckSize / this.numPlayers)
 		return res
+	}
+
+	endRoundAnimation() {
+		this.numAnimationsCompleted += 1
+
+		console.log(this.numAnimationsCompleted, this.numPlayers)
+		if (this.numAnimationsCompleted === this.numPlayers) {
+			console.log("Finsihing The End of ROund")
+			this.finishEndRound()
+		}
 	}
 }

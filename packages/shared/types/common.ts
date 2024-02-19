@@ -69,6 +69,7 @@ export type BidStateSerialized = {
 	playerBids: [string, number][]
 	playerPropertyCards: [string, number[]][]
 	playerTurn: number
+	endRoundAnimate: boolean
 }
 
 export type BidState = {
@@ -76,6 +77,7 @@ export type BidState = {
 	roundCards: number[]
 	playerBids: Map<SessionID, number>
 	playerTurn: number
+	endRoundAnimate: boolean
 }
 
 export type AuctionStateSerialized = {

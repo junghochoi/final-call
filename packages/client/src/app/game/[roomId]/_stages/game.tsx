@@ -154,7 +154,7 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 					highestBid={highestBid}
 					communityCards={gameState.bidState!.roundCards}
 					stage={gameState.stage}
-					yourTurn={currPlayerTurnIndex === gameState.bidState!.playerTurn}
+					yourTurn={currPlayerTurnIndex === gameState.bidState.playerTurn && !gameState.bidState.endRoundAnimate}
 				/>
 			)}
 
