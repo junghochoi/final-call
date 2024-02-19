@@ -61,7 +61,7 @@ export const GameBoard = ({
 					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
 						<AnimatePresence>
 							{bidState.roundCards.map((num: number) => (
-								<Card key={num} value={`${num}`} />
+								<Card key={num} value={`${num}`} labelVisible={false} />
 							))}
 						</AnimatePresence>
 					</div>
@@ -70,7 +70,7 @@ export const GameBoard = ({
 				{stage === Stage.Auctioning && (
 					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
 						{auctionState.roundCards.map((num: number) => (
-							<Card key={num} value={`$${num}`} />
+							<Card key={num} value={`$${num}`} labelVisible={true} />
 						))}
 					</div>
 				)}
