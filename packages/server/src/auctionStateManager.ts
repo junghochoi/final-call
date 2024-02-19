@@ -24,6 +24,7 @@ export class AuctionStateManager {
 	private playerCashCards: Map<SessionID, number[]>
 	private playerPropertyCards: Map<SessionID, number[]>
 	private playerSellingPropertyCard: Map<SessionID, number>
+	private endRoundAnimate: boolean
 
 	constructor() {
 		this.numPlayers = 0
@@ -35,6 +36,7 @@ export class AuctionStateManager {
 		this.playerCashCards = new Map()
 		this.playerSellingPropertyCard = new Map()
 		this.deckSize = 0
+		this.endRoundAnimate = false
 	}
 
 	initialize(playerOrder: Player[], playerPropertyCards: Map<SessionID, number[]>) {
@@ -55,14 +57,13 @@ export class AuctionStateManager {
 			playerPropertyCards: [...this.playerPropertyCards.entries()],
 			playerCashCards: [...this.playerCashCards.entries()],
 			playerSellingPropertyCard: [...this.playerSellingPropertyCard.entries()],
+			endRoundAnimate: this.endRoundAnimate,
 		}
 	}
 
 	getIndividualAuctionState(sessionId: SessionID): IndividualAuctionStateUploadPayload {
 		const propertyCards = this.playerPropertyCards.get(sessionId)
 		const cashCards = this.playerCashCards.get(sessionId)
-
-		console.log("Call from getIndividualAuctionState", this.playerPropertyCards)
 
 		return {
 			stage: Stage.Auctioning,
@@ -72,7 +73,6 @@ export class AuctionStateManager {
 	}
 
 	makePlayerSellProperty(sessionId: SessionID, property: number): UpdateInfo {
-		console.log("Call from makeSellProperty", this.playerPropertyCards)
 		const propertyCards = this.playerPropertyCards.get(sessionId)!
 		const propertyCardsWithRemovedProperty = propertyCards.filter((num) => num !== property)
 		this.playerPropertyCards.set(sessionId, propertyCardsWithRemovedProperty)
@@ -94,7 +94,8 @@ export class AuctionStateManager {
 				this.#addCashCardToPlayerHand(cashCard, userId)
 			})
 
-			this.startNewRound()
+			this.endRoundAnimate = true
+			// this.startNewRound()
 
 			return {
 				success: true,

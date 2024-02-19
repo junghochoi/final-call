@@ -128,7 +128,7 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 	if (gameState.bidState === undefined) {
 		return <p>Game State Loading - bidstate not defined</p>
 	}
-	if (gameState.auctionState === undefined && gameState.stage === Stage.Auctioning) {
+	if (gameState.auctionState === undefined) {
 		return <p>Game State Loading - auctionstate not defined</p>
 	} else if (gameState.currPlayer === undefined) {
 		return <p>Error: CurrPlayerNot Defined</p>
@@ -163,6 +163,7 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 					currPlayerPropertyCards={currPlayerPropertyCards}
 					currPlayerCashCards={currPlayerCashCards}
 					sell={handleSellPropertyAction}
+					canTakeAction={!gameState.auctionState.endRoundAnimate}
 				/>
 			)}
 		</>

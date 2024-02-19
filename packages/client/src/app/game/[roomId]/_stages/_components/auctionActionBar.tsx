@@ -12,11 +12,20 @@ interface AuctionActionBarProps {
 	currPlayerCashCards: number[]
 
 	sell: (amount: number) => void
+	canTakeAction: boolean
 }
 
-export const AuctionActionBar = ({ currPlayerPropertyCards, currPlayerCashCards, sell }: AuctionActionBarProps) => {
+export const AuctionActionBar = ({
+	currPlayerPropertyCards,
+	currPlayerCashCards,
+	sell,
+	canTakeAction,
+}: AuctionActionBarProps) => {
 	const handleSellProperty = (card: number) => {
-		sell(card)
+		console.log(canTakeAction)
+		if (canTakeAction) {
+			sell(card)
+		}
 	}
 
 	return (

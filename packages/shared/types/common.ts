@@ -86,6 +86,7 @@ export type AuctionStateSerialized = {
 	playerPropertyCards: [SessionID, number[]][]
 	playerSellingPropertyCard: [SessionID, number][]
 	playerCashCards: [SessionID, number[]][]
+	endRoundAnimate: boolean
 }
 
 export type AuctionState = {
@@ -94,6 +95,7 @@ export type AuctionState = {
 	playerPropertyCards: Map<SessionID, number[]>
 	playerSellingPropertyCard: Map<SessionID, number>
 	playerCashCards: Map<SessionID, number[]>
+	endRoundAnimate: boolean
 }
 
 export type PlayerResultState = {
