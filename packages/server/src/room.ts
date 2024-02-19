@@ -102,11 +102,9 @@ export class Room {
 	makePlayerPass(sessionId: SessionID) {
 		const player = this.getParticipant(sessionId)
 
-		if (!player) return false
+		if (!player) return { success: false, emitGameState: false }
 
-		const playerPassSuccessful = this.bidStateManager.makePlayerPass(player)
-
-		return playerPassSuccessful
+		return this.bidStateManager.makePlayerPass(player)
 	}
 
 	makePlayerSell(sessionId: SessionID, property: Property): UpdateInfo {
@@ -115,6 +113,10 @@ export class Room {
 		if (!player) return { success: false, submitAllIndividualStates: false }
 
 		return this.auctionStateManager.makePlayerSellProperty(sessionId, property)
+	}
+
+	startNewBiddingRound() {
+		this.bidStateManager.startNewRound()
 	}
 
 	changeStage(stage: Stage) {

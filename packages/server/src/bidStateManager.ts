@@ -101,14 +101,23 @@ export class BidStateManager {
 
 		const propertyCard = this.roundCards.pop()
 
-		if (!propertyCard) return false
+		if (!propertyCard) {
+			return {
+				success: false,
+				emitGameState: false,
+			}
+		}
 
 		this.#addPropertyCardToPlayerHand(propertyCard, player.sessionId)
 		this.#setNextPlayerTurn()
 
-		console.log(this.numPlayersPassed, this.numPlayers)
 		if (this.numPlayersPassed === this.numPlayers - 1) {
 			this.endRound()
+
+			return {
+				success: true,
+				emitGameState: true,
+			}
 			// this.startNewRound()
 		} else {
 			const bank = this.playerBanks.get(player.sessionId)!
@@ -117,10 +126,24 @@ export class BidStateManager {
 			this.playerBids.set(player.sessionId, 0)
 		}
 
-		return true
+		return {
+			success: true,
+			emitGameState: false,
+		}
 	}
 
 	startNewRound() {
+		this.endRoundAnimate = false
+		const propertyCard = this.roundCards.pop()
+		if (!propertyCard) return false
+
+		const player = this.playerOrder[this.playerTurn]
+
+		this.#addPropertyCardToPlayerHand(propertyCard, player.sessionId)
+		this.#setNextPlayerTurn()
+		this.startNewRound()
+
+		// Starting New Round - Above code gives card back to last person
 		this.roundCards = this.#drawCards(this.playerOrder.length)
 
 		this.round += 1
@@ -137,14 +160,6 @@ export class BidStateManager {
 
 	endRound() {
 		this.endRoundAnimate = true
-		// const propertyCard = this.roundCards.pop()
-		// if (!propertyCard) return false
-
-		// const player = this.playerOrder[this.playerTurn]
-
-		// this.#addPropertyCardToPlayerHand(propertyCard, player.sessionId)
-		// this.#setNextPlayerTurn()
-		// this.startNewRound()
 	}
 
 	#setNextPlayerTurn() {

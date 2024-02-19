@@ -157,9 +157,25 @@ export class Game {
 				}
 
 				case "pass": {
-					this.roomManager.makePlayerPass(socket.data.roomId, action.player.sessionId)
+					const { success, emitGameState } = this.roomManager.makePlayerPass(
+						socket.data.roomId,
+						action.player.sessionId
+					)
 					// this.emitIndividualGameState(socket)
 					this.emitAllIndividualGameState(roomId)
+
+					console.log(emitGameState)
+
+					if (emitGameState) {
+						setTimeout(() => {
+							console.log("SetTimeout Executing")
+							this.roomManager.startNewBiddingRound(roomId)
+							this.emitAllIndividualGameState(roomId)
+							this.emitGameState(roomId)
+							this.changeStageIfNeeded(socket.data.roomId)
+							this.emitGameState(socket.data.roomId)
+						}, 2000)
+					}
 
 					break
 				}

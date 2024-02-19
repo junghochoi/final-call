@@ -115,12 +115,20 @@ export class RoomManager {
 		return room.makePlayerBid(sessionId, amount)
 	}
 
-	makePlayerPass(roomId: RoomID, sessionId: SessionID): boolean {
+	makePlayerPass(roomId: RoomID, sessionId: SessionID): { success: boolean; emitGameState: boolean } {
+		const room = this.rooms.get(roomId)
+
+		if (!room) return { success: false, emitGameState: false }
+
+		return room.makePlayerPass(sessionId)
+	}
+
+	startNewBiddingRound(roomId: RoomID) {
 		const room = this.rooms.get(roomId)
 
 		if (!room) return false
 
-		return room.makePlayerPass(sessionId)
+		room.startNewBiddingRound()
 	}
 
 	makePlayerSell(roomId: RoomID, sessionId: SessionID, property: Property): UpdateInfo {
