@@ -184,6 +184,14 @@ export class Game {
 
 					if (info.submitAllIndividualStates) {
 						this.emitAllIndividualGameState(roomId)
+						setTimeout(() => {
+							console.log("SetTimeout Executing")
+							this.roomManager.startNewAuctionRound(roomId)
+							this.emitAllIndividualGameState(roomId)
+							this.emitGameState(roomId)
+							this.changeStageIfNeeded(socket.data.roomId)
+							this.emitGameState(socket.data.roomId)
+						}, 2000)
 					} else {
 						this.emitIndividualGameState(socket)
 					}

@@ -126,9 +126,17 @@ export class RoomManager {
 	startNewBiddingRound(roomId: RoomID) {
 		const room = this.rooms.get(roomId)
 
-		if (!room) return false
+		if (!room) return
 
 		room.startNewBiddingRound()
+	}
+
+	startNewAuctionRound(roomId: RoomID) {
+		const room = this.rooms.get(roomId)
+
+		if (!room) return
+
+		room.startNewAuctionRound()
 	}
 
 	makePlayerSell(roomId: RoomID, sessionId: SessionID, property: Property): UpdateInfo {

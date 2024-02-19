@@ -119,6 +119,10 @@ export class Room {
 		this.bidStateManager.startNewRound()
 	}
 
+	startNewAuctionRound() {
+		this.auctionStateManager.startNewRound()
+	}
+
 	changeStage(stage: Stage) {
 		if (stage == Stage.Bidding) {
 			this.playerOrder = Array.from(this.players.values()).sort((a, b) => a.nickname.localeCompare(b.nickname))

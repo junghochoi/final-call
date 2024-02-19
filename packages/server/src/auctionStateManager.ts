@@ -110,6 +110,7 @@ export class AuctionStateManager {
 	}
 
 	startNewRound() {
+		this.endRoundAnimate = false
 		if (!this.isGameOver()) {
 			this.roundCards = this.#drawCards(this.playerOrder.length)
 
