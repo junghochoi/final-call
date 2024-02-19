@@ -22,7 +22,6 @@ export const AuctionActionBar = ({
 	canTakeAction,
 }: AuctionActionBarProps) => {
 	const handleSellProperty = (card: number) => {
-		console.log(canTakeAction)
 		if (canTakeAction) {
 			sell(card)
 		}

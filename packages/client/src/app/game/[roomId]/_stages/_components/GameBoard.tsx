@@ -1,4 +1,6 @@
-import { AuctionState, BidState, Player, Stage } from "@final-call/shared"
+import { useState, useEffect } from "react"
+
+import { AuctionState, BidState, Cash, Player, SessionID, Stage } from "@final-call/shared"
 
 import { PlayerBox } from "./playerBox"
 import { zip } from "@/lib/utils"
@@ -42,6 +44,12 @@ const playerAbsentStyle = "bg-gray-300"
 const currPlayerStyle = "text-white"
 const playerTurnStyle = "border-fc-accent border-2"
 
+export type CashCard = {
+	sessionId?: SessionID
+	propertyCard?: number
+	cashCard: number
+}
+
 export const GameBoard = ({
 	stage,
 	currPlayer,
@@ -51,6 +59,35 @@ export const GameBoard = ({
 	playerOrder,
 }: GameBoardProps) => {
 	// const playerOrder = bidState.playerOrder ?? auctionState.playerOrder
+
+	const [cashCards, setCashCards] = useState<CashCard[]>([])
+
+	useEffect(() => {
+		const orderedSellingProperties = Array.from(auctionState.playerSellingPropertyCard.entries()).sort(
+			(a, b) => a[1] - b[1]
+		)
+
+		const orderedCashCards = Array.from(auctionState.roundCards)
+			.sort((a, b) => a - b)
+			.map((cashCard, ind) => {
+				if (ind >= orderedSellingProperties.length) {
+					return {
+						cashCard,
+					}
+				} else {
+					return {
+						sessionId: orderedSellingProperties[ind][0],
+						propertyCard: orderedSellingProperties[ind][1],
+						cashCard,
+					}
+				}
+			})
+
+		setCashCards(orderedCashCards)
+
+		// setPlayerSellingPropertiesOrdered(orderedSellingProperties)
+	}, [auctionState.playerSellingPropertyCard, auctionState.roundCards])
+
 	return (
 		<div className=" bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">
 			<h1 className="absolute">{stage}</h1>
@@ -69,9 +106,17 @@ export const GameBoard = ({
 
 				{stage === Stage.Auctioning && (
 					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
-						{auctionState.roundCards.map((num: number) => (
-							<Card key={num} value={`$${num}`} labelVisible={true} />
-						))}
+						{cashCards.map(({ cashCard, propertyCard, sessionId }) => {
+							console.log(auctionState.endRoundAnimate)
+							return (
+								<Card
+									key={cashCard}
+									value={`$${cashCard}`}
+									labelVisible={auctionState.endRoundAnimate}
+									label={`${sessionId} - ${propertyCard}`}
+								/>
+							)
+						})}
 					</div>
 				)}
 
