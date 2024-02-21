@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+	font-family: "Riffic";
+	src: url("/fonts/RifficFree-Bold.ttf");
+}
+
 @layer base {
 	:root {
 		--background: 0 0% 100%;
