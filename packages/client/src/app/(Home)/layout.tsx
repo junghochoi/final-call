@@ -2,7 +2,7 @@ import { HomeHeader } from "./header"
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<div className="w-full bg-blue-400">
+		<div className=" bg-stone-700">
 			<HomeHeader />
 			{children}
 		</div>

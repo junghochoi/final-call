@@ -104,3 +104,10 @@ export type PlayerResultState = {
 }
 
 export type ResultStateSerialized = [SessionID, PlayerResultState][]
+
+export enum Sound {
+	Bet,
+	Win,
+	Pass,
+	PlacingCards,
+}

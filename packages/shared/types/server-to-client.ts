@@ -6,6 +6,7 @@ import {
 	AuctionStateSerialized,
 	PlayerResultState,
 	ResultStateSerialized,
+	Sound,
 } from "./common"
 
 export type GameStateUpdatePayload = {
@@ -38,4 +39,5 @@ export interface ServerToClientEvents {
 	GameStateUpdate: (payload: GameStateUpdatePayload) => void
 	IndividualGameStateUpdate: (payload: IndividualGameStateUpdatePayload) => void
 	PlayerInitialization: (payload: PlayerInitializationPayload) => void
+	PlaySound: (payload: { sound: Sound }) => void
 }

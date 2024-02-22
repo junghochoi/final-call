@@ -14,6 +14,7 @@ import {
 	BidAction,
 	PassAction,
 	SessionID,
+	Sound,
 } from "@final-call/shared"
 
 import { RoomManager } from "./roomManager"
@@ -152,6 +153,7 @@ export class Game {
 				case "bid": {
 					this.roomManager.makePlayerBid(socket.data.roomId, action.player.sessionId, action.amount)
 					this.emitIndividualGameState(socket)
+					this.emitSound(roomId, Sound.Bet)
 
 					break
 				}
@@ -225,6 +227,10 @@ export class Game {
 		if (gameState) {
 			this.server.to(roomId).emit("GameStateUpdate", gameState)
 		}
+	}
+
+	private emitSound(roomId: RoomID, sound: Sound): void {
+		this.server.to(roomId).emit("PlaySound", { sound })
 	}
 
 	private emitIndividualGameState(socket: Socket) {

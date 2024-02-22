@@ -96,6 +96,8 @@ const GamePage = () => {
 			}
 			setGameState(gameState)
 		})
+
+		socket.on("PlaySound", ({ sound }) => {})
 	}
 
 	const handleUserJoinGame = (name: string) => {
