@@ -3,6 +3,8 @@
 import { useParams } from "next/navigation"
 import { useEffect, useState, useCallback } from "react"
 
+import { betSoundEffect, passSoundEffect } from "@/lib/soundEffects"
+
 import {
 	Player,
 	GameStateUpdatePayload,
@@ -13,6 +15,7 @@ import {
 	Action,
 	AuctionState,
 	PlayerResultState,
+	Sound,
 } from "@final-call/shared"
 import { getNickname, getSessionId, persistSessionId } from "@/lib/utils"
 import { useSocket } from "@/contexts/SocketContext"
@@ -97,7 +100,19 @@ const GamePage = () => {
 			setGameState(gameState)
 		})
 
-		socket.on("PlaySound", ({ sound }) => {})
+		socket.on("PlaySound", ({ sound }) => {
+			switch (sound) {
+				case Sound.Bet: {
+					betSoundEffect.play()
+					break
+				}
+
+				case Sound.Pass: {
+					passSoundEffect.play()
+					break
+				}
+			}
+		})
 	}
 
 	const handleUserJoinGame = (name: string) => {
