@@ -22,7 +22,6 @@ export const useSocket = () => {
 
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 	const [socket, setSocket] = useState<Socket<ServerToClientEvents, ClientToServerEvents>>()
-	const [socketLoading, setSocketLoading] = useState<boolean>(true)
 	const { roomId } = useParams<{ roomId: string }>()
 
 	const initializeSocket = async () => {

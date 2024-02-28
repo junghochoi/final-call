@@ -70,8 +70,6 @@ export const BidActionBar = ({
 	const validBidStyle =
 		highestBid < bidAmount && bidAmount <= currPlayerBank + currPlayerBid ? "bg-green-500" : "bg-red-500"
 
-	console.log(currPlayerBid + currPlayerBank, highestBid)
-
 	return (
 		<div className="h-28 mx-auto w-full bg-red-200 absolute bottom-0 flex justify-between">
 			{!bidMenuOpen && (

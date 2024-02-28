@@ -3,7 +3,9 @@
 import { useParams } from "next/navigation"
 import { useEffect, useState, useCallback } from "react"
 
-import { betSoundEffect, passSoundEffect } from "@/lib/soundEffects"
+// import { betSoundEffect, passSoundEffect } from "@/lib/soundEffects"
+
+import { useAudio } from "@/hooks/useAudio"
 
 import {
 	Player,
@@ -21,6 +23,7 @@ import { getNickname, getSessionId, persistSessionId } from "@/lib/utils"
 import { useSocket } from "@/contexts/SocketContext"
 import UsernameSelection from "./usernameSelection"
 import { Lobby, Game, Results } from "./_stages"
+import { BET_SOUND_EFFECT_PATH, PASS_SOUND_EFFECT_PATH } from "@/lib/soundEffects"
 
 const GamePage = () => {
 	const { socket } = useSocket()
@@ -36,6 +39,9 @@ const GamePage = () => {
 		auctionState: undefined,
 		resultState: undefined,
 	})
+
+	const betSoundEffect = useAudio(BET_SOUND_EFFECT_PATH)
+	const passSoundEffect = useAudio(PASS_SOUND_EFFECT_PATH)
 
 	const playerInitializationCallback = useCallback((playerData: Player) => {
 		setGameState((prevGameState) => ({
@@ -103,18 +109,21 @@ const GamePage = () => {
 		socket.on("PlaySound", ({ sound }) => {
 			switch (sound) {
 				case Sound.Bet: {
-					betSoundEffect.play()
+					console.log(betSoundEffect)
+					betSoundEffect && betSoundEffect.play()
+					// new Audio(BET_SOUND_EFFECT_PATH).play()
 					break
 				}
 
 				case Sound.Pass: {
-					passSoundEffect.play()
+					console.log(passSoundEffect)
+					passSoundEffect && passSoundEffect.play()
+					// new Audio(PASS_SOUND_EFFECT_PATH).play()
 					break
 				}
 			}
 		})
 	}
-
 	const handleUserJoinGame = (name: string) => {
 		setPickedName(true)
 		const sessionId = getSessionId()
