@@ -91,32 +91,38 @@ export const GameBoard = ({
 	return (
 		<div className=" bg-fuchsia-blue-950 h-screen  mx-auto relative overscroll-none shadow-xl p-4">
 			<div className="relative h-[calc(100%-7em)]">
-				{/* Community Cards */}
-				{stage === Stage.Bidding && (
-					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
+				<div className="flex justify-center space-x-4 absolute h-16 md:h-28 w-2/3 mx-auto bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
+					{stage === Stage.Bidding && (
 						<AnimatePresence>
 							{bidState.roundCards.map((num: number) => (
 								<Card key={num} value={`${num}`} labelVisible={false} />
 							))}
 						</AnimatePresence>
-					</div>
-				)}
-				{stage === Stage.Auctioning && (
-					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
-						{cashCards.map(({ cashCard, propertyCard, sessionId }) => {
-							console.log(auctionState.endRoundAnimate)
-							return (
-								<Card
-									key={cashCard}
-									value={`$${cashCard}`}
-									labelVisible={auctionState.endRoundAnimate}
-									label={`${sessionId} - ${propertyCard}`}
-								/>
-							)
-						})}
-					</div>
-				)}
-				s
+					)}
+
+					{stage === Stage.Auctioning && (
+						<>
+							{cashCards.map(({ cashCard, propertyCard, sessionId }) => {
+								console.log(auctionState.endRoundAnimate)
+								return (
+									<Card
+										key={cashCard}
+										value={`$${cashCard}`}
+										labelVisible={auctionState.endRoundAnimate}
+										label={`${sessionId} - ${propertyCard}`}
+									/>
+								)
+							})}
+						</>
+					)}
+				</div>
+				{/* {stage === Stage.Bidding && (
+					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 w-2/3 mx-auto bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]"></div>
+				)} */}
+				{/* {stage === Stage.Auctioning && (
+					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 w-2/3 bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]"></div>
+				)} */}
+
 				{playerOrder.map((player, ind) => {
 					return (
 						<PlayerBox

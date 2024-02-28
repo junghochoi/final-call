@@ -20,11 +20,11 @@ const playerBidPositions = [
 	"right-[6.5rem] md:right-[8rem] bottom-[calc(20%+1rem)]",
 ]
 
-const playerPresentStyle = "bg-blue-300"
-const playerAbsentStyle = "bg-gray-300"
+const playerPresentStyle = "bg-fuchsia-blue-400"
+const playerAbsentStyle = "bg-fuchsia-blue-900 border-none"
 const currPlayerStyle = "text-white"
 const opponentPlayerStyle = "text-black"
-const playerTurnStyle = "border-fc-accent border-2"
+const playerTurnStyle = "border-2 border-lavender-magenta-500"
 
 interface PlayerBoxProps {
 	playerPosition: number
@@ -74,7 +74,7 @@ export const PlayerBox = ({
 		<>
 			<motion.div
 				className={cn(
-					"absolute w-20 h-14 md:w-28 md:h-18 ",
+					"absolute w-20 h-14 md:w-32 md:h-18 rounded-lg p-1 border border-tolopea-800 shadow-xl",
 					playerBoxPositions[playerPosition],
 					playerPresent ? playerPresentStyle : playerAbsentStyle,
 					playerTurn ? playerTurnStyle : "",
