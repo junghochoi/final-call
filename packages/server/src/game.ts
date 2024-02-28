@@ -165,6 +165,7 @@ export class Game {
 					)
 					// this.emitIndividualGameState(socket)
 					this.emitAllIndividualGameState(roomId)
+					this.emitSound(roomId, Sound.Pass)
 
 					console.log(emitGameState)
 

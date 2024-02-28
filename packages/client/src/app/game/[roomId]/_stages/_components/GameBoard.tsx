@@ -89,11 +89,9 @@ export const GameBoard = ({
 	}, [auctionState.playerSellingPropertyCard, auctionState.roundCards])
 
 	return (
-		<div className=" bg-green-200 h-screen max-w-screen-lg mx-auto relative overscroll-none">
-			<h1 className="absolute">{stage}</h1>
+		<div className=" bg-fuchsia-blue-950 h-screen  mx-auto relative overscroll-none shadow-xl p-4">
 			<div className="relative h-[calc(100%-7em)]">
 				{/* Community Cards */}
-
 				{stage === Stage.Bidding && (
 					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
 						<AnimatePresence>
@@ -103,7 +101,6 @@ export const GameBoard = ({
 						</AnimatePresence>
 					</div>
 				)}
-
 				{stage === Stage.Auctioning && (
 					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 : w-full bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
 						{cashCards.map(({ cashCard, propertyCard, sessionId }) => {
@@ -119,15 +116,14 @@ export const GameBoard = ({
 						})}
 					</div>
 				)}
-
+				s
 				{playerOrder.map((player, ind) => {
 					return (
 						<PlayerBox
-							positionTailwindStyle={playerPositions[ind][BOX_POSITION]}
-							bidPositionTailwindStyle={playerPositions[ind][BID_POSITION]}
-							playerPresenceTailwindStyle={playerPresentStyle}
-							playerTurnTailwindStyle={bidState!.playerTurn === ind ? playerTurnStyle : undefined}
-							currPlayerTailwindStyle={player.sessionId === currPlayer.sessionId ? currPlayerStyle : undefined}
+							playerPosition={ind}
+							playerPresent={true}
+							playerTurn={bidState!.playerTurn === ind}
+							currPlayer={player.sessionId === currPlayer.sessionId}
 							stage={stage}
 							nickname={player.nickname}
 							currPlayerBank={player.sessionId === currPlayer.sessionId ? currPlayerBank : undefined}
@@ -144,8 +140,10 @@ export const GameBoard = ({
 				{Array.from({ length: 6 - (playerOrder.length || 0) }).map((_, ind) => (
 					<PlayerBox
 						stage={stage}
-						positionTailwindStyle={playerPositions[ind + playerOrder.length][BOX_POSITION]}
-						playerPresenceTailwindStyle={playerAbsentStyle}
+						playerPresent={false}
+						playerTurn={false}
+						playerPosition={playerOrder.length + ind}
+						currPlayer={false}
 						key={ind}
 						animateWinner={false}
 					/>

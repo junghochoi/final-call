@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils"
 import { Player } from "@final-call/shared"
 import Image from "next/image"
+import { Crown } from "lucide-react"
 
 export const PlayerCard = ({
 	currPlayer,
@@ -10,14 +11,12 @@ export const PlayerCard = ({
 	player: Player
 	// nickname: string | undefined
 }) => {
-	const playerCardBorder = currPlayer ? `border-fc-accent` : "border-none"
+	const currPlayerStyle = currPlayer ? `text-lavender-magenta-300` : "text-white"
 	return (
-		<div
-			className={cn("flex space-x-3 items-center p-5 bg-fc-blue border-2 shadow-m border-fc-accent", playerCardBorder)}
-		>
+		<div className={cn("flex space-x-3 items-center p-5 bg-fc-blue text-white", currPlayerStyle)}>
 			<Image src="/avatar.png" alt="me" width="32" height="32" />
-			<h1 className="w-40">{player.nickname}</h1>
-			<span>{player.host ? "Host" : "Not Host"}</span>
+			<Crown className={player.host ? "inline-block" : "hidden"} size={20} />
+			<span>{player.nickname}</span>
 		</div>
 	)
 }

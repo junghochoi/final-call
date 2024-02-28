@@ -134,38 +134,40 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 		return <p>Error: CurrPlayerNot Defined</p>
 	}
 	return (
-		<>
-			<GameBoard
-				stage={gameState.stage}
-				currPlayerBank={currPlayerBank}
-				playerOrder={gameState.playerOrder}
-				bidState={gameState.bidState!}
-				auctionState={gameState.auctionState!}
-				currPlayer={gameState.currPlayer}
-			/>
-
-			{gameState.stage === Stage.Bidding && (
-				<BidActionBar
-					bid={handleBidAction}
-					pass={handlePassAction}
-					currPlayerBank={currPlayerBank}
-					currPlayerPropertyCards={currPlayerPropertyCards}
-					currPlayerBid={gameState.bidState!.playerBids.get(gameState.currPlayer!.sessionId) ?? 0}
-					highestBid={highestBid}
-					communityCards={gameState.bidState!.roundCards}
+		<div className="bg-tolopea-950">
+			<div className="bg-fuchsia-blue-950 max-w-screen-xl relative mx-auto">
+				<GameBoard
 					stage={gameState.stage}
-					yourTurn={currPlayerTurnIndex === gameState.bidState.playerTurn && !gameState.bidState.endRoundAnimate}
+					currPlayerBank={currPlayerBank}
+					playerOrder={gameState.playerOrder}
+					bidState={gameState.bidState!}
+					auctionState={gameState.auctionState!}
+					currPlayer={gameState.currPlayer}
 				/>
-			)}
 
-			{gameState.stage === Stage.Auctioning && (
-				<AuctionActionBar
-					currPlayerPropertyCards={currPlayerPropertyCards}
-					currPlayerCashCards={currPlayerCashCards}
-					sell={handleSellPropertyAction}
-					canTakeAction={!gameState.auctionState.endRoundAnimate}
-				/>
-			)}
-		</>
+				{gameState.stage === Stage.Bidding && (
+					<BidActionBar
+						bid={handleBidAction}
+						pass={handlePassAction}
+						currPlayerBank={currPlayerBank}
+						currPlayerPropertyCards={currPlayerPropertyCards}
+						currPlayerBid={gameState.bidState!.playerBids.get(gameState.currPlayer!.sessionId) ?? 0}
+						highestBid={highestBid}
+						communityCards={gameState.bidState!.roundCards}
+						stage={gameState.stage}
+						yourTurn={currPlayerTurnIndex === gameState.bidState.playerTurn && !gameState.bidState.endRoundAnimate}
+					/>
+				)}
+
+				{gameState.stage === Stage.Auctioning && (
+					<AuctionActionBar
+						currPlayerPropertyCards={currPlayerPropertyCards}
+						currPlayerCashCards={currPlayerCashCards}
+						sell={handleSellPropertyAction}
+						canTakeAction={!gameState.auctionState.endRoundAnimate}
+					/>
+				)}
+			</div>
+		</div>
 	)
 }
