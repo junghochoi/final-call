@@ -15,7 +15,7 @@ export const Card = ({ value, labelVisible, label }: CardProps) => {
 			<motion.div
 				className="h-full w-12 md:w-20 border border-black"
 				initial={{ opacity: 0 }}
-				animate={{ opacity: 1 }}
+				animate={{ opacity: 1, transition: { delay: 0.5 } }}
 				transition={{ duration: 0.3 }}
 				exit={{ opacity: 0 }}
 				key={value}

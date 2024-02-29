@@ -64,7 +64,6 @@ export const PlayerBox = ({
 			scale: 1.1,
 			transition: {
 				repeat: 9,
-				// delay: 2,
 				repeatType: "mirror",
 			},
 		},
