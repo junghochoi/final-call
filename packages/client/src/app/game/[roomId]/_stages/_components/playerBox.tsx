@@ -24,7 +24,7 @@ const playerPresentStyle = "bg-fuchsia-blue-400"
 const playerAbsentStyle = "bg-fuchsia-blue-900 border-none"
 const currPlayerStyle = "text-white"
 const opponentPlayerStyle = "text-black"
-const playerTurnStyle = "border-2 border-lavender-magenta-500"
+const playerTurnStyle = "border-2 border-lavender-magenta-500 shadow-md shadow-lavender-magenta-400"
 
 interface PlayerBoxProps {
 	playerPosition: number

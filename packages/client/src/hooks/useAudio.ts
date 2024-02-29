@@ -1,13 +1,17 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
 export function useAudio(path: string) {
-	const [audio, setAudio] = useState<HTMLAudioElement>()
-
+	const audioRef = useRef<HTMLAudioElement | null>(null)
+	// const [audio, setAudio] = useState<HTMLAudioElement>()
 	useEffect(() => {
 		const audioElement = new Audio(path)
 
-		setAudio(audioElement)
+		audioRef.current = audioElement
 	}, [])
 
-	return audio
+	const play = () => {
+		audioRef.current && audioRef.current.play()
+	}
+
+	return { play }
 }

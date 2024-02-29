@@ -40,8 +40,11 @@ const GamePage = () => {
 		resultState: undefined,
 	})
 
-	const betSoundEffect = useAudio(BET_SOUND_EFFECT_PATH)
-	const passSoundEffect = useAudio(PASS_SOUND_EFFECT_PATH)
+	// const betSoundEffect = useAudio(BET_SOUND_EFFECT_PATH)
+	// const passSoundEffect = useAudio(PASS_SOUND_EFFECT_PATH)
+
+	const betSound = useAudio(BET_SOUND_EFFECT_PATH)
+	const passSound = useAudio(PASS_SOUND_EFFECT_PATH)
 
 	const playerInitializationCallback = useCallback((playerData: Player) => {
 		setGameState((prevGameState) => ({
@@ -109,16 +112,15 @@ const GamePage = () => {
 		socket.on("PlaySound", ({ sound }) => {
 			switch (sound) {
 				case Sound.Bet: {
-					console.log(betSoundEffect)
-					betSoundEffect && betSoundEffect.play()
+					betSound.play()
+					// console.log(betSoundEffect)
+					// betSoundEffect && betSoundEffect.play()
 					// new Audio(BET_SOUND_EFFECT_PATH).play()
 					break
 				}
 
 				case Sound.Pass: {
-					console.log(passSoundEffect)
-					passSoundEffect && passSoundEffect.play()
-					// new Audio(PASS_SOUND_EFFECT_PATH).play()
+					passSound.play()
 					break
 				}
 			}
