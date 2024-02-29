@@ -6,6 +6,7 @@ import { Slider } from "@/components/ui/slider"
 import { Plus, Minus } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Stage } from "@final-call/shared"
+import { PersonalCard } from "./PersonalCard"
 
 interface ActionBarProps {
 	yourTurn: boolean
@@ -66,19 +67,22 @@ export const BidActionBar = ({
 		console.log(`Selling Property ${card}`)
 	}
 
-	const actionEnabledStyles = yourTurn ? "bg-black" : "bg-gray-400"
+	const betActionEnabledStyles = yourTurn ? "border-2 border-green-500 hover:bg-green-500" : "border-gray-500 border-2"
+	const passActionEnabledStyles = yourTurn ? "border-2 border-red-500 hover:bg-red-500" : "border-gray-500 border-2"
+
 	const validBidStyle =
 		highestBid < bidAmount && bidAmount <= currPlayerBank + currPlayerBid ? "bg-green-500" : "bg-red-500"
 
 	return (
-		<div className="h-28 mx-auto w-full bg-red-200 absolute bottom-0 flex justify-between">
+		<div className="h-28 mx-auto w-full border-t border-fuchsia-blue-900 absolute bottom-0 flex justify-between">
 			{!bidMenuOpen && (
 				<>
-					<div className="w-7/12 px-5 lg:px-10 bg-blue-300 flex justify-start items-center">
+					<div className="w-7/12 px-5 lg:px-10 flex justify-start items-center">
 						{currPlayerPropertyCards.map((card) => (
-							<div key={card} onClick={() => handleSellProperty(card)} className="p-4 border-2 border-black">
-								{card}
-							</div>
+							<PersonalCard value={card} color={"black"} />
+							// <div key={card} onClick={() => handleSellProperty(card)} className="p-4 border-2 border-black">
+							// 	{card}
+							// </div>
 						))}
 					</div>
 					<div className="w-5/12 flex justify-around items-center">
@@ -86,14 +90,14 @@ export const BidActionBar = ({
 						<Button
 							disabled={!yourTurn}
 							onClick={passClick}
-							className={cn("m-0 p-0 h-2/3 lg:h-3/4 w-5/12", actionEnabledStyles)}
+							className={cn("m-0 p-0 h-2/3 lg:h-3/4 w-5/12", passActionEnabledStyles)}
 						>
 							Pass
 						</Button>
 						<Button
 							disabled={!yourTurn || currPlayerBid + currPlayerBank <= highestBid || communityCards.length === 1}
 							onClick={handleMenu}
-							className={cn("m-0 p-0 h-2/3 lg:h-3/4 w-5/12", actionEnabledStyles)}
+							className={cn("m-0 p-0 h-2/3 lg:h-3/4 w-5/12", betActionEnabledStyles)}
 						>
 							Bid
 						</Button>
@@ -103,7 +107,7 @@ export const BidActionBar = ({
 
 			{bidMenuOpen && stage === Stage.Bidding && (
 				<>
-					<div className="w-7/12 bg-blue-300 p-4 flex justify-around">
+					<div className="w-7/12 bg-tolopea-900 p-4 flex justify-around">
 						<div className={cn("p-4", validBidStyle)}>
 							<p className="text-2xl text-center p-2 w-3/5 lg:w-2/5">${bidAmount}</p>
 						</div>
@@ -134,14 +138,14 @@ export const BidActionBar = ({
 								communityCards.length === 1
 							}
 							onClick={bidClick}
-							className={cn("m-0 p-0 h-2/3 lg:h-3/4 w-5/12", actionEnabledStyles)}
+							className={cn("m-0 p-0 h-2/3 lg:h-3/4 w-5/12", betActionEnabledStyles)}
 						>
 							Bid
 						</Button>
 						<Button
 							disabled={!yourTurn}
 							onClick={handleMenu}
-							className={cn("m-0 p-0 h-2/3 lg:h-3/4 w-5/12", actionEnabledStyles)}
+							className={cn("m-0 p-0 h-2/3 lg:h-3/4 w-5/12", betActionEnabledStyles)}
 						>
 							Cancel
 						</Button>

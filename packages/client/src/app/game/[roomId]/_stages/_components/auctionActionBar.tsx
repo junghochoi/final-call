@@ -36,7 +36,7 @@ export const AuctionActionBar = ({
 					</div>
 				))}
 			</div>
-			<div className="w-1/3flex justify-around items-center">
+			<div className="w-1/3 flex justify-around items-center">
 				{currPlayerCashCards.map((card) => (
 					<div key={card} className="p-4 border-2 border-black">
 						{card}

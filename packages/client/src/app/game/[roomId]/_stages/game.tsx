@@ -4,7 +4,7 @@ import { GameState, IndividualGameStateUpdatePayload, Stage } from "@final-call/
 import { BidAction, PassAction, SellAction, RoomID, Action, Player } from "@final-call/shared"
 import { PlayerBox } from "./_components/playerBox"
 import { BidActionBar } from "./_components/bidActionBar"
-import { Card } from "./_components/card"
+import { Card } from "./_components/CommunityCard"
 import { cn, zip } from "@/lib/utils"
 import { useSocket } from "@/contexts/SocketContext"
 import { GameBoard as GameBoard } from "./_components/GameBoard"
@@ -134,8 +134,8 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 		return <p>Error: CurrPlayerNot Defined</p>
 	}
 	return (
-		<div className="bg-tolopea-950">
-			<div className="bg-fuchsia-blue-950 max-w-screen-xl relative mx-auto">
+		<div>
+			<div className="relative mx-auto">
 				<GameBoard
 					stage={gameState.stage}
 					currPlayerBank={currPlayerBank}

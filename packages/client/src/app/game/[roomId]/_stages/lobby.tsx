@@ -40,7 +40,7 @@ export const Lobby = ({ gameState, handleStartGame }: LobbyProps) => {
 
 						<Button
 							onClick={handleStartGame}
-							className="w-full bg-lavender-magenta-800 shadow-md hover:bg-fuchsia-blue-400"
+							className="w-full bg-fuchsia-blue-400 shadow-md hover:bg-fuchsia-blue-300"
 						>
 							Start Game
 						</Button>

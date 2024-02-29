@@ -20,11 +20,12 @@ const playerBidPositions = [
 	"right-[6.5rem] md:right-[8rem] bottom-[calc(20%+1rem)]",
 ]
 
-const playerPresentStyle = "bg-fuchsia-blue-400"
-const playerAbsentStyle = "bg-fuchsia-blue-900 border-none"
-const currPlayerStyle = "text-white"
-const opponentPlayerStyle = "text-black"
-const playerTurnStyle = "border-2 border-lavender-magenta-500 shadow-md shadow-lavender-magenta-400"
+const playerPresentStyle = ""
+const playerAbsentStyle = "border border-dashed border-fuchsia-blue-800"
+// const currPlayerStyle = ""
+// const opponentPlayerStyle = "bg-gray-800 text-white"
+const playerTurnStyle = "bg-white shadow-gray-200 text-black shadow-[rgba(255,_255,_255,_1)_0px_0px_16px]"
+const playerWaitStyle = "bg-none text-white border"
 
 interface PlayerBoxProps {
 	playerPosition: number
@@ -73,16 +74,18 @@ export const PlayerBox = ({
 		<>
 			<motion.div
 				className={cn(
-					"absolute w-20 h-14 md:w-32 md:h-18 rounded-lg p-1 border border-tolopea-800 shadow-xl",
+					"absolute w-20 h-14 md:w-32 md:h-18 rounded-lg p-1 flex justify-evenly items-center",
 					playerBoxPositions[playerPosition],
 					playerPresent ? playerPresentStyle : playerAbsentStyle,
-					playerTurn ? playerTurnStyle : "",
-					currPlayer ? currPlayerStyle : opponentPlayerStyle
+					playerTurn ? playerTurnStyle : playerWaitStyle
+					// currPlayer ? currPlayerStyle : opponentPlayerStyle
 				)}
 				variants={variants}
 				animate={animateWinner ? "animate" : "initial"}
 			>
-				{nickname} - {currPlayerBank}
+				<div>{nickname}</div>
+
+				{currPlayer && <div className="p-1 rounded-full bg-sky-300 text-sm">${currPlayerBank}</div>}
 			</motion.div>
 
 			<div

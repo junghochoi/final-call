@@ -4,7 +4,7 @@ import { AuctionState, BidState, Cash, Player, SessionID, Stage } from "@final-c
 
 import { PlayerBox } from "./playerBox"
 import { zip } from "@/lib/utils"
-import { Card } from "./card"
+import { Card } from "./CommunityCard"
 import { AnimatePresence } from "framer-motion"
 
 interface GameBoardProps {
@@ -33,16 +33,6 @@ const playerBidPositions = [
 	"right-[6.5rem] md:right-[8rem] top-[calc(20%+1rem)]",
 	"right-[6.5rem] md:right-[8rem] bottom-[calc(20%+1rem)]",
 ]
-
-const BOX_POSITION = 0
-const BID_POSITION = 1
-
-const playerPositions = zip(playerBoxPositions, playerBidPositions)
-
-const playerPresentStyle = "bg-blue-300"
-const playerAbsentStyle = "bg-gray-300"
-const currPlayerStyle = "text-white"
-const playerTurnStyle = "border-fc-accent border-2"
 
 export type CashCard = {
 	sessionId?: SessionID
@@ -87,11 +77,11 @@ export const GameBoard = ({
 
 		// setPlayerSellingPropertiesOrdered(orderedSellingProperties)
 	}, [auctionState.playerSellingPropertyCard, auctionState.roundCards])
-
+	// top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]
 	return (
-		<div className=" bg-fuchsia-blue-950 h-screen  mx-auto relative overscroll-none shadow-xl p-4">
+		<div className="bg-[#1F002E] h-screen  mx-auto relative overscroll-none shadow-xl p-4">
 			<div className="relative h-[calc(100%-7em)]">
-				<div className="flex justify-center space-x-4 absolute h-16 md:h-28 w-2/3 mx-auto bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]">
+				<div className="bg-blue-200 p-1 rounded flex justify-center space-x-4 absolute h-16 md:h-28 w-2/3 shadow-sm shadow-fuchsia-blue-300 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 					{stage === Stage.Bidding && (
 						<AnimatePresence>
 							{bidState.roundCards.map((num: number) => (
@@ -116,12 +106,6 @@ export const GameBoard = ({
 						</>
 					)}
 				</div>
-				{/* {stage === Stage.Bidding && (
-					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 w-2/3 mx-auto bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]"></div>
-				)} */}
-				{/* {stage === Stage.Auctioning && (
-					<div className="flex justify-center space-x-4 absolute h-16 md:h-28 w-2/3 bg-slate-400 top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]"></div>
-				)} */}
 
 				{playerOrder.map((player, ind) => {
 					return (
