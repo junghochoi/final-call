@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, Variants, motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { Home } from "lucide-react"
 import Image from "next/image"
@@ -7,6 +7,7 @@ interface CardProps {
 	value: string
 	labelVisible: boolean
 	label?: string
+	animateLastCard?: boolean
 }
 
 const luckiestGuy = Luckiest_Guy({
@@ -14,17 +15,33 @@ const luckiestGuy = Luckiest_Guy({
 	weight: ["400"],
 })
 
-export const Card = ({ value, labelVisible, label }: CardProps) => {
+export const Card = ({ value, labelVisible, label, animateLastCard }: CardProps) => {
 	const labelStyle = labelVisible ? "absolute" : "hidden"
+
+	const variants: Variants = {
+		show: { opacity: 1 },
+		passed: { opacity: 0, transition: { delay: 0.5 } },
+		winner: {
+			opacity: 1,
+			scale: 1.1,
+			transition: {
+				repeat: 9,
+				repeatType: "mirror",
+				delay: 2,
+			},
+		},
+	}
+
 	return (
 		<div className="relative">
 			<div className={cn("absolute bottom-24 -rotate-45 text-xs w-20 bg-slate-400 rounded", labelStyle)}>{label}</div>
 			<motion.div
 				className="relative h-full w-12 md:w-20 bg-white rounded-sm"
+				variants={variants}
 				initial={{ opacity: 0 }}
-				animate={{ opacity: 1, transition: { delay: 0.5 } }}
+				animate={animateLastCard ? "winner" : "show"}
 				transition={{ duration: 0.2 }}
-				exit={{ opacity: 0 }}
+				exit={"passed"}
 				key={value}
 			>
 				<div className={cn("md:text-2xl pl-1 lg:ml-2", luckiestGuy.className)}>{value}</div>

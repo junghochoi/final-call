@@ -118,7 +118,6 @@ export class BidStateManager {
 				success: true,
 				emitGameState: true,
 			}
-			// this.startNewRound()
 		} else {
 			const bank = this.playerBanks.get(player.sessionId)!
 			const bid = this.playerBids.get(player.sessionId)!

@@ -6,3 +6,4 @@
 
 export const BET_SOUND_EFFECT_PATH = "/sounds/bet.mp3"
 export const PASS_SOUND_EFFECT_PATH = "/sounds/pass.mp3"
+export const WINNER_SOUND_EFFECT_PATH = "/sounds/winner.mp3"

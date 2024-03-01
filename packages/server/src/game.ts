@@ -177,7 +177,7 @@ export class Game {
 							this.emitGameState(roomId)
 							this.changeStageIfNeeded(socket.data.roomId)
 							this.emitGameState(socket.data.roomId)
-						}, 2000)
+						}, 4000)
 					}
 
 					break

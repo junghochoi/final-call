@@ -85,7 +85,7 @@ export const GameBoard = ({
 					{stage === Stage.Bidding && (
 						<AnimatePresence>
 							{bidState.roundCards.map((num: number) => (
-								<Card key={num} value={`${num}`} labelVisible={false} />
+								<Card key={num} value={`${num}`} labelVisible={false} animateLastCard={bidState.endRoundAnimate} />
 							))}
 						</AnimatePresence>
 					)}

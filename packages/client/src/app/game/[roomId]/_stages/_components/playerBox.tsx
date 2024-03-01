@@ -1,6 +1,9 @@
+import { Variants, motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { Stage } from "@final-call/shared"
-import { Variants, motion } from "framer-motion"
+import { WINNER_SOUND_EFFECT_PATH } from "@/lib/soundEffects"
+
+import { useAudio } from "@/hooks/useAudio"
 
 const playerBoxPositions = [
 	"left-[calc(50%-2.5rem)] md:left-[calc(50%-3.5rem)] bottom-[0.5rem]",
@@ -66,9 +69,12 @@ export const PlayerBox = ({
 			transition: {
 				repeat: 9,
 				repeatType: "mirror",
+				delay: 2,
 			},
 		},
 	}
+
+	const winnerSound = useAudio(WINNER_SOUND_EFFECT_PATH)
 
 	return (
 		<>
@@ -80,6 +86,11 @@ export const PlayerBox = ({
 					playerTurn ? playerTurnStyle : playerWaitStyle
 					// currPlayer ? currPlayerStyle : opponentPlayerStyle
 				)}
+				onAnimationStart={() => {
+					setTimeout(() => {
+						animateWinner && winnerSound.play()
+					}, 2000)
+				}}
 				variants={variants}
 				animate={animateWinner ? "animate" : "initial"}
 			>
