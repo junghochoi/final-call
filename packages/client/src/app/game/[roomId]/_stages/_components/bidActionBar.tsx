@@ -69,6 +69,7 @@ export const BidActionBar = ({
 
 	const betActionEnabledStyles = yourTurn ? "border-2 border-green-500 hover:bg-green-500" : "border-gray-500 border-2"
 	const passActionEnabledStyles = yourTurn ? "border-2 border-red-500 hover:bg-red-500" : "border-gray-500 border-2"
+	const cancelActionEnabledStyles = yourTurn ? "border-2 border-gray-300 hover:bg-gray-700" : "border-gray-500 border-2"
 
 	const validBidStyle =
 		highestBid < bidAmount && bidAmount <= currPlayerBank + currPlayerBid ? "bg-green-500" : "bg-red-500"
@@ -107,7 +108,7 @@ export const BidActionBar = ({
 
 			{bidMenuOpen && stage === Stage.Bidding && (
 				<>
-					<div className="w-7/12 bg-tolopea-900 p-4 flex justify-around">
+					<div className="w-7/12  p-4 flex justify-around">
 						<div className={cn("p-4", validBidStyle)}>
 							<p className="text-2xl text-center p-2 w-3/5 lg:w-2/5">${bidAmount}</p>
 						</div>
@@ -145,7 +146,7 @@ export const BidActionBar = ({
 						<Button
 							disabled={!yourTurn}
 							onClick={handleMenu}
-							className={cn("m-0 p-0 h-2/3 lg:h-3/4 w-5/12", betActionEnabledStyles)}
+							className={cn("m-0 p-0 h-2/3 lg:h-3/4 w-5/12", cancelActionEnabledStyles)}
 						>
 							Cancel
 						</Button>
