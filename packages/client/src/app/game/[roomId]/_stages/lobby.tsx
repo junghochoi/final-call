@@ -36,13 +36,13 @@ export const Lobby = ({ gameState, handleStartGame }: LobbyProps) => {
 
 					<div className="bg-fuchsia-blue-900 w-full lg:w-1/2  min-h-80 relative rounded-md p-2">
 						<h1 className={cn("text-white font-thin", luckiestGuy.className)}>Settings</h1>
-						<div></div>
 
 						<Button
 							onClick={handleStartGame}
+							disabled={!gameState.currPlayer?.host}
 							className="w-full bg-fuchsia-blue-400 shadow-md hover:bg-fuchsia-blue-300"
 						>
-							Start Game
+							{gameState.currPlayer?.host ? "Start Game" : "Waiting for Host to Start Game"}
 						</Button>
 
 						{/* {!gameState.currPlayer?.host && <Button className="w-full"></Button>} */}
