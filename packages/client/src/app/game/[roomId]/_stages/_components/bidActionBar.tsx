@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { Slider } from "@/components/ui/slider"
 import { Plus, Minus } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Stage } from "@final-call/shared"
+import { CardType, Stage } from "@final-call/shared"
 import { PersonalCard } from "./PersonalCard"
 
 interface ActionBarProps {
@@ -76,14 +76,13 @@ export const BidActionBar = ({
 				<>
 					<div className="w-7/12 px-5 lg:px-10 space-x-2 flex justify-start items-center">
 						{currPlayerPropertyCards.map((card) => (
-							<PersonalCard value={card} color={"black"} />
+							<PersonalCard value={card} color={"black"} cardType={CardType.Property} />
 							// <div key={card} onClick={() => handleSellProperty(card)} className="p-4 border-2 border-black">
 							// 	{card}
 							// </div>
 						))}
 					</div>
 					<div className="w-5/12 flex justify-around items-center">
-						{stage === Stage.Bidding && <></>}
 						<Button
 							disabled={!yourTurn}
 							onClick={passClick}
