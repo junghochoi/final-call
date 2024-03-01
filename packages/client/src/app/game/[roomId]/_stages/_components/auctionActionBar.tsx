@@ -14,8 +14,6 @@ interface AuctionActionBarProps {
 
 	sell: (amount: number) => void
 	canTakeAction: boolean
-
-	playerSellingPropertyCard: Map<string, number>
 }
 
 export const AuctionActionBar = ({
@@ -31,7 +29,7 @@ export const AuctionActionBar = ({
 	}
 
 	return (
-		<div className="h-28 mx-auto w-full absolute bottom-0 flex justify-between">
+		<div className="h-28 mx-auto w-full border-t border-fuchsia-blue-900 absolute bottom-0 flex justify-between">
 			<div className="w-2/3 px-5 lg:px-10 flex justify-start items-center space-x-2">
 				{currPlayerPropertyCards.map((card) => (
 					<PersonalCard value={card} color={"black"} handleSellProperty={handleSellProperty} />

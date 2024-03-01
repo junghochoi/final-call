@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-import { AuctionState, BidState, Cash, Player, SessionID, Stage } from "@final-call/shared"
+import { AuctionState, BidState, CardType, Cash, Player, SessionID, Stage } from "@final-call/shared"
 
 import { PlayerBox } from "./playerBox"
 import { zip } from "@/lib/utils"
@@ -85,7 +85,13 @@ export const GameBoard = ({
 					{stage === Stage.Bidding && (
 						<AnimatePresence>
 							{bidState.roundCards.map((num: number) => (
-								<Card key={num} value={`${num}`} labelVisible={false} animateLastCard={bidState.endRoundAnimate} />
+								<Card
+									key={num}
+									value={`${num}`}
+									labelVisible={false}
+									animateLastCard={bidState.endRoundAnimate}
+									cardType={CardType.Property}
+								/>
 							))}
 						</AnimatePresence>
 					)}
@@ -97,9 +103,10 @@ export const GameBoard = ({
 								return (
 									<Card
 										key={cashCard}
-										value={`$${cashCard}`}
+										value={`${cashCard}`}
 										labelVisible={auctionState.endRoundAnimate}
 										label={`${sessionId} - ${propertyCard}`}
+										cardType={CardType.Cash}
 									/>
 								)
 							})}

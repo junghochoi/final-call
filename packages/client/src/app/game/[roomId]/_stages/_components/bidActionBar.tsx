@@ -63,10 +63,6 @@ export const BidActionBar = ({
 		setBidMenuOpen((prev) => !prev)
 	}
 
-	const handleSellProperty = (card: number) => {
-		console.log(`Selling Property ${card}`)
-	}
-
 	const betActionEnabledStyles = yourTurn ? "border-2 border-green-500 hover:bg-green-500" : "border-gray-500 border-2"
 	const passActionEnabledStyles = yourTurn ? "border-2 border-red-500 hover:bg-red-500" : "border-gray-500 border-2"
 	const cancelActionEnabledStyles = yourTurn ? "border-2 border-gray-300 hover:bg-gray-700" : "border-gray-500 border-2"

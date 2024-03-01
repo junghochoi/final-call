@@ -1,13 +1,16 @@
 import { AnimatePresence, Variants, motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { Home } from "lucide-react"
+import { CircleDollarSign } from "lucide-react"
 import Image from "next/image"
 import { Luckiest_Guy } from "next/font/google"
+import { CardType } from "@final-call/shared"
 interface CardProps {
 	value: string
 	labelVisible: boolean
 	label?: string
 	animateLastCard?: boolean
+	cardType: CardType
 }
 
 const luckiestGuy = Luckiest_Guy({
@@ -15,7 +18,7 @@ const luckiestGuy = Luckiest_Guy({
 	weight: ["400"],
 })
 
-export const Card = ({ value, labelVisible, label, animateLastCard }: CardProps) => {
+export const Card = ({ value, labelVisible, label, animateLastCard, cardType }: CardProps) => {
 	const labelStyle = labelVisible ? "absolute" : "hidden"
 
 	const variants: Variants = {
@@ -27,7 +30,7 @@ export const Card = ({ value, labelVisible, label, animateLastCard }: CardProps)
 			transition: {
 				repeat: 9,
 				repeatType: "mirror",
-				delay: 2,
+				delay: 1,
 			},
 		},
 	}
@@ -45,10 +48,20 @@ export const Card = ({ value, labelVisible, label, animateLastCard }: CardProps)
 				key={value}
 			>
 				<div className={cn("md:text-2xl pl-1 lg:ml-2", luckiestGuy.className)}>{value}</div>
-				<Home
-					color="black"
-					className="absolute w-9 h-9 lg:w-14 lg:h-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-				/>
+
+				{cardType === CardType.Property && (
+					<Home
+						color="black"
+						className="absolute w-9 h-9 lg:w-14 lg:h-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+					/>
+				)}
+
+				{cardType === CardType.Cash && (
+					<CircleDollarSign
+						color="black"
+						className="absolute w-9 h-9 lg:w-14 lg:h-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+					/>
+				)}
 			</motion.div>
 		</div>
 	)

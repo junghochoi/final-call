@@ -111,3 +111,8 @@ export enum Sound {
 	Pass,
 	PlacingCards,
 }
+
+export enum CardType {
+	Property,
+	Cash,
+}

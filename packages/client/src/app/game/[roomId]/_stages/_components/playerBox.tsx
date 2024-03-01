@@ -69,7 +69,7 @@ export const PlayerBox = ({
 			transition: {
 				repeat: 9,
 				repeatType: "mirror",
-				delay: 2,
+				delay: 1, // Need to change in
 			},
 		},
 	}
@@ -89,7 +89,7 @@ export const PlayerBox = ({
 				onAnimationStart={() => {
 					setTimeout(() => {
 						animateWinner && winnerSound.play()
-					}, 2000)
+					}, 1000)
 				}}
 				variants={variants}
 				animate={animateWinner ? "animate" : "initial"}
