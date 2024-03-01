@@ -112,6 +112,9 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 	}
 
 	const handleSellPropertyAction = (property: number) => {
+		if (gameState.auctionState?.playerSellingPropertyCard.has(gameState.currPlayer?.sessionId!)) {
+			return
+		}
 		const action: SellAction = {
 			name: "sell",
 			roomId: roomId,

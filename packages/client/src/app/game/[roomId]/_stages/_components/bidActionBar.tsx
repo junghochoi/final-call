@@ -78,7 +78,7 @@ export const BidActionBar = ({
 		<div className="h-28 mx-auto w-full border-t border-fuchsia-blue-900 absolute bottom-0 flex justify-between">
 			{!bidMenuOpen && (
 				<>
-					<div className="w-7/12 px-5 lg:px-10 flex justify-start items-center">
+					<div className="w-7/12 px-5 lg:px-10 space-x-2 flex justify-start items-center">
 						{currPlayerPropertyCards.map((card) => (
 							<PersonalCard value={card} color={"black"} />
 							// <div key={card} onClick={() => handleSellProperty(card)} className="p-4 border-2 border-black">

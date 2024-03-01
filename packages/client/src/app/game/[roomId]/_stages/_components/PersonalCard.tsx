@@ -7,7 +7,7 @@ interface CardProps {
 	value: number
 	color: string
 
-	handleSellProperty?: () => void
+	handleSellProperty?: (value: number) => void
 }
 
 const luckiestGuy = Luckiest_Guy({
@@ -15,8 +15,12 @@ const luckiestGuy = Luckiest_Guy({
 	weight: ["400"],
 })
 
-export const PersonalCard = ({ value, color }: CardProps) => {
+export const PersonalCard = ({ value, color, handleSellProperty }: CardProps) => {
 	// const labelStyle = labelVisible ? "absolute" : "hidden"
+
+	const sell = () => {
+		handleSellProperty && handleSellProperty(value)
+	}
 	return (
 		<motion.div
 			className="relative h-2/3 w-12 md:w-20 bg-white rounded-sm opacity-50"
@@ -25,6 +29,7 @@ export const PersonalCard = ({ value, color }: CardProps) => {
 			// transition={{ duration: 0.2 }}
 			// exit={{ opacity: 0 }}
 			key={value}
+			onClick={sell}
 		>
 			<div className={cn("md:text-2xl pl-1 lg:ml-2", luckiestGuy.className)}>{value}</div>
 			<Home
