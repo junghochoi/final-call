@@ -7,6 +7,7 @@ import { Luckiest_Guy } from "next/font/google"
 import { CardType } from "@final-call/shared"
 interface CardProps {
 	value: string
+	position?: number
 	labelVisible: boolean
 	label?: string
 	animateLastCard?: boolean
@@ -18,10 +19,11 @@ const luckiestGuy = Luckiest_Guy({
 	weight: ["400"],
 })
 
-export const Card = ({ value, labelVisible, label, animateLastCard, cardType }: CardProps) => {
-	const labelStyle = labelVisible ? "absolute" : "hidden"
+export const Card = ({ value, labelVisible, label, animateLastCard, cardType, position }: CardProps) => {
+	// const labelStyle = labelVisible ? "absolute" : "none"
+	const labelStyle = "absolute"
 
-	const variants: Variants = {
+	const cardVariants: Variants = {
 		show: { opacity: 1 },
 		passed: { opacity: 0, transition: { delay: 0.5 } },
 		winner: {
@@ -35,21 +37,47 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType }: 
 		},
 	}
 
+	const labelVariants: Variants = {
+		auctionLabelInitial: {
+			opacity: 0,
+			y: -100,
+		},
+
+		auctionLabelAnimate: (index: number) => ({
+			opacity: 1,
+			y: 0,
+			rotate: -45,
+			transition: {
+				duration: 0.7,
+				delay: 0.1 * index,
+			},
+		}),
+	}
+
+	console.log(position)
+
 	return (
 		<div className="relative">
-			<div
-				className={cn(
-					"absolute flex justify-center items-center w-20 h-6 lg:w-32 lg:h-6 text-center bottom-24 lg:bottom-36 -rotate-45 text-sm bg-white rounded",
-					labelStyle,
-					luckiestGuy.className
-				)}
-			>
-				{label}
-				<Home />
-			</div>
+			{labelVisible && (
+				<motion.div
+					className={cn(
+						"absolute flex justify-center items-center w-20 h-6 lg:w-24 lg:h-8 text-center bottom-24 lg:bottom-36 -rotate-45 text-sm bg-white rounded",
+						labelStyle,
+						luckiestGuy.className
+					)}
+					variants={labelVariants}
+					initial={"auctionLabelInitial"}
+					animate={"auctionLabelAnimate"}
+					custom={position}
+				>
+					{label}
+					<Home />
+				</motion.div>
+			)}
+
 			<motion.div
 				className="relative h-full w-12 md:w-20 bg-white rounded-sm"
-				variants={variants}
+				variants={cardVariants}
 				initial={{ opacity: 0 }}
 				animate={animateLastCard ? "winner" : "show"}
 				transition={{ duration: 0.2 }}

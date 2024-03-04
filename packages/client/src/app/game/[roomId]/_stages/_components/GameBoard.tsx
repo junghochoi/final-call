@@ -81,7 +81,7 @@ export const GameBoard = ({
 				<div className="bg-blue-200 p-1 rounded flex justify-center space-x-4 absolute h-16 md:h-28 w-2/3 shadow-sm shadow-fuchsia-blue-300 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 					{stage === Stage.Bidding && (
 						<AnimatePresence>
-							{bidState.roundCards.map((num: number) => (
+							{bidState.roundCards.map((num: number, index: number) => (
 								<Card
 									key={num}
 									value={`${num}`}
@@ -95,11 +95,11 @@ export const GameBoard = ({
 
 					{stage === Stage.Auctioning && (
 						<>
-							{cashCards.map(({ cashCard, propertyCard, sessionId }) => {
-								console.log(auctionState.endRoundAnimate)
+							{cashCards.map(({ cashCard, propertyCard, sessionId }, index) => {
 								return (
 									<Card
 										key={cashCard}
+										position={index}
 										value={`${cashCard}`}
 										labelVisible={auctionState.endRoundAnimate}
 										label={`${
