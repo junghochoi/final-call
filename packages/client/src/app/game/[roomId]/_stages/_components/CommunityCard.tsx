@@ -49,7 +49,7 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 			rotate: -45,
 			transition: {
 				duration: 0.7,
-				delay: 0.1 * index,
+				delay: 0.5 * index,
 			},
 		}),
 	}

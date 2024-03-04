@@ -4,6 +4,8 @@ import { Stage } from "@final-call/shared"
 import { WINNER_SOUND_EFFECT_PATH } from "@/lib/soundEffects"
 
 import { useAudio } from "@/hooks/useAudio"
+import { Home } from "lucide-react"
+import { Luckiest_Guy } from "next/font/google"
 
 const playerBoxPositions = [
 	"left-[calc(50%-2.5rem)] md:left-[calc(50%-3.5rem)] bottom-[0.5rem]",
@@ -48,6 +50,11 @@ interface PlayerBoxProps {
 
 	animateWinner: boolean
 }
+
+const luckiestGuy = Luckiest_Guy({
+	subsets: ["latin"],
+	weight: ["400"],
+})
 
 export const PlayerBox = ({
 	playerPosition,
@@ -107,15 +114,33 @@ export const PlayerBox = ({
 			>
 				{bid}
 			</div>
-			x
+
 			{stage === Stage.Auctioning && propertyCard?.value !== undefined && (
+				// <div
+				// 	className={cn(
+				// 		"absolute rounded h-12 w-8 text-sm bg-cyan-300 text-center p-1",
+				// 		playerBidPositions[playerPosition]
+				// 	)}
+				// >
+				// 	{propertyCard?.visible && <p>{propertyCard.value}</p>}
+				// </div>
+
 				<div
-					className={cn(
-						"absolute rounded h-12 w-8 text-sm bg-cyan-300 text-center p-1",
-						playerBidPositions[playerPosition]
-					)}
+					className={cn("absolute h-12 w-8 bg-white rounded-sm text-xs", playerBidPositions[playerPosition])}
+					// initial={{ opacity: 0 }}
+					// transition={{ duration: 0.2 }}
+					key={propertyCard.value}
 				>
-					{propertyCard?.visible && <p>{propertyCard.value}</p>}
+					{propertyCard?.visible && (
+						<>
+							<div className={cn("md:text-2xl pl-1 lg:ml-2", luckiestGuy.className)}>{propertyCard.value}</div>
+
+							<Home
+								color="black"
+								className="absolute w-9 h-9 lg:w-14 lg:h-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+							/>
+						</>
+					)}
 				</div>
 			)}
 		</>

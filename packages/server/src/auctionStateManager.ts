@@ -139,7 +139,6 @@ export class AuctionStateManager {
 	}
 
 	isGameOver(): boolean {
-		console.log(this.round, this.numPlayers)
 		return this.round + 1 === this.numPlayers && this.round !== 0
 	}
 }
