@@ -37,7 +37,16 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType }: 
 
 	return (
 		<div className="relative">
-			<div className={cn("absolute bottom-24 -rotate-45 text-xs w-20 bg-slate-400 rounded", labelStyle)}>{label}</div>
+			<div
+				className={cn(
+					"absolute flex justify-center items-center w-20 h-6 lg:w-32 lg:h-6 text-center bottom-24 lg:bottom-36 -rotate-45 text-sm bg-white rounded",
+					labelStyle,
+					luckiestGuy.className
+				)}
+			>
+				{label}
+				<Home />
+			</div>
 			<motion.div
 				className="relative h-full w-12 md:w-20 bg-white rounded-sm"
 				variants={variants}
