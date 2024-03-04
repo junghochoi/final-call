@@ -51,12 +51,12 @@ export const GameBoard = ({
 	// const playerOrder = bidState.playerOrder ?? auctionState.playerOrder
 
 	const [cashCards, setCashCards] = useState<CashCard[]>([])
+	const [sessionIdToNickname, setSessionIdToNickname] = useState<Map<SessionID, string>>()
 
 	useEffect(() => {
 		const orderedSellingProperties = Array.from(auctionState.playerSellingPropertyCard.entries()).sort(
 			(a, b) => a[1] - b[1]
 		)
-
 		const orderedCashCards = Array.from(auctionState.roundCards)
 			.sort((a, b) => a - b)
 			.map((cashCard, ind) => {
@@ -72,10 +72,7 @@ export const GameBoard = ({
 					}
 				}
 			})
-
 		setCashCards(orderedCashCards)
-
-		// setPlayerSellingPropertiesOrdered(orderedSellingProperties)
 	}, [auctionState.playerSellingPropertyCard, auctionState.roundCards])
 	// top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]
 	return (
@@ -105,7 +102,9 @@ export const GameBoard = ({
 										key={cashCard}
 										value={`${cashCard}`}
 										labelVisible={auctionState.endRoundAnimate}
-										label={`${sessionId} - ${propertyCard}`}
+										label={`${
+											playerOrder.find((player) => player.sessionId === sessionId)?.nickname
+										} - ${propertyCard}`}
 										cardType={CardType.Cash}
 									/>
 								)

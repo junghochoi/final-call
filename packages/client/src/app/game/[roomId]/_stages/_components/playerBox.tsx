@@ -98,7 +98,6 @@ export const PlayerBox = ({
 
 				{currPlayer && <div className="p-1 rounded-full bg-sky-300 text-sm">${currPlayerBank}</div>}
 			</motion.div>
-
 			<div
 				className={cn(
 					"absolute rounded h-7 w-6 text-sm bg-cyan-300 text-center p-1",
@@ -108,7 +107,7 @@ export const PlayerBox = ({
 			>
 				{bid}
 			</div>
-
+			x
 			{stage === Stage.Auctioning && propertyCard?.value !== undefined && (
 				<div
 					className={cn(
