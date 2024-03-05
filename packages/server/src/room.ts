@@ -139,10 +139,11 @@ export class Room {
 			})
 
 			const propertyCards = new Map(this.bidStateManager.getBidState().playerPropertyCards)
+			const playerBanks = this.bidStateManager.getAllPlayerBanks()
 
 			// Deinitialize BidState
 			this.bidStateManager = new BidStateManager()
-			this.auctionStateManager.initialize(this.playerOrder, this.numRounds, propertyCards)
+			this.auctionStateManager.initialize(this.playerOrder, this.numRounds, propertyCards, playerBanks)
 		} else if (stage == Stage.Result) {
 			this.playerOrder.forEach((player: Player) => {
 				const individualAuctionState = this.auctionStateManager.getIndividualAuctionState(player.sessionId)

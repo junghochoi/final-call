@@ -21,6 +21,7 @@ export class AuctionStateManager {
 
 	private round: number
 
+	private playerBanks: Map<SessionID, number>
 	private playerCashCards: Map<SessionID, number[]>
 	private playerPropertyCards: Map<SessionID, number[]>
 	private playerSellingPropertyCard: Map<SessionID, number>
@@ -32,6 +33,7 @@ export class AuctionStateManager {
 		this.roundCards = []
 		this.round = 0
 		this.playerOrder = []
+		this.playerBanks = new Map()
 		this.playerPropertyCards = new Map()
 		this.playerCashCards = new Map()
 		this.playerSellingPropertyCard = new Map()
@@ -39,7 +41,12 @@ export class AuctionStateManager {
 		this.endRoundAnimate = false
 	}
 
-	initialize(playerOrder: Player[], numRounds: number, playerPropertyCards: Map<SessionID, number[]>) {
+	initialize(
+		playerOrder: Player[],
+		numRounds: number,
+		playerPropertyCards: Map<SessionID, number[]>,
+		playerBanks: Map<SessionID, number>
+	) {
 		this.deckSize = playerOrder.length * numRounds
 		this.numPlayers = playerOrder.length
 		this.playerOrder = playerOrder
@@ -48,6 +55,7 @@ export class AuctionStateManager {
 		this.round = 0
 		this.playerPropertyCards = playerPropertyCards
 		this.playerCashCards = new Map(playerOrder.map((player) => [player.sessionId, []]))
+		this.playerBanks = playerBanks
 	}
 
 	getAuctionState(): AuctionStateSerialized {
@@ -67,6 +75,7 @@ export class AuctionStateManager {
 
 		return {
 			stage: Stage.Auctioning,
+			bank: this.playerBanks.get(sessionId)!,
 			propertyCards: propertyCards!,
 			cashCards: cashCards!,
 		}

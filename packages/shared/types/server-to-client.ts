@@ -29,6 +29,7 @@ export type IndividualBidStateUploadPayload = {
 
 export type IndividualAuctionStateUploadPayload = {
 	stage: Stage.Auctioning
+	bank: number
 	propertyCards: number[]
 	cashCards: number[]
 }

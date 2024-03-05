@@ -75,6 +75,10 @@ export class BidStateManager {
 		}
 	}
 
+	getAllPlayerBanks(): Map<SessionID, number> {
+		return this.playerBanks
+	}
+
 	makePlayerBid(player: Player, bid: number) {
 		const sessionId = player.sessionId
 		const bank = this.playerBanks.get(sessionId)
