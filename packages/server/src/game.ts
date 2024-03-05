@@ -192,7 +192,7 @@ export class Game {
 							this.emitGameState(roomId)
 							this.changeStageIfNeeded(socket.data.roomId)
 							this.emitGameState(socket.data.roomId)
-						}, 10000)
+						}, 5000)
 					} else {
 						this.emitIndividualGameState(socket)
 					}

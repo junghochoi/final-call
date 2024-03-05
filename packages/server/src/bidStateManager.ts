@@ -18,7 +18,6 @@ export class BidStateManager {
 	private playersPassed: Map<SessionID, boolean>
 
 	private endRoundAnimate: boolean
-	private numAnimationsCompleted: number
 	constructor() {
 		this.numPlayers = 0
 		this.allCards = []
@@ -35,11 +34,10 @@ export class BidStateManager {
 		this.playersPassed = new Map()
 
 		this.endRoundAnimate = false
-		this.numAnimationsCompleted = 0
 	}
 
-	initialize(players: Player[]) {
-		this.deckSize = 6
+	initialize(players: Player[], numRounds: number) {
+		this.deckSize = players.length * numRounds
 		this.numPlayers = players.length
 		this.allCards = this.#createDeck(this.deckSize)
 		this.roundCards = this.#drawCards(players.length)
@@ -54,7 +52,6 @@ export class BidStateManager {
 		this.playersPassed = new Map(players.map((player) => [player.sessionId, false]))
 
 		this.endRoundAnimate = false
-		this.numAnimationsCompleted = 0
 	}
 
 	getBidState(): BidStateSerialized {

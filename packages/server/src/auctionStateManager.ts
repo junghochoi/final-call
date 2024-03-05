@@ -39,8 +39,8 @@ export class AuctionStateManager {
 		this.endRoundAnimate = false
 	}
 
-	initialize(playerOrder: Player[], playerPropertyCards: Map<SessionID, number[]>) {
-		this.deckSize = 6
+	initialize(playerOrder: Player[], numRounds: number, playerPropertyCards: Map<SessionID, number[]>) {
+		this.deckSize = playerOrder.length * numRounds
 		this.numPlayers = playerOrder.length
 		this.playerOrder = playerOrder
 		this.allCards = this.#createDeck(this.deckSize)
@@ -121,17 +121,15 @@ export class AuctionStateManager {
 
 	#addCashCardToPlayerHand(cashCard: number, sessionId: SessionID) {
 		const cashCards = this.playerCashCards.get(sessionId)!
-
 		if (cashCards === undefined) {
 			throw new Error("could not find player in playerPropertyCards")
 		}
-
 		cashCards.push(cashCard)
 		this.playerCashCards.set(sessionId, cashCards)
 	}
 	// Helper Functions
 	#createDeck(numCards: number) {
-		return shuffle(Array.from({ length: numCards }, (_, index) => index + 1))
+		return shuffle(Array.from({ length: Math.floor(numCards / 2) }, (_, index) => [index, index]).flat())
 	}
 	#drawCards(numCards: number) {
 		const cards = this.allCards.splice(-numCards).sort((a, b) => b - a)
@@ -139,6 +137,8 @@ export class AuctionStateManager {
 	}
 
 	isGameOver(): boolean {
-		return this.round + 1 === this.numPlayers && this.round !== 0
+		// return this.round + 1 === this.numPlayers && this.round !== 0
+
+		return this.round === Math.ceil(this.deckSize / this.numPlayers)
 	}
 }

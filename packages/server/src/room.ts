@@ -25,16 +25,17 @@ export class Room {
 	private bidStateManager: BidStateManager
 	private auctionStateManager: AuctionStateManager
 	private resultState: Map<SessionID, ResultState>
+	private numRounds: number
 
 	constructor(roomId: string) {
 		this.roomId = roomId
 		this.players = new Map()
 		this.stage = Stage.Lobby
-
 		this.bidStateManager = new BidStateManager()
 		this.auctionStateManager = new AuctionStateManager()
 		this.resultState = new Map()
 		this.playerOrder = []
+		this.numRounds = 2
 	}
 
 	getGameState(): GameStateUpdatePayload {
@@ -126,7 +127,7 @@ export class Room {
 	changeStage(stage: Stage) {
 		if (stage == Stage.Bidding) {
 			this.playerOrder = Array.from(this.players.values()).sort((a, b) => a.nickname.localeCompare(b.nickname))
-			this.bidStateManager.initialize(this.playerOrder)
+			this.bidStateManager.initialize(this.playerOrder, this.numRounds)
 		} else if (stage == Stage.Auctioning) {
 			// Obtain all the Result States from the Bank Stage
 			this.playerOrder.forEach((player: Player) => {
@@ -141,7 +142,7 @@ export class Room {
 
 			// Deinitialize BidState
 			this.bidStateManager = new BidStateManager()
-			this.auctionStateManager.initialize(this.playerOrder, propertyCards)
+			this.auctionStateManager.initialize(this.playerOrder, this.numRounds, propertyCards)
 		} else if (stage == Stage.Result) {
 			this.playerOrder.forEach((player: Player) => {
 				const individualAuctionState = this.auctionStateManager.getIndividualAuctionState(player.sessionId)
