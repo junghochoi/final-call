@@ -185,6 +185,7 @@ export class Game {
 
 					if (info.submitAllIndividualStates) {
 						this.emitAllIndividualGameState(roomId)
+						this.emitSound(roomId, Sound.EndAuction)
 						setTimeout(() => {
 							console.log("SetTimeout Executing")
 							this.roomManager.startNewAuctionRound(roomId)
@@ -195,6 +196,7 @@ export class Game {
 						}, 5000)
 					} else {
 						this.emitIndividualGameState(socket)
+						this.emitSound(roomId, Sound.PlacingCard)
 					}
 
 					break

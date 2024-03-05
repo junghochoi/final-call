@@ -104,7 +104,6 @@ export class AuctionStateManager {
 			})
 
 			this.endRoundAnimate = true
-			// this.startNewRound()
 
 			return {
 				success: true,
@@ -122,6 +121,7 @@ export class AuctionStateManager {
 		this.endRoundAnimate = false
 		if (!this.isGameOver()) {
 			this.roundCards = this.#drawCards(this.playerOrder.length)
+			console.log(this.roundCards)
 
 			this.round += 1
 			this.playerSellingPropertyCard.clear()

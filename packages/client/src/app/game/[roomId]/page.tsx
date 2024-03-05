@@ -23,7 +23,12 @@ import { getNickname, getSessionId, persistSessionId } from "@/lib/utils"
 import { useSocket } from "@/contexts/SocketContext"
 import UsernameSelection from "./usernameSelection"
 import { Lobby, Game, Results } from "./_stages"
-import { BET_SOUND_EFFECT_PATH, PASS_SOUND_EFFECT_PATH } from "@/lib/soundEffects"
+import {
+	BET_SOUND_EFFECT_PATH,
+	PASS_SOUND_EFFECT_PATH,
+	END_AUCTION_SOUND_EFFECT_PATH,
+	PLACING_CARD_SOUND_EFFECT_PATH,
+} from "@/lib/soundEffects"
 
 const GamePage = () => {
 	const { socket } = useSocket()
@@ -45,6 +50,8 @@ const GamePage = () => {
 
 	const betSound = useAudio(BET_SOUND_EFFECT_PATH)
 	const passSound = useAudio(PASS_SOUND_EFFECT_PATH)
+	const placingCardSound = useAudio(PLACING_CARD_SOUND_EFFECT_PATH)
+	const auctionEndSound = useAudio(END_AUCTION_SOUND_EFFECT_PATH)
 
 	const playerInitializationCallback = useCallback((playerData: Player) => {
 		setGameState((prevGameState) => ({
@@ -113,14 +120,19 @@ const GamePage = () => {
 			switch (sound) {
 				case Sound.Bet: {
 					betSound.play()
-					// console.log(betSoundEffect)
-					// betSoundEffect && betSoundEffect.play()
-					// new Audio(BET_SOUND_EFFECT_PATH).play()
 					break
 				}
 
 				case Sound.Pass: {
 					passSound.play()
+					break
+				}
+				case Sound.PlacingCard: {
+					placingCardSound.play()
+					break
+				}
+				case Sound.EndAuction: {
+					auctionEndSound.play()
 					break
 				}
 			}

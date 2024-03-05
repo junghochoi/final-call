@@ -109,7 +109,8 @@ export enum Sound {
 	Bet,
 	Win,
 	Pass,
-	PlacingCards,
+	PlacingCard,
+	EndAuction,
 }
 
 export enum CardType {
