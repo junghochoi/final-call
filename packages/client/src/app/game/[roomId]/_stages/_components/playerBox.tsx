@@ -126,7 +126,10 @@ export const PlayerBox = ({
 				// </div>
 
 				<div
-					className={cn("absolute h-12 w-8 bg-white rounded-sm text-xs", playerBidPositions[playerPosition])}
+					className={cn(
+						"absolute h-12 w-8 lg:h-24 lg:w-16 bg-white rounded-sm text-xs",
+						playerBidPositions[playerPosition]
+					)}
 					// initial={{ opacity: 0 }}
 					// transition={{ duration: 0.2 }}
 					key={propertyCard.value}
