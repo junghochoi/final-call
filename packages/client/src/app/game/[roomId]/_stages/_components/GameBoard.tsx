@@ -40,6 +40,8 @@ export type CashCard = {
 	cashCard: number
 }
 
+const uniqueKey = (number: number, index: number) => `${number}_${index}`
+
 export const GameBoard = ({
 	stage,
 	currPlayer,
@@ -83,7 +85,7 @@ export const GameBoard = ({
 						<AnimatePresence>
 							{bidState.roundCards.map((num: number, index: number) => (
 								<Card
-									key={num}
+									key={uniqueKey(num, index)}
 									value={`${num}`}
 									labelVisible={false}
 									animateLastCard={bidState.endRoundAnimate}
@@ -98,7 +100,7 @@ export const GameBoard = ({
 							{cashCards.map(({ cashCard, propertyCard, sessionId }, index) => {
 								return (
 									<Card
-										key={cashCard}
+										key={uniqueKey(cashCard, index)}
 										position={index}
 										value={`${cashCard}`}
 										labelVisible={auctionState.endRoundAnimate}
