@@ -51,14 +51,14 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 			y: 0,
 			rotate: -45,
 			transition: {
-				duration: 0.7,
+				duration: 0.3,
 				delay: 0.5 * index,
 			},
 		}),
 		auctionLabelExit: {
 			opacity: 0,
 			transition: {
-				duration: 1,
+				duration: 0.7,
 			},
 		},
 	}
@@ -90,7 +90,7 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 				variants={cardVariants}
 				initial={{ opacity: 0 }}
 				animate={animateLastCard ? "winner" : "show"}
-				transition={{ duration: 0.2 }}
+				transition={{ duration: 0.7 }}
 				exit={"passed"}
 				custom={animateLastCard ? 1 : 0}
 			>
