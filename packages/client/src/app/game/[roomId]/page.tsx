@@ -29,6 +29,7 @@ import {
 	END_AUCTION_SOUND_EFFECT_PATH,
 	PLACING_CARD_SOUND_EFFECT_PATH,
 } from "@/lib/soundEffects"
+import { AnimatePresence } from "framer-motion"
 
 const GamePage = () => {
 	const { socket } = useSocket()
@@ -156,17 +157,21 @@ const GamePage = () => {
 
 	const handleGameAction = (action: Action) => {}
 
+	let component = null
+
 	if (!pickedName) {
-		return <UsernameSelection handleUserJoinGame={handleUserJoinGame} />
+		component = <UsernameSelection handleUserJoinGame={handleUserJoinGame} />
 	} else if (gameState.stage == Stage.Lobby) {
-		return <Lobby gameState={gameState} handleStartGame={handleStartGame} />
+		component = <Lobby gameState={gameState} handleStartGame={handleStartGame} />
 	} else if (gameState.stage == Stage.Bidding || gameState.stage == Stage.Auctioning) {
-		return <Game roomId={roomId} gameState={gameState} handleGameAction={handleGameAction} />
+		component = <Game roomId={roomId} gameState={gameState} handleGameAction={handleGameAction} />
 	} else if (gameState.stage === Stage.Result) {
-		return <Results gameState={gameState} />
+		component = <Results gameState={gameState} />
 	} else {
-		return <div>{gameState.stage}</div>
+		component = <div>{gameState.stage}</div>
 	}
+
+	return component
 }
 
 export default GamePage

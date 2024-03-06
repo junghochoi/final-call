@@ -80,7 +80,6 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 				animate={animateLastCard ? "winner" : "show"}
 				transition={{ duration: 0.2 }}
 				exit={"passed"}
-				key={value}
 			>
 				<div className={cn("md:text-2xl pl-1 lg:ml-2", luckiestGuy.className)}>{value}</div>
 

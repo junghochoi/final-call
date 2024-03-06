@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import { AuctionState, BidState, CardType, Cash, Player, SessionID, Stage } from "@final-call/shared"
 
 import { PlayerBox } from "./playerBox"
-import { zip } from "@/lib/utils"
+import { uniqueKey } from "@/lib/utils"
 import { Card } from "./CommunityCard"
 import { AnimatePresence } from "framer-motion"
 
@@ -39,8 +39,6 @@ export type CashCard = {
 	propertyCard?: number
 	cashCard: number
 }
-
-const uniqueKey = (number: number, index: number) => `${number}_${index}`
 
 export const GameBoard = ({
 	stage,
@@ -87,7 +85,7 @@ export const GameBoard = ({
 				<div className="bg-blue-200 p-1 rounded flex justify-center space-x-4 absolute h-16 md:h-28 w-2/3 shadow-sm shadow-fuchsia-blue-300 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 					{stage === Stage.Bidding && (
 						<AnimatePresence>
-							{propertyCards.map((num: number, index: number) => (
+							{bidState.roundCards.map((num: number, index: number) => (
 								<Card
 									key={uniqueKey(num, index)}
 									value={`${num}`}

@@ -40,3 +40,5 @@ export function persistNickname(newNickname: string) {
 }
 
 export const zip = <K, T>(a: K[], b: T[]) => Array.from(Array(Math.max(a.length, b.length)), (_, i) => [a[i], b[i]])
+
+export const uniqueKey = (number: number, index: number) => `${number}_${index}`

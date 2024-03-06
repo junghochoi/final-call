@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 import { Slider } from "@/components/ui/slider"
 import { Plus, Minus } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn, uniqueKey } from "@/lib/utils"
 import { CardType, SessionID, Stage } from "@final-call/shared"
 import { PersonalCard } from "./PersonalCard"
 
@@ -41,8 +41,14 @@ export const AuctionActionBar = ({
 				))}
 			</div>
 			<div className="w-1/3 flex justify-around items-center">
-				{currPlayerCashCards.map((card) => (
-					<PersonalCard value={card} color={"black"} handleSellProperty={handleSellProperty} cardType={CardType.Cash} />
+				{currPlayerCashCards.map((card, index) => (
+					<PersonalCard
+						value={card}
+						key={uniqueKey(card, index)}
+						color={"black"}
+						handleSellProperty={handleSellProperty}
+						cardType={CardType.Cash}
+					/>
 				))}
 			</div>
 		</div>
