@@ -138,7 +138,8 @@ export class AuctionStateManager {
 	}
 	// Helper Functions
 	#createDeck(numCards: number) {
-		return shuffle(Array.from({ length: Math.floor(numCards / 2) }, (_, index) => [index, index]).flat())
+		return shuffle(Array.from({ length: numCards }, (_, index) => index + 1))
+		// return shuffle(Array.from({ length: Math.floor(numCards / 2) }, (_, index) => [index, index]).flat())
 	}
 	#drawCards(numCards: number) {
 		const cards = this.allCards.splice(-numCards).sort((a, b) => b - a)

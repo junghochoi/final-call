@@ -58,7 +58,7 @@ export class BidStateManager {
 		return {
 			round: this.round,
 			playerTurn: this.playerTurn,
-			roundCards: this.roundCards,
+			roundCards: this.roundCards.sort((a, b) => a - b),
 			playerBids: [...this.playerBids.entries()],
 			playerPropertyCards: [...this.playerPropertyCards.entries()],
 			endRoundAnimate: this.endRoundAnimate,

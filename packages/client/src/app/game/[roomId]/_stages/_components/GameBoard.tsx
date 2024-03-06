@@ -54,10 +54,13 @@ export const GameBoard = ({
 	const [propertyCards, setPropertyCards] = useState<number[]>([])
 
 	useEffect(() => {
-		setPropertyCards(bidState.roundCards.sort((a, b) => a - b))
+		console.log(bidState.roundCards)
+		const orderedCards = Array.from(bidState.roundCards).sort((a, b) => a - b)
+		setPropertyCards(orderedCards)
 	}, [bidState.roundCards])
 
 	useEffect(() => {
+		console.log(auctionState.roundCards)
 		const orderedSellingProperties = Array.from(auctionState.playerSellingPropertyCard.entries()).sort(
 			(a, b) => a[1] - b[1]
 		)
@@ -85,7 +88,7 @@ export const GameBoard = ({
 				<div className="bg-blue-200 p-1 rounded flex justify-center space-x-4 absolute h-16 md:h-28 w-2/3 shadow-sm shadow-fuchsia-blue-300 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 					{stage === Stage.Bidding && (
 						<AnimatePresence>
-							{bidState.roundCards.map((num: number, index: number) => (
+							{propertyCards.map((num: number, index: number) => (
 								<Card
 									key={uniqueKey(num, index)}
 									value={`${num}`}

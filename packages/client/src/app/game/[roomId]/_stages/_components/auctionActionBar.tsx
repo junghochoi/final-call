@@ -31,9 +31,10 @@ export const AuctionActionBar = ({
 	return (
 		<div className="h-28 mx-auto w-full border-t border-fuchsia-blue-900 absolute bottom-0 flex justify-between">
 			<div className="w-2/3 px-5 lg:px-10 flex justify-start items-center space-x-2">
-				{currPlayerPropertyCards.map((card) => (
+				{currPlayerPropertyCards.map((card, index) => (
 					<PersonalCard
 						value={card}
+						key={uniqueKey(card, index)}
 						color={"black"}
 						handleSellProperty={handleSellProperty}
 						cardType={CardType.Property}

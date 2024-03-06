@@ -33,6 +33,7 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 
 	const individualGameStateCallback = useCallback((individualState: IndividualGameStateUpdatePayload) => {
 		console.log("individualGameStateCallback used")
+		// console.log(individualState)
 		switch (individualState.stage) {
 			case Stage.Bidding:
 				setCurrPlayerBank(individualState.bank)

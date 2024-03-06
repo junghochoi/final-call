@@ -1,4 +1,4 @@
-import { Variants, motion } from "framer-motion"
+import { AnimatePresence, Variants, motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { Stage } from "@final-call/shared"
 import { WINNER_SOUND_EFFECT_PATH } from "@/lib/soundEffects"
@@ -114,38 +114,41 @@ export const PlayerBox = ({
 			>
 				{bid}
 			</div>
+			<AnimatePresence>
+				{stage === Stage.Auctioning && propertyCard?.value !== undefined && (
+					// <div
+					// 	className={cn(
+					// 		"absolute rounded h-12 w-8 text-sm bg-cyan-300 text-center p-1",
+					// 		playerBidPositions[playerPosition]
+					// 	)}
+					// >
+					// 	{propertyCard?.visible && <p>{propertyCard.value}</p>}
+					// </div>
 
-			{stage === Stage.Auctioning && propertyCard?.value !== undefined && (
-				// <div
-				// 	className={cn(
-				// 		"absolute rounded h-12 w-8 text-sm bg-cyan-300 text-center p-1",
-				// 		playerBidPositions[playerPosition]
-				// 	)}
-				// >
-				// 	{propertyCard?.visible && <p>{propertyCard.value}</p>}
-				// </div>
+					<motion.div
+						className={cn(
+							"absolute h-12 w-8 lg:h-24 lg:w-16 bg-white rounded-sm text-xs",
+							playerBidPositions[playerPosition]
+						)}
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						transition={{ duration: 0.3 }}
+						exit={{ opacity: 0 }}
+						key={propertyCard.value}
+					>
+						{propertyCard?.visible && (
+							<>
+								<div className={cn("md:text-2xl pl-1 lg:ml-2", luckiestGuy.className)}>{propertyCard.value}</div>
 
-				<div
-					className={cn(
-						"absolute h-12 w-8 lg:h-24 lg:w-16 bg-white rounded-sm text-xs",
-						playerBidPositions[playerPosition]
-					)}
-					// initial={{ opacity: 0 }}
-					// transition={{ duration: 0.2 }}
-					key={propertyCard.value}
-				>
-					{propertyCard?.visible && (
-						<>
-							<div className={cn("md:text-2xl pl-1 lg:ml-2", luckiestGuy.className)}>{propertyCard.value}</div>
-
-							<Home
-								color="black"
-								className="absolute w-9 h-9 lg:w-14 lg:h-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-							/>
-						</>
-					)}
-				</div>
-			)}
+								<Home
+									color="black"
+									className="absolute w-9 h-9 lg:w-14 lg:h-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+								/>
+							</>
+						)}
+					</motion.div>
+				)}
+			</AnimatePresence>
 		</>
 	)
 }

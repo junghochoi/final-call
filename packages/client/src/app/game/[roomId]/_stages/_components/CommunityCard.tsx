@@ -25,7 +25,10 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 
 	const cardVariants: Variants = {
 		show: { opacity: 1 },
-		passed: { opacity: 0, transition: { delay: 0.5 } },
+		passed: (isDelayed) => {
+			console.log(isDelayed)
+			return { opacity: 0, transition: { delay: 0.7 * isDelayed } }
+		},
 		winner: {
 			opacity: 1,
 			scale: 1.1,
@@ -52,26 +55,35 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 				delay: 0.5 * index,
 			},
 		}),
+		auctionLabelExit: {
+			opacity: 0,
+			transition: {
+				duration: 1,
+			},
+		},
 	}
 
 	return (
 		<div className="relative">
-			{labelVisible && (
-				<motion.div
-					className={cn(
-						"absolute flex justify-center items-center w-20 h-6 lg:w-24 lg:h-8 text-center bottom-24 lg:bottom-36 -rotate-45 text-sm bg-white rounded",
-						labelStyle,
-						luckiestGuy.className
-					)}
-					variants={labelVariants}
-					initial={"auctionLabelInitial"}
-					animate={"auctionLabelAnimate"}
-					custom={position}
-				>
-					{label}
-					<Home />
-				</motion.div>
-			)}
+			<AnimatePresence>
+				{labelVisible && (
+					<motion.div
+						className={cn(
+							"absolute flex justify-center items-center w-20 h-6 lg:w-24 lg:h-8 text-center bottom-24 lg:bottom-36 -rotate-45 text-sm bg-white rounded",
+							labelStyle,
+							luckiestGuy.className
+						)}
+						variants={labelVariants}
+						initial={"auctionLabelInitial"}
+						animate={"auctionLabelAnimate"}
+						exit={"auctionLabelExit"}
+						custom={position}
+					>
+						{label}
+						<Home />
+					</motion.div>
+				)}
+			</AnimatePresence>
 
 			<motion.div
 				className="relative h-full w-12 md:w-20 bg-white rounded-sm"
@@ -80,6 +92,7 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 				animate={animateLastCard ? "winner" : "show"}
 				transition={{ duration: 0.2 }}
 				exit={"passed"}
+				custom={animateLastCard ? 1 : 0}
 			>
 				<div className={cn("md:text-2xl pl-1 lg:ml-2", luckiestGuy.className)}>{value}</div>
 
