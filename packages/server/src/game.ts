@@ -189,7 +189,7 @@ export class Game {
 						setTimeout(() => {
 							console.log("SetTimeout Executing")
 							this.roomManager.startNewAuctionRound(roomId)
-							this.emitAllIndividualGameState(roomId)
+							// this.emitAllIndividualGameState(roomId)
 							this.emitGameState(roomId)
 							this.changeStageIfNeeded(socket.data.roomId)
 							this.emitGameState(socket.data.roomId)

@@ -75,8 +75,8 @@ export class AuctionStateManager {
 
 		return {
 			stage: Stage.Auctioning,
-			bank: this.playerBanks.get(sessionId)!,
-			propertyCards: propertyCards!,
+			bank: this.playerBanks.get(sessionId) ?? -1,
+			propertyCards: propertyCards ?? [],
 			cashCards: cashCards!,
 		}
 	}

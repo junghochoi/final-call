@@ -32,23 +32,24 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 	}, [gameState.bidState])
 
 	const individualGameStateCallback = useCallback((individualState: IndividualGameStateUpdatePayload) => {
-		console.log("individualGameStateCallback used")
-		// console.log(individualState)
 		switch (individualState.stage) {
 			case Stage.Bidding:
 				setCurrPlayerBank(individualState.bank)
 				setCurrPlayerPropertyCards(individualState.propertyCards)
+				console.log(individualState.propertyCards)
 				break
 			case Stage.Auctioning:
 				setCurrPlayerPropertyCards(individualState.propertyCards)
 				setCurrPlayerCashCards(individualState.cashCards)
 				setCurrPlayerBank(individualState.bank)
+				console.log(individualState.propertyCards)
 				break
 		}
 	}, [])
 
 	useEffect(() => {
 		socket.on("IndividualGameStateUpdate", (payload: IndividualGameStateUpdatePayload) => {
+			console.log("indiviaulGameStateUpdate Event Received")
 			individualGameStateCallback(payload)
 		})
 		socket.emit("IndividualGameStateInitialization", gameState.currPlayer!, individualGameStateCallback)

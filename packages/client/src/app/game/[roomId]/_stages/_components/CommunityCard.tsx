@@ -26,8 +26,7 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 	const cardVariants: Variants = {
 		show: { opacity: 1 },
 		passed: (isDelayed) => {
-			console.log(isDelayed)
-			return { opacity: 0, transition: { delay: 0.7 * isDelayed } }
+			return { opacity: 0, transition: { duration: 0.7 * isDelayed } }
 		},
 		winner: {
 			opacity: 1,
@@ -51,7 +50,7 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 			y: 0,
 			rotate: -45,
 			transition: {
-				duration: 0.3,
+				duration: 0.7,
 				delay: 0.5 * index,
 			},
 		}),
@@ -78,6 +77,7 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 						animate={"auctionLabelAnimate"}
 						exit={"auctionLabelExit"}
 						custom={position}
+						key={value}
 					>
 						{label}
 						<Home />

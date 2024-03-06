@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation"
 import { useEffect, useState, useCallback } from "react"
+import { motion } from "framer-motion"
 
 // import { betSoundEffect, passSoundEffect } from "@/lib/soundEffects"
 
@@ -164,14 +165,31 @@ const GamePage = () => {
 	} else if (gameState.stage == Stage.Lobby) {
 		component = <Lobby gameState={gameState} handleStartGame={handleStartGame} />
 	} else if (gameState.stage == Stage.Bidding || gameState.stage == Stage.Auctioning) {
-		component = <Game roomId={roomId} gameState={gameState} handleGameAction={handleGameAction} />
+		component = (
+			<motion.div
+				key={"game"}
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				exit={{ opacity: 0, transition: { duration: 1 } }}
+			>
+				<Game roomId={roomId} gameState={gameState} handleGameAction={handleGameAction} />
+			</motion.div>
+		)
 	} else if (gameState.stage === Stage.Result) {
-		component = <Results gameState={gameState} />
+		component = (
+			<motion.div
+				key={"results"}
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1, transition: { duration: 1, delay: 1 } }}
+			>
+				<Results gameState={gameState} />
+			</motion.div>
+		)
 	} else {
 		component = <div>{gameState.stage}</div>
 	}
 
-	return component
+	return <AnimatePresence>{component}</AnimatePresence>
 }
 
 export default GamePage

@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect } from "react"
 
 import { AuctionState, BidState, CardType, Cash, Player, SessionID, Stage } from "@final-call/shared"
@@ -54,13 +56,11 @@ export const GameBoard = ({
 	const [propertyCards, setPropertyCards] = useState<number[]>([])
 
 	useEffect(() => {
-		console.log(bidState.roundCards)
 		const orderedCards = Array.from(bidState.roundCards).sort((a, b) => a - b)
 		setPropertyCards(orderedCards)
 	}, [bidState.roundCards])
 
 	useEffect(() => {
-		console.log(auctionState.roundCards)
 		const orderedSellingProperties = Array.from(auctionState.playerSellingPropertyCard.entries()).sort(
 			(a, b) => a[1] - b[1]
 		)
