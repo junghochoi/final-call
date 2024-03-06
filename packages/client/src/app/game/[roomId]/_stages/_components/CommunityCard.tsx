@@ -54,8 +54,6 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 		}),
 	}
 
-	console.log(position)
-
 	return (
 		<div className="relative">
 			{labelVisible && (
