@@ -25,7 +25,7 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: num
 			{/* <span className="absolute top-0 hidden -mt-6 text-xs font-bold group-hover:block">
 				{stack.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}
 			</span> */}
-			{stack.map((value: number, index) => {
+			{stack.reverse().map((value: number, index) => {
 				return (
 					<motion.div
 						key={`${value}_${index}`}
@@ -34,8 +34,8 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: num
 							`bg-indigo-${(index + 2) * 100}`,
 							heightStyle[value]
 						)}
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1, transition: { delay: index * 3, duration: 1 } }}
+						initial={{ height: 0 }}
+						animate={{ height: value * 16, transition: { delay: (stack.length - index) * 3, duration: 1 } }}
 					>
 						{/* {`${(index + 2) * 100} - h-[${value}rem]`} */}
 					</motion.div>
@@ -61,8 +61,6 @@ export const Results = ({ gameState }: ResultProps) => {
 	const { roomId } = useParams<{ roomId: string }>()
 	const [resultData, setResultData] = useState<PlayerResultData[]>([])
 
-	useEffect(() => {}, [])
-
 	useEffect(() => {
 		if (!gameState.resultState) return
 
@@ -70,11 +68,9 @@ export const Results = ({ gameState }: ResultProps) => {
 			return {
 				sessionId: sessionId,
 				nickname: gameState.players.find((p) => p.sessionId === sessionId)?.nickname ?? "Error: Could not find name",
-				data: [playerResult.bank, ...playerResult.cashCards],
+				data: [playerResult.bank, ...playerResult.cashCards].reverse(),
 			}
 		})
-
-		console.log(data)
 
 		setResultData(data)
 	}, [gameState.resultState])
