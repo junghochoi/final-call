@@ -58,10 +58,6 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: num
 					</motion.div>
 				)
 			})}
-			{/* 
-			<div className="relative flex justify-center w-full h-4 bg-indigo-200"></div>
-			<div className="relative flex justify-center w-full h-8 bg-indigo-300"></div>
-			<div className="relative flex justify-center w-full h-20 bg-indigo-400"></div> */}
 			<span className="absolute bottom-0 text-xs font-bold -rotate-45 ">{nickname}</span>
 		</motion.div>
 	)
@@ -105,24 +101,7 @@ export const Results = ({ gameState }: ResultProps) => {
 					{resultData.map(({ sessionId, nickname, data }) => {
 						return <VerticalBar key={sessionId} numBars={resultData.length} stack={data} nickname={nickname} />
 					})}
-
-					<VerticalBar key={"123"} numBars={resultData.length} stack={[10, 3, 7]} nickname="bob" />
 				</div>
-
-				{/* <div class="flex w-full mt-3">
-					<div class="flex items-center ml-auto">
-						<span class="block w-4 h-4 bg-indigo-400"></span>
-						<span class="ml-1 text-xs font-medium">Existing</span>
-					</div>
-					<div class="flex items-center ml-4">
-						<span class="block w-4 h-4 bg-indigo-300"></span>
-						<span class="ml-1 text-xs font-medium">Upgrades</span>
-					</div>
-					<div class="flex items-center ml-4">
-						<span class="block w-4 h-4 bg-indigo-200"></span>
-						<span class="ml-1 text-xs font-medium">New</span>
-					</div>
-				</div> */}
 			</div>
 
 			<Button onClick={returnToLobby}>Return to Lobby</Button>
