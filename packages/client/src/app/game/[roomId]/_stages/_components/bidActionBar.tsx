@@ -76,7 +76,7 @@ export const BidActionBar = ({
 				<>
 					<div className="w-7/12 px-5 lg:px-10 space-x-2 flex justify-start items-center">
 						{currPlayerPropertyCards.map((card, index) => (
-							<PersonalCard value={card} key={uniqueKey(card, index)} color={"black"} cardType={CardType.Property} />
+							<PersonalCard value={card} cardId={uniqueKey(card, index)} color={"black"} cardType={CardType.Property} />
 							// <div key={card} onClick={() => handleSellProperty(card)} className="p-4 border-2 border-black">
 							// 	{card}
 							// </div>

@@ -7,6 +7,7 @@ import { Plus, Minus } from "lucide-react"
 import { cn, uniqueKey } from "@/lib/utils"
 import { CardType, SessionID, Stage } from "@final-call/shared"
 import { PersonalCard } from "./PersonalCard"
+import { unique } from "next/dist/build/utils"
 
 interface AuctionActionBarProps {
 	currPlayerPropertyCards: number[]
@@ -22,13 +23,15 @@ export const AuctionActionBar = ({
 	sell,
 	canTakeAction,
 }: AuctionActionBarProps) => {
-	const handleSellProperty = (card: number) => {
-		if (canTakeAction) {
+	const [selectedCard, setSelectedCard] = useState<string>("")
+	const handleSellProperty = (card: number, key: string) => {
+		console.log(window.innerWidth)
+		if (window.innerWidth < 640 && selectedCard !== key) {
+			setSelectedCard(key)
+		} else if (canTakeAction) {
 			sell(card)
 		}
 	}
-
-	console.log(currPlayerCashCards)
 
 	return (
 		<div className="h-28 mx-auto w-full border-t border-fuchsia-blue-900 absolute bottom-0 flex justify-between">
@@ -37,21 +40,17 @@ export const AuctionActionBar = ({
 					<PersonalCard
 						value={card}
 						key={uniqueKey(card, index)}
+						cardId={uniqueKey(card, index)}
 						color={"black"}
 						handleSellProperty={handleSellProperty}
 						cardType={CardType.Property}
+						selected={selectedCard === uniqueKey(card, index)}
 					/>
 				))}
 			</div>
 			<div className="w-1/3 flex justify-around items-center">
 				{currPlayerCashCards.map((card, index) => (
-					<PersonalCard
-						value={card}
-						key={uniqueKey(card, index)}
-						color={"black"}
-						handleSellProperty={handleSellProperty}
-						cardType={CardType.Cash}
-					/>
+					<PersonalCard value={card} cardId={uniqueKey(card, index)} color={"black"} cardType={CardType.Cash} />
 				))}
 			</div>
 		</div>

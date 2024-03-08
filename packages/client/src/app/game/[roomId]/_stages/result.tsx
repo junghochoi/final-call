@@ -96,7 +96,7 @@ export const Results = ({ gameState }: ResultProps) => {
 		<div className="bg-[#1F002E] h-screen text-white flex items-center justify-center flex-col">
 			<div className="flex flex-col max-w-screen-md items-center justify-center p-6 pb-6 rounded-lg shadow-xl sm:p-8">
 				<h2 className="text-xl font-bold">Standings</h2>
-				<span className="text-sm font-semibold text-gray-500">2020</span>
+				{/* <span className="text-sm font-semibold text-gray-500">2020</span> */}
 				<div className="flex items-end flex-grow w-full mt-2 space-x-2 sm:space-x-3">
 					{resultData.map(({ sessionId, nickname, data }) => {
 						return <VerticalBar key={sessionId} numBars={resultData.length} stack={data} nickname={nickname} />

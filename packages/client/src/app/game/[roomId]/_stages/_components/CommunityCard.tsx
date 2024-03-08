@@ -1,3 +1,5 @@
+"use client"
+
 import { AnimatePresence, Variants, motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { Home } from "lucide-react"
@@ -94,7 +96,7 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 				exit={"passed"}
 				custom={animateLastCard ? 1 : 0}
 			>
-				<div className={cn("lg:text-2xl pl-1 md:ml-2 md:pt-2", luckiestGuy.className)}>{value}</div>
+				<div className={cn("md:text-2xl pl-1 md:ml-2 md:pt-2", luckiestGuy.className)}>{value}</div>
 
 				{cardType === CardType.Property && (
 					<Home

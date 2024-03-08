@@ -1,3 +1,5 @@
+"use client"
+
 import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { CircleDollarSign, Home } from "lucide-react"
@@ -7,8 +9,10 @@ interface CardProps {
 	value: number
 	color: string
 	cardType: CardType
+	cardId: string
 
-	handleSellProperty?: (value: number) => void
+	handleSellProperty?: (value: number, key: string) => void
+	selected?: boolean
 }
 
 const luckiestGuy = Luckiest_Guy({
@@ -16,15 +20,17 @@ const luckiestGuy = Luckiest_Guy({
 	weight: ["400"],
 })
 
-export const PersonalCard = ({ value, color, handleSellProperty, cardType }: CardProps) => {
+export const PersonalCard = ({ value, color, handleSellProperty, cardType, cardId, selected }: CardProps) => {
 	// const labelStyle = labelVisible ? "absolute" : "hidden"
 
 	const sell = () => {
-		handleSellProperty && handleSellProperty(value)
+		handleSellProperty && handleSellProperty(value, cardId)
 	}
+
+	const cardStyle = selected ? "opacity-100" : "opacity-50"
 	return (
 		<motion.div
-			className="relative h-2/3 w-12 lg:w-16 bg-white rounded-sm opacity-50"
+			className={cn("relative h-2/3 w-12 lg:w-16 bg-white rounded-sm opacity-50 hover:opacity-100", cardStyle)}
 			// initial={{ opacity: 0 }}
 			// animate={{ opacity: 1, transition: { delay: 0.5 } }}
 			// transition={{ duration: 0.2 }}
