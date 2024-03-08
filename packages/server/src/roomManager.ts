@@ -79,6 +79,17 @@ export class RoomManager {
 		return false
 	}
 
+	canPlayerJoin(roomId: RoomID): { error: boolean; message: string } {
+		const room = this.rooms.get(roomId)
+
+		if (room) {
+			return room.hasGameStarted()
+				? { error: true, message: "Game Has Already Begun, Wait for Game to finish" }
+				: { error: false, message: "Player Can Join" }
+		}
+		return { error: true, message: "Room Does not Exist" }
+	}
+
 	getParticipant(roomId: RoomID, sessionId: SessionID): Player | undefined {
 		const room = this.rooms.get(roomId)
 		if (room) {

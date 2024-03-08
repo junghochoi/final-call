@@ -15,6 +15,7 @@ import {
 	PassAction,
 	SessionID,
 	Sound,
+	CanPlayerJoinCallback,
 } from "@final-call/shared"
 
 import { RoomManager } from "./roomManager"
@@ -118,6 +119,10 @@ export class Game {
 					connected: true,
 				})
 			}
+		})
+		socket.on("CanPlayerJoin", (roomId: RoomID, callback: CanPlayerJoinCallback) => {
+			const data = this.roomManager.canPlayerJoin(roomId)
+			callback(data)
 		})
 		socket.on("PlayerLeave", (payload: Player) => {
 			socket.leave(payload.roomId)

@@ -38,6 +38,9 @@ export class Room {
 		this.numRounds = 2
 	}
 
+	hasGameStarted(): boolean {
+		return this.stage !== Stage.Lobby
+	}
 	getGameState(): GameStateUpdatePayload {
 		return {
 			roomId: this.roomId,
