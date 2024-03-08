@@ -6,13 +6,22 @@ import { cn } from "@/lib/utils"
 import { useEffect, useState } from "react"
 import { heightStyle } from "@/lib/dynamicStyles"
 import { motion } from "framer-motion"
+import { Luckiest_Guy, Poppins } from "next/font/google"
+import { INCREASE_SOUND_EFFECT_PATH } from "@/lib/soundEffects"
+import { useAudio } from "@/hooks/useAudio"
 
 interface ResultProps {
 	gameState: GameState
 }
 
+const poppins = Poppins({
+	subsets: ["latin"],
+	weight: ["700"],
+})
+
 const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: number[]; nickname: string }) => {
 	const barWidthStyle = numBars <= 3 ? "w-32" : "w-14"
+
 	return (
 		<motion.div
 			className={cn("relative flex flex-col items-center flex-grow pb-5 group", barWidthStyle)}
@@ -26,6 +35,8 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: num
 				{stack.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}
 			</span> */}
 			{stack.reverse().map((value: number, index) => {
+				const delay = (stack.length - index) * 3
+
 				return (
 					<motion.div
 						key={`${value}_${index}`}
@@ -35,9 +46,15 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: num
 							heightStyle[value]
 						)}
 						initial={{ height: 0 }}
-						animate={{ height: value * 16, transition: { delay: (stack.length - index) * 3, duration: 1 } }}
+						animate={{ height: value * 16, transition: { delay: delay, duration: 1 } }}
 					>
-						{/* {`${(index + 2) * 100} - h-[${value}rem]`} */}
+						<motion.span
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1, transition: { delay: delay, duration: 2 } }}
+							className={cn("text-center text-black", poppins.className)}
+						>
+							{value}
+						</motion.span>
 					</motion.div>
 				)
 			})}
@@ -91,6 +108,21 @@ export const Results = ({ gameState }: ResultProps) => {
 
 					<VerticalBar key={"123"} numBars={resultData.length} stack={[10, 3, 7]} nickname="bob" />
 				</div>
+
+				{/* <div class="flex w-full mt-3">
+					<div class="flex items-center ml-auto">
+						<span class="block w-4 h-4 bg-indigo-400"></span>
+						<span class="ml-1 text-xs font-medium">Existing</span>
+					</div>
+					<div class="flex items-center ml-4">
+						<span class="block w-4 h-4 bg-indigo-300"></span>
+						<span class="ml-1 text-xs font-medium">Upgrades</span>
+					</div>
+					<div class="flex items-center ml-4">
+						<span class="block w-4 h-4 bg-indigo-200"></span>
+						<span class="ml-1 text-xs font-medium">New</span>
+					</div>
+				</div> */}
 			</div>
 
 			<Button onClick={returnToLobby}>Return to Lobby</Button>

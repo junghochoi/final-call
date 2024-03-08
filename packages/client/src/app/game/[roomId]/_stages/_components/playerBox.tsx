@@ -18,11 +18,11 @@ const playerBoxPositions = [
 
 const playerBidPositions = [
 	"left-[calc(50%-0.75rem)] bottom-[4.5rem]",
-	"left-[6.5rem] md:left-[8rem] bottom-[calc(20%+1rem)]",
-	"left-[6.5rem] md:left-[8rem] top-[calc(20%+1rem)]",
+	"left-[6.5rem] md:left-[10rem] bottom-[calc(20%+1rem)]",
+	"left-[6.5rem] md:left-[10rem] top-[calc(20%+1rem)]",
 	"left-[calc(50%-0.75rem)] top-[4.5rem]",
-	"right-[6.5rem] md:right-[8rem] top-[calc(20%+1rem)]",
-	"right-[6.5rem] md:right-[8rem] bottom-[calc(20%+1rem)]",
+	"right-[6.5rem] md:right-[10rem] top-[calc(20%+1rem)]",
+	"right-[6.5rem] md:right-[10rem] bottom-[calc(20%+1rem)]",
 ]
 
 const playerPresentStyle = ""

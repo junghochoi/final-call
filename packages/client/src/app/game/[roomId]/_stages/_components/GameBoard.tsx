@@ -18,24 +18,6 @@ interface GameBoardProps {
 	currPlayerBank: number
 }
 
-const playerBoxPositions = [
-	"left-[calc(50%-2.5rem)] md:left-[calc(50%-3.5rem)] bottom-[0.5rem]",
-	"left-[0.5rem] bottom-[20%]",
-	"left-[0.5rem] top-[20%]",
-	"left-[calc(50%-2.5rem)] md:left-[calc(50%-3.5rem)] top-[0.5rem]",
-	"right-[0.5rem] top-[20%]",
-	"right-[0.5rem] bottom-[20%]",
-]
-
-const playerBidPositions = [
-	"left-[calc(50%-0.75rem)] bottom-[4.5rem]",
-	"left-[6.5rem] md:left-[8rem] bottom-[calc(20%+1rem)]",
-	"left-[6.5rem] md:left-[8rem] top-[calc(20%+1rem)]",
-	"left-[calc(50%-0.75rem)] top-[4.5rem]",
-	"right-[6.5rem] md:right-[8rem] top-[calc(20%+1rem)]",
-	"right-[6.5rem] md:right-[8rem] bottom-[calc(20%+1rem)]",
-]
-
 export type CashCard = {
 	sessionId?: SessionID
 	propertyCard?: number

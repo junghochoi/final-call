@@ -24,7 +24,7 @@ export const PersonalCard = ({ value, color, handleSellProperty, cardType }: Car
 	}
 	return (
 		<motion.div
-			className="relative h-2/3 w-12 md:w-20 bg-white rounded-sm opacity-50"
+			className="relative h-2/3 w-12 lg:w-16 bg-white rounded-sm opacity-50"
 			// initial={{ opacity: 0 }}
 			// animate={{ opacity: 1, transition: { delay: 0.5 } }}
 			// transition={{ duration: 0.2 }}
@@ -32,7 +32,7 @@ export const PersonalCard = ({ value, color, handleSellProperty, cardType }: Car
 			key={value}
 			onClick={sell}
 		>
-			<div className={cn("md:text-2xl pl-1 lg:ml-2", luckiestGuy.className)}>{value}</div>
+			<div className={cn("md:text-2xl ml-1 ", luckiestGuy.className)}>{value}</div>
 			{cardType === CardType.Property && (
 				<Home
 					color="black"

@@ -68,7 +68,7 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 				{labelVisible && (
 					<motion.div
 						className={cn(
-							"absolute flex justify-center items-center w-20 h-6 lg:w-24 lg:h-8 text-center bottom-24 lg:bottom-36 -rotate-45 text-sm bg-white rounded",
+							"absolute flex justify-center items-center w-20 h-6 lg:w-24 lg:h-8 text-center bottom-24 md:bottom-36 -rotate-45 text-sm bg-white rounded",
 							labelStyle,
 							luckiestGuy.className
 						)}
@@ -94,19 +94,19 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 				exit={"passed"}
 				custom={animateLastCard ? 1 : 0}
 			>
-				<div className={cn("md:text-2xl pl-1 lg:ml-2", luckiestGuy.className)}>{value}</div>
+				<div className={cn("lg:text-2xl pl-1 md:ml-2 md:pt-2", luckiestGuy.className)}>{value}</div>
 
 				{cardType === CardType.Property && (
 					<Home
 						color="black"
-						className="absolute w-9 h-9 lg:w-14 lg:h-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+						className="absolute w-9 h-9 md:h-14 md:w-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
 					/>
 				)}
 
 				{cardType === CardType.Cash && (
 					<CircleDollarSign
 						color="black"
-						className="absolute w-9 h-9 lg:w-14 lg:h-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+						className="absolute w-9 h-9 md:w-14 md:h-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
 					/>
 				)}
 			</motion.div>
