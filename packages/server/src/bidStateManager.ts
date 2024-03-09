@@ -37,14 +37,22 @@ export class BidStateManager {
 	}
 
 	initialize(players: Player[], numRounds: number) {
-		this.deckSize = players.length * numRounds
+		let startingMoney = 14
+		if (players.length === 2) startingMoney = 24
+		if (players.length === 3 || players.length === 4) startingMoney = 18
+
+		let removeCards = 0
+		if (players.length === 2) removeCards = 20
+		if (players.length === 3) removeCards = 6
+		if (players.length === 4) removeCards = 2
+		this.deckSize = 30 - removeCards
 		this.numPlayers = players.length
-		this.allCards = this.#createDeck(this.deckSize)
+		this.allCards = this.#createDeck(30, removeCards)
 		this.roundCards = this.#drawCards(players.length)
 		this.round = 0
 		this.playerOrder = players
 		this.playerTurn = 0
-		this.playerBanks = new Map(players.map((player) => [player.sessionId, 14]))
+		this.playerBanks = new Map(players.map((player) => [player.sessionId, startingMoney]))
 		this.playerBids = new Map(players.map((player) => [player.sessionId, 0]))
 		this.playerPropertyCards = new Map(players.map((player) => [player.sessionId, []]))
 
@@ -187,8 +195,8 @@ export class BidStateManager {
 		this.playerPropertyCards.set(sessionId, playerPropertyHand)
 	}
 	// Helper Functions
-	#createDeck(numCards: number) {
-		return shuffle(Array.from({ length: numCards }, (_, index) => index + 1))
+	#createDeck(numCards: number, removeCards: number) {
+		return shuffle(Array.from({ length: numCards }, (_, index) => index + 1)).splice(removeCards)
 	}
 	#drawCards(numCards: number) {
 		const cards = this.allCards.splice(-numCards).sort((a, b) => b - a)
@@ -197,6 +205,7 @@ export class BidStateManager {
 
 	isGameOver(): boolean {
 		const res = this.round === Math.ceil(this.deckSize / this.numPlayers)
+		console.log(this.round, this.deckSize, this.numPlayers)
 		return res
 	}
 }
