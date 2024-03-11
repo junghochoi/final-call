@@ -74,7 +74,7 @@ export class BidStateManager {
 		return {
 			round: this.round,
 			playerTurn: this.playerTurn,
-			roundCards: this.roundCards.sort((a, b) => a.value - b.value),
+			roundCards: this.roundCards,
 			playerBids: [...this.playerBids.entries()],
 			playerPropertyCards: [...this.playerPropertyCards.entries()],
 			endRoundAnimate: this.endRoundAnimate,
@@ -116,7 +116,9 @@ export class BidStateManager {
 		this.numPlayersPassed += 1
 		this.playersPassed.set(player.sessionId, true)
 
+		console.log(this.roundCards)
 		const propertyCard = this.roundCards.pop()
+		console.log(propertyCard)
 
 		if (!propertyCard) {
 			return {
@@ -216,6 +218,8 @@ export class BidStateManager {
 	}
 	#drawCards(numCards: number): Card[] {
 		const cards = this.allCards.splice(-numCards).sort((a, b) => b.value - a.value)
+		console.log("DrAW")
+		console.log(cards)
 		return cards
 	}
 

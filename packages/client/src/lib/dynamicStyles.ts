@@ -68,3 +68,15 @@ export const heightStyle: HeightStyle = {
 	59: "h-[59rem]",
 	60: "h-[60rem]",
 }
+
+export const backgroundStyle: BackgroundStyle = {
+	100: "bg-indigo-100",
+	200: "bg-indigo-200",
+	300: "bg-indigo-300",
+	400: "bg-indigo-400",
+	500: "bg-indigo-500",
+	600: "bg-indigo-600",
+	700: "bg-indigo-700",
+	800: "bg-indigo-800",
+	900: "bg-indigo-900",
+}

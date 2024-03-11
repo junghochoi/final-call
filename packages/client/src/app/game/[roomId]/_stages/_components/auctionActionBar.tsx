@@ -35,20 +35,24 @@ export const AuctionActionBar = ({
 
 	return (
 		<div className="h-28 mx-auto w-full border-t border-fuchsia-blue-900 absolute bottom-0 flex justify-between">
-			<div className="w-2/3 px-5 lg:px-10 flex justify-start items-center space-x-2">
-				{currPlayerPropertyCards.map((card, index) => (
-					<PersonalCard
-						card={card}
-						key={card.id}
-						handleSellProperty={handleSellProperty}
-						selected={selectedCard === card.id}
-					/>
-				))}
+			<div className="w-1/2 px-5 lg:px-10 flex justify-start items-center space-x-2">
+				{currPlayerPropertyCards
+					.sort((a, b) => a.value - b.value)
+					.map((card, index) => (
+						<PersonalCard
+							card={card}
+							key={card.id}
+							handleSellProperty={handleSellProperty}
+							selected={selectedCard === card.id}
+						/>
+					))}
 			</div>
-			<div className="w-1/3 flex justify-around items-center">
-				{currPlayerCashCards.map((card, index) => (
-					<PersonalCard card={card} key={card.id} />
-				))}
+			<div className="mr-3 w-1/2 flex justify-end items-center space-x-2">
+				{currPlayerCashCards
+					.sort((a, b) => a.value - b.value)
+					.map((card, index) => (
+						<PersonalCard card={card} key={card.id} />
+					))}
 			</div>
 		</div>
 	)

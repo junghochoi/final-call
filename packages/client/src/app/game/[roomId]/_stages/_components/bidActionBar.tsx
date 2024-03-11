@@ -75,12 +75,14 @@ export const BidActionBar = ({
 			{!bidMenuOpen && (
 				<>
 					<div className="w-7/12 px-5 lg:px-10 space-x-2 flex justify-start items-center">
-						{currPlayerPropertyCards.map((card, index) => (
-							<PersonalCard card={card} key={card.id} />
-							// <div key={card} onClick={() => handleSellProperty(card)} className="p-4 border-2 border-black">
-							// 	{card}
-							// </div>
-						))}
+						{currPlayerPropertyCards
+							.sort((a, b) => a.value - b.value)
+							.map((card, index) => (
+								<PersonalCard card={card} key={card.id} />
+								// <div key={card} onClick={() => handleSellProperty(card)} className="p-4 border-2 border-black">
+								// 	{card}
+								// </div>
+							))}
 					</div>
 					<div className="w-5/12 flex justify-around items-center">
 						<Button
@@ -104,23 +106,32 @@ export const BidActionBar = ({
 			{bidMenuOpen && stage === Stage.Bidding && (
 				<>
 					<div className="w-7/12  p-4 flex justify-around">
-						<div className={cn("p-4", validBidStyle)}>
-							<p className="text-2xl text-center p-2 w-3/5 lg:w-2/5">${bidAmount}</p>
+						<div className={cn("w-20 flex justify-center items-center rounded text-black", validBidStyle)}>
+							<p className="text-2xl text-center p-2">${bidAmount}</p>
 						</div>
-						<div className="space-y-1 space-y-reverse flex flex-col-reverse items-center justify-around lg:bg-pink-500 lg:flex-row w-2/5 lg:w-3/5 lg:space-y-0">
-							<Button disabled={!yourTurn} onClick={handleBidDecrease} className="m-0 p-0 h-10 w-10 lg:rounded-r-none">
+						<div className="space-y-1 space-y-reverse flex flex-col-reverse items-center justify-aroun md:flex-row w-2/5 md:w-3/5 md:space-y-0">
+							<Button
+								disabled={!yourTurn}
+								onClick={handleBidDecrease}
+								className="m-0 p-0 h-10 w-10 md:rounded-r-none bg-fuchsia-blue-500"
+							>
 								<Minus />
 							</Button>
 
 							<Slider
 								disabled={!yourTurn}
-								value={[highestBid]}
+								defaultValue={[highestBid]}
+								value={[bidAmount]}
 								onValueChange={handleSliderValueChange}
-								className="hidden lg:inline-flex bg-gray-600 h-10 px-1"
+								className="hidden md:inline-flex bg-fuchsia-blue-900 h-10 px-1"
 								max={14}
 								step={1}
 							/>
-							<Button disabled={!yourTurn} onClick={handleBidIncrease} className="m-0 p-0 h-10 w-10 lg:rounded-l-none">
+							<Button
+								disabled={!yourTurn}
+								onClick={handleBidIncrease}
+								className="m-0 p-0 h-10 w-10 md:rounded-l-none bg-fuchsia-blue-500"
+							>
 								<Plus />
 							</Button>
 						</div>

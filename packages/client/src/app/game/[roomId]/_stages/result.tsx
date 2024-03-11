@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { useParams } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { useEffect, useState } from "react"
-import { heightStyle } from "@/lib/dynamicStyles"
+import { heightStyle, backgroundStyle } from "@/lib/dynamicStyles"
 import { motion } from "framer-motion"
 import { Luckiest_Guy, Poppins } from "next/font/google"
 import { INCREASE_SOUND_EFFECT_PATH } from "@/lib/soundEffects"
@@ -31,9 +31,9 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: num
 				},
 			}}
 		>
-			{/* <span className="absolute top-0 hidden -mt-6 text-xs font-bold group-hover:block">
+			<span className="absolute top-0 hidden -mt-6 text-xs font-bold group-hover:block">
 				{stack.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}
-			</span> */}
+			</span>
 			{stack.reverse().map((value: number, index) => {
 				const delay = (stack.length - index) * 3
 
@@ -42,11 +42,11 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: num
 						key={`${value}_${index}`}
 						className={cn(
 							"relative flex flex-col justify-center w-full",
-							`bg-indigo-${(index + 2) * 100}`,
+							backgroundStyle[(index + 1) * 100],
 							heightStyle[value]
 						)}
 						initial={{ height: 0 }}
-						animate={{ height: value * 16, transition: { delay: delay, duration: 1 } }}
+						animate={{ height: value * 4, transition: { delay: delay, duration: 1 } }}
 					>
 						<motion.span
 							initial={{ opacity: 0 }}
@@ -95,7 +95,7 @@ export const Results = ({ gameState }: ResultProps) => {
 	return (
 		<div className="bg-[#1F002E] h-screen text-white flex items-center justify-center flex-col">
 			<div className="flex flex-col max-w-screen-md items-center justify-center p-6 pb-6 rounded-lg shadow-xl sm:p-8">
-				<h2 className="text-xl font-bold">Standings</h2>
+				<h2 className="text-xl font-bold mb-16">Standings</h2>
 				{/* <span className="text-sm font-semibold text-gray-500">2020</span> */}
 				<div className="flex items-end flex-grow w-full mt-2 space-x-2 sm:space-x-3">
 					{resultData.map(({ sessionId, nickname, data }) => {
@@ -104,7 +104,9 @@ export const Results = ({ gameState }: ResultProps) => {
 				</div>
 			</div>
 
-			<Button onClick={returnToLobby}>Return to Lobby</Button>
+			<Button onClick={returnToLobby} className="bg-indigo-400">
+				Return to Lobby
+			</Button>
 		</div>
 	)
 }

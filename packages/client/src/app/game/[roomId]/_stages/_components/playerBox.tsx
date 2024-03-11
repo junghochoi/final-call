@@ -8,10 +8,10 @@ import { Home } from "lucide-react"
 import { Luckiest_Guy } from "next/font/google"
 
 const playerBoxPositions = [
-	"left-[calc(50%-2.5rem)] md:left-[calc(50%-3.5rem)] bottom-[0.5rem]",
+	"left-[calc(50%-2.5rem)] md:left-[calc(50%-4rem)] bottom-[0.5rem]",
 	"left-[0.5rem] bottom-[20%]",
 	"left-[0.5rem] top-[20%]",
-	"left-[calc(50%-2.5rem)] md:left-[calc(50%-3.5rem)] top-[0.5rem]",
+	"left-[calc(50%-2.5rem)] md:left-[calc(50%-4rem)] top-[0.5rem]",
 	"right-[0.5rem] top-[20%]",
 	"right-[0.5rem] bottom-[20%]",
 ]
@@ -126,10 +126,7 @@ export const PlayerBox = ({
 					// </div>
 
 					<motion.div
-						className={cn(
-							"absolute h-12 w-8 lg:h-24 lg:w-16 bg-white rounded-sm text-xs",
-							playerBidPositions[playerPosition]
-						)}
+						className={cn("absolute h-14 w-10 bg-white rounded-sm text-sm", playerBidPositions[playerPosition])}
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						transition={{ duration: 0.7 }}
@@ -138,12 +135,9 @@ export const PlayerBox = ({
 					>
 						{propertyCard?.visible && (
 							<>
-								<div className={cn("md:text-2xl pl-1 lg:ml-2", luckiestGuy.className)}>{propertyCard.value.value}</div>
+								<div className={cn("ml-1 mb-3", luckiestGuy.className)}>{propertyCard.value.value}</div>
 
-								<Home
-									color="black"
-									className="absolute w-9 h-9 lg:w-14 lg:h-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-								/>
+								<Home color="black" className="absolute w-7 h-7  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
 							</>
 						)}
 					</motion.div>

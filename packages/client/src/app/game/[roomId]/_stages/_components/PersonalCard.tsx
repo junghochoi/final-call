@@ -38,7 +38,7 @@ export const PersonalCard = ({ card, handleSellProperty, selected }: CardProps) 
 			key={card.id}
 			onClick={sell}
 		>
-			<div className={cn("md:text-2xl ml-1 ", luckiestGuy.className)}>{card.value}</div>
+			<div className={cn("md:text-lg ml-1", luckiestGuy.className)}>{card.value}</div>
 			{card.type === CardType.Property && (
 				<Home
 					color="black"
@@ -49,7 +49,7 @@ export const PersonalCard = ({ card, handleSellProperty, selected }: CardProps) 
 			{card.type === CardType.Cash && (
 				<CircleDollarSign
 					color="black"
-					className="absolute w-9 h-9 lg:w-14 lg:h-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+					className="absolute w-9 h-9 lg:w-11 lg:h-11 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
 				/>
 			)}
 		</motion.div>

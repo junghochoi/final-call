@@ -94,19 +94,19 @@ export const CommunityCard = ({ card, labelVisible, label, animateLastCard, posi
 				exit={"passed"}
 				custom={animateLastCard ? 1 : 0}
 			>
-				<div className={cn("md:text-2xl pl-1 md:ml-2 md:pt-2", luckiestGuy.className)}>{card.value}</div>
+				<div className={cn("md:text-2xl md:ml-1 md:pt-2", luckiestGuy.className)}>{card.value}</div>
 
 				{card.type === CardType.Property && (
 					<Home
 						color="black"
-						className="absolute w-9 h-9 md:h-14 md:w-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+						className="absolute w-8 h-8 md:h-14 md:w-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
 					/>
 				)}
 
 				{card.type === CardType.Cash && (
 					<CircleDollarSign
 						color="black"
-						className="absolute w-9 h-9 md:w-14 md:h-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+						className="absolute w-8 h-8 md:w-14 md:h-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
 					/>
 				)}
 			</motion.div>
