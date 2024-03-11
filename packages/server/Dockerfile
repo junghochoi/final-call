@@ -1,13 +1,13 @@
-FROM node:18-alpine # node version
+FROM node:21-alpine
 
-COPY . .            # copy project files
+WORKDIR /src
 
-RUN npm install     # install dependencies
-RUN npm run build   # build project
+COPY . .
 
-# Add these dependencies to enable your server to make outbound TLS requests
-RUN apk update && apk upgrade && \
-  apk add ca-certificates && \
-  update-ca-certificates
+RUN npm ci
 
-CMD npm start       # start server
+ENV PORT 8000
+
+EXPOSE 8000
+
+CMD ["npm", "run", "start"]

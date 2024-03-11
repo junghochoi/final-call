@@ -5,6 +5,7 @@
 	"main": "index.ts",
 	"scripts": {
 		"dev": "tsx watch src/index.ts",
+		"start": "tsx src/index.ts",
 		"test": "mocha src/test/**/*.ts"
 	},
 	"author": "",
