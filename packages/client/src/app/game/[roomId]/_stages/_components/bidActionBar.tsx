@@ -5,16 +5,16 @@ import { useEffect, useState } from "react"
 import { Slider } from "@/components/ui/slider"
 import { Plus, Minus } from "lucide-react"
 import { cn, uniqueKey } from "@/lib/utils"
-import { CardType, Stage } from "@final-call/shared"
+import { Card, CardType, Stage } from "@final-call/shared"
 import { PersonalCard } from "./PersonalCard"
 
 interface ActionBarProps {
 	yourTurn: boolean
 	currPlayerBank: number
-	currPlayerPropertyCards: number[]
+	currPlayerPropertyCards: Card[]
 	currPlayerBid: number
 	highestBid: number
-	communityCards: number[]
+	communityCards: Card[]
 	stage: Stage
 
 	bid: (amount: number) => void
@@ -76,7 +76,7 @@ export const BidActionBar = ({
 				<>
 					<div className="w-7/12 px-5 lg:px-10 space-x-2 flex justify-start items-center">
 						{currPlayerPropertyCards.map((card, index) => (
-							<PersonalCard value={card} cardId={uniqueKey(card, index)} color={"black"} cardType={CardType.Property} />
+							<PersonalCard card={card} key={card.id} />
 							// <div key={card} onClick={() => handleSellProperty(card)} className="p-4 border-2 border-black">
 							// 	{card}
 							// </div>

@@ -1,8 +1,8 @@
 import {
+	Card,
 	GameStateUpdatePayload,
 	IndividualGameStateUpdatePayload,
 	Player,
-	Property,
 	RoomID,
 	SessionID,
 	Stage,
@@ -150,7 +150,7 @@ export class RoomManager {
 		room.startNewAuctionRound()
 	}
 
-	makePlayerSell(roomId: RoomID, sessionId: SessionID, property: Property): UpdateInfo {
+	makePlayerSell(roomId: RoomID, sessionId: SessionID, property: Card): UpdateInfo {
 		const room = this.rooms.get(roomId)
 
 		if (!room) return { success: false, submitAllIndividualStates: false }

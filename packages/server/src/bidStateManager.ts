@@ -1,18 +1,26 @@
-import { Player, SessionID, BidStateSerialized, IndividualBidStateUploadPayload, Stage } from "@final-call/shared"
+import {
+	Player,
+	SessionID,
+	BidStateSerialized,
+	IndividualBidStateUploadPayload,
+	Stage,
+	Card,
+	CardType,
+} from "@final-call/shared"
 import { shuffle } from "./lib/utils"
 
 export class BidStateManager {
 	private deckSize: number
 	private numPlayers: number
-	private allCards: number[]
-	private roundCards: number[]
+	private allCards: Card[]
+	private roundCards: Card[]
 
 	private playerOrder: Player[]
 	private round: number
 	private playerTurn: number
 	private playerBanks: Map<SessionID, number>
 	private playerBids: Map<SessionID, number>
-	private playerPropertyCards: Map<SessionID, number[]>
+	private playerPropertyCards: Map<SessionID, Card[]>
 
 	private numPlayersPassed: number
 	private playersPassed: Map<SessionID, boolean>
@@ -66,7 +74,7 @@ export class BidStateManager {
 		return {
 			round: this.round,
 			playerTurn: this.playerTurn,
-			roundCards: this.roundCards.sort((a, b) => a - b),
+			roundCards: this.roundCards.sort((a, b) => a.value - b.value),
 			playerBids: [...this.playerBids.entries()],
 			playerPropertyCards: [...this.playerPropertyCards.entries()],
 			endRoundAnimate: this.endRoundAnimate,
@@ -184,7 +192,7 @@ export class BidStateManager {
 		this.playerTurn = nextPlayerTurn
 	}
 
-	#addPropertyCardToPlayerHand(propertyCard: number, sessionId: SessionID) {
+	#addPropertyCardToPlayerHand(propertyCard: Card, sessionId: SessionID) {
 		const playerPropertyHand = this.playerPropertyCards.get(sessionId)
 
 		if (playerPropertyHand === undefined) {
@@ -195,11 +203,19 @@ export class BidStateManager {
 		this.playerPropertyCards.set(sessionId, playerPropertyHand)
 	}
 	// Helper Functions
-	#createDeck(numCards: number, removeCards: number) {
-		return shuffle(Array.from({ length: numCards }, (_, index) => index + 1)).splice(removeCards)
+	#createDeck(numCards: number, removeCards: number): Card[] {
+		const values = Array.from({ length: numCards }, (_, index) => index + 1)
+		const cards = values.map((value) => {
+			return {
+				value: value,
+				id: `${value}_P`,
+				type: CardType.Property,
+			}
+		})
+		return shuffle(cards).splice(removeCards)
 	}
-	#drawCards(numCards: number) {
-		const cards = this.allCards.splice(-numCards).sort((a, b) => b - a)
+	#drawCards(numCards: number): Card[] {
+		const cards = this.allCards.splice(-numCards).sort((a, b) => b.value - a.value)
 		return cards
 	}
 

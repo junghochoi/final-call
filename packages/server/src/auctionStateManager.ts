@@ -4,6 +4,8 @@ import {
 	IndividualAuctionStateUploadPayload,
 	AuctionStateSerialized,
 	Stage,
+	Card,
+	CardType,
 } from "@final-call/shared"
 import { shuffle, zip } from "./lib/utils"
 
@@ -16,15 +18,15 @@ export class AuctionStateManager {
 	private deckSize: number
 	private playerOrder: Player[]
 	private numPlayers: number
-	private allCards: number[]
-	private roundCards: number[]
+	private allCards: Card[]
+	private roundCards: Card[]
 
 	private round: number
 
 	private playerBanks: Map<SessionID, number>
-	private playerCashCards: Map<SessionID, number[]>
-	private playerPropertyCards: Map<SessionID, number[]>
-	private playerSellingPropertyCard: Map<SessionID, number>
+	private playerCashCards: Map<SessionID, Card[]>
+	private playerPropertyCards: Map<SessionID, Card[]>
+	private playerSellingPropertyCard: Map<SessionID, Card>
 	private endRoundAnimate: boolean
 
 	constructor() {
@@ -44,13 +46,19 @@ export class AuctionStateManager {
 	initialize(
 		playerOrder: Player[],
 		numRounds: number,
-		playerPropertyCards: Map<SessionID, number[]>,
+		playerPropertyCards: Map<SessionID, Card[]>,
 		playerBanks: Map<SessionID, number>
 	) {
-		this.deckSize = playerOrder.length * numRounds
+		let removeCards = 0
+
+		if (playerOrder.length === 2) removeCards = 20
+		if (playerOrder.length === 3) removeCards = 6
+		if (playerOrder.length === 4) removeCards = 2
+
+		this.deckSize = 30 - removeCards
 		this.numPlayers = playerOrder.length
 		this.playerOrder = playerOrder
-		this.allCards = this.#createDeck(this.deckSize)
+		this.allCards = this.#createDeck(this.deckSize, removeCards)
 		this.roundCards = this.#drawCards(playerOrder.length)
 		this.round = 0
 		this.playerPropertyCards = playerPropertyCards
@@ -73,32 +81,42 @@ export class AuctionStateManager {
 		const propertyCards = this.playerPropertyCards.get(sessionId)
 		const cashCards = this.playerCashCards.get(sessionId)
 
+		console.log("LOOK HERE")
+		console.log(cashCards)
+
 		return {
 			stage: Stage.Auctioning,
 			bank: this.playerBanks.get(sessionId) ?? -1,
 			propertyCards: propertyCards ?? [],
-			cashCards: cashCards!,
+			cashCards: cashCards ?? [],
 		}
 	}
 
-	makePlayerSellProperty(sessionId: SessionID, property: number): UpdateInfo {
+	makePlayerSellProperty(sessionId: SessionID, property: Card): UpdateInfo {
 		const propertyCards = this.playerPropertyCards.get(sessionId)!
-		const propertyCardsWithRemovedProperty = propertyCards.filter((num) => num !== property)
+		const propertyCardsWithRemovedProperty = propertyCards.filter((card) => card.value !== property.value)
 		this.playerPropertyCards.set(sessionId, propertyCardsWithRemovedProperty)
 
 		this.playerSellingPropertyCard.set(sessionId, property)
 
 		if (this.playerSellingPropertyCard.size === this.numPlayers) {
-			const playersOrdered = [...this.playerSellingPropertyCard.entries()].sort((a, b) => a[1] - b[1]).map((a) => a[0])
-			const cashCardsOrdered = this.roundCards.sort((a, b) => a - b)
+			const playersOrdered = [...this.playerSellingPropertyCard.entries()]
+				.sort((a, b) => a[1].value - b[1].value)
+				.map((a) => a[0])
+			const cashCardsOrdered = this.roundCards.sort((a, b) => a.value - b.value)
+
+			console.log(this.roundCards)
+
+			console.log("LOOK HERE")
+			console.log(cashCardsOrdered)
 
 			const assignments = zip(playersOrdered, cashCardsOrdered)
 
 			console.log(assignments)
 
 			assignments.forEach((pair) => {
-				const userId = pair[0]
-				const cashCard = pair[1]
+				const userId: string = pair[0]
+				const cashCard: Card = pair[1]
 
 				this.#addCashCardToPlayerHand(cashCard, userId)
 			})
@@ -128,21 +146,35 @@ export class AuctionStateManager {
 		}
 	}
 
-	#addCashCardToPlayerHand(cashCard: number, sessionId: SessionID) {
+	#addCashCardToPlayerHand(cashCard: Card, sessionId: SessionID) {
+		console.log(cashCard)
 		const cashCards = this.playerCashCards.get(sessionId)!
 		if (cashCards === undefined) {
 			throw new Error("could not find player in playerPropertyCards")
 		}
+
+		console.log("OVER HERE", cashCard)
 		cashCards.push(cashCard)
 		this.playerCashCards.set(sessionId, cashCards)
 	}
 	// Helper Functions
-	#createDeck(numCards: number) {
-		return shuffle(Array.from({ length: numCards }, (_, index) => index + 1))
-		// return shuffle(Array.from({ length: Math.floor(numCards / 2) }, (_, index) => [index, index]).flat())
+	#createDeck(numCards: number, removeCards: number): Card[] {
+		// return shuffle(Array.from({ length: numCards }, (_, index) => index + 1))
+		return shuffle(
+			Array.from({ length: Math.floor(15) }, (_, index) => [
+				{
+					value: index + 1,
+					id: `${index}_C1`,
+					type: CardType.Cash,
+				},
+				{ value: index + 1, id: `${index}_C2`, type: CardType.Cash },
+			])
+				.flat()
+				.splice(removeCards)
+		)
 	}
-	#drawCards(numCards: number) {
-		const cards = this.allCards.splice(-numCards).sort((a, b) => b - a)
+	#drawCards(numCards: number): Card[] {
+		const cards = this.allCards.splice(-numCards).sort((a, b) => b.value - a.value)
 		return cards
 	}
 

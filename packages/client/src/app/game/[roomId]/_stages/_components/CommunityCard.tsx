@@ -6,14 +6,13 @@ import { Home } from "lucide-react"
 import { CircleDollarSign } from "lucide-react"
 import Image from "next/image"
 import { Luckiest_Guy } from "next/font/google"
-import { CardType } from "@final-call/shared"
+import { Card, CardType } from "@final-call/shared"
 interface CardProps {
-	value: string
+	card: Card
 	position?: number
 	labelVisible: boolean
 	label?: string
 	animateLastCard?: boolean
-	cardType: CardType
 }
 
 const luckiestGuy = Luckiest_Guy({
@@ -21,7 +20,7 @@ const luckiestGuy = Luckiest_Guy({
 	weight: ["400"],
 })
 
-export const Card = ({ value, labelVisible, label, animateLastCard, cardType, position }: CardProps) => {
+export const CommunityCard = ({ card, labelVisible, label, animateLastCard, position }: CardProps) => {
 	// const labelStyle = labelVisible ? "absolute" : "none"
 	const labelStyle = "absolute"
 
@@ -63,7 +62,6 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 			},
 		},
 	}
-
 	return (
 		<div className="relative">
 			<AnimatePresence>
@@ -79,7 +77,7 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 						animate={"auctionLabelAnimate"}
 						exit={"auctionLabelExit"}
 						custom={position}
-						key={value}
+						key={card.id}
 					>
 						{label}
 						<Home />
@@ -96,16 +94,16 @@ export const Card = ({ value, labelVisible, label, animateLastCard, cardType, po
 				exit={"passed"}
 				custom={animateLastCard ? 1 : 0}
 			>
-				<div className={cn("md:text-2xl pl-1 md:ml-2 md:pt-2", luckiestGuy.className)}>{value}</div>
+				<div className={cn("md:text-2xl pl-1 md:ml-2 md:pt-2", luckiestGuy.className)}>{card.value}</div>
 
-				{cardType === CardType.Property && (
+				{card.type === CardType.Property && (
 					<Home
 						color="black"
 						className="absolute w-9 h-9 md:h-14 md:w-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
 					/>
 				)}
 
-				{cardType === CardType.Cash && (
+				{card.type === CardType.Cash && (
 					<CircleDollarSign
 						color="black"
 						className="absolute w-9 h-9 md:w-14 md:h-14 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"

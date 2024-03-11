@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react"
 
-import { AuctionState, BidState, CardType, Cash, Player, SessionID, Stage } from "@final-call/shared"
+import { AuctionState, BidState, CardType, Player, SessionID, Stage, Card } from "@final-call/shared"
 
 import { PlayerBox } from "./playerBox"
 import { uniqueKey } from "@/lib/utils"
-import { Card } from "./CommunityCard"
+import { CommunityCard } from "./CommunityCard"
 import { AnimatePresence } from "framer-motion"
 
 interface GameBoardProps {
@@ -20,8 +20,8 @@ interface GameBoardProps {
 
 export type CashCard = {
 	sessionId?: SessionID
-	propertyCard?: number
-	cashCard: number
+	propertyCard?: Card
+	cashCard: Card
 }
 
 export const GameBoard = ({
@@ -35,29 +35,29 @@ export const GameBoard = ({
 	// const playerOrder = bidState.playerOrder ?? auctionState.playerOrder
 
 	const [cashCards, setCashCards] = useState<CashCard[]>([])
-	const [propertyCards, setPropertyCards] = useState<number[]>([])
+	const [propertyCards, setPropertyCards] = useState<Card[]>([])
 
 	useEffect(() => {
-		const orderedCards = Array.from(bidState.roundCards).sort((a, b) => a - b)
+		const orderedCards = Array.from(bidState.roundCards).sort((a, b) => a.value - b.value)
 		setPropertyCards(orderedCards)
 	}, [bidState.roundCards])
 
 	useEffect(() => {
 		const orderedSellingProperties = Array.from(auctionState.playerSellingPropertyCard.entries()).sort(
-			(a, b) => a[1] - b[1]
+			(a, b) => a[1].value - b[1].value
 		)
 		const orderedCashCards = Array.from(auctionState.roundCards)
-			.sort((a, b) => a - b)
+			.sort((a, b) => a.value - b.value)
 			.map((cashCard, ind) => {
 				if (ind >= orderedSellingProperties.length) {
 					return {
-						cashCard,
+						cashCard: cashCard,
 					}
 				} else {
 					return {
 						sessionId: orderedSellingProperties[ind][0],
 						propertyCard: orderedSellingProperties[ind][1],
-						cashCard,
+						cashCard: cashCard,
 					}
 				}
 			})
@@ -70,13 +70,12 @@ export const GameBoard = ({
 				<div className="bg-blue-200 p-1 rounded flex justify-center space-x-4 absolute h-16 md:h-28 w-2/3 shadow-sm shadow-fuchsia-blue-300 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 					{stage === Stage.Bidding && (
 						<AnimatePresence>
-							{propertyCards.map((num: number, index: number) => (
-								<Card
-									key={uniqueKey(num, index)}
-									value={`${num}`}
+							{propertyCards.map((card: Card, index: number) => (
+								<CommunityCard
+									card={card}
+									key={card.id}
 									labelVisible={false}
 									animateLastCard={bidState.endRoundAnimate}
-									cardType={CardType.Property}
 								/>
 							))}
 						</AnimatePresence>
@@ -86,15 +85,14 @@ export const GameBoard = ({
 						<>
 							{cashCards.map(({ cashCard, propertyCard, sessionId }, index) => {
 								return (
-									<Card
-										key={uniqueKey(cashCard, index)}
+									<CommunityCard
+										key={cashCard.id}
 										position={index}
-										value={`${cashCard}`}
 										labelVisible={auctionState.endRoundAnimate}
-										label={`${
-											playerOrder.find((player) => player.sessionId === sessionId)?.nickname
-										} - ${propertyCard}`}
-										cardType={CardType.Cash}
+										label={`${playerOrder.find((player) => player.sessionId === sessionId)?.nickname} - ${
+											propertyCard?.value
+										}`}
+										card={cashCard}
 									/>
 								)
 							})}

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react"
 
-import { GameState, IndividualGameStateUpdatePayload, Stage } from "@final-call/shared"
+import { Card, GameState, IndividualGameStateUpdatePayload, Stage } from "@final-call/shared"
 import { BidAction, PassAction, SellAction, RoomID, Action, Player } from "@final-call/shared"
 import { BidActionBar } from "./_components/bidActionBar"
 import { useSocket } from "@/contexts/SocketContext"
@@ -16,8 +16,8 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 	const { socket } = useSocket()
 	const [currPlayerTurnIndex, setCurrPlayerTurnIndex] = useState<number>(0)
 	const [currPlayerBank, setCurrPlayerBank] = useState<number>(0)
-	const [currPlayerPropertyCards, setCurrPlayerPropertyCards] = useState<number[]>([])
-	const [currPlayerCashCards, setCurrPlayerCashCards] = useState<number[]>([])
+	const [currPlayerPropertyCards, setCurrPlayerPropertyCards] = useState<Card[]>([])
+	const [currPlayerCashCards, setCurrPlayerCashCards] = useState<Card[]>([])
 	const [highestBid, setHighestBid] = useState<number>(0)
 
 	useEffect(() => {
@@ -36,20 +36,19 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 			case Stage.Bidding:
 				setCurrPlayerBank(individualState.bank)
 				setCurrPlayerPropertyCards(individualState.propertyCards)
-				console.log(individualState.propertyCards)
 				break
 			case Stage.Auctioning:
+				console.log(individualState.cashCards)
 				setCurrPlayerPropertyCards(individualState.propertyCards)
 				setCurrPlayerCashCards(individualState.cashCards)
 				setCurrPlayerBank(individualState.bank)
-				console.log(individualState.propertyCards)
 				break
 		}
 	}, [])
 
 	useEffect(() => {
 		socket.on("IndividualGameStateUpdate", (payload: IndividualGameStateUpdatePayload) => {
-			console.log("indiviaulGameStateUpdate Event Received")
+			console.log(payload)
 			individualGameStateCallback(payload)
 		})
 		socket.emit("IndividualGameStateInitialization", gameState.currPlayer!, individualGameStateCallback)
@@ -83,7 +82,7 @@ export const Game = ({ gameState, roomId, handleGameAction }: GameProps) => {
 		})
 	}
 
-	const handleSellPropertyAction = (property: number) => {
+	const handleSellPropertyAction = (property: Card) => {
 		if (gameState.auctionState?.playerSellingPropertyCard.has(gameState.currPlayer?.sessionId!)) {
 			return
 		}

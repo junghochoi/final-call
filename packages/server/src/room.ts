@@ -1,8 +1,8 @@
 import {
+	Card,
 	GameStateUpdatePayload,
 	IndividualGameStateUpdatePayload,
 	Player,
-	Property,
 	RoomID,
 	SessionID,
 	Stage,
@@ -13,7 +13,7 @@ import { shuffle } from "./lib/utils"
 
 type ResultState = {
 	bank: number
-	cashCards: number[]
+	cashCards: Card[]
 }
 
 export class Room {
@@ -111,7 +111,7 @@ export class Room {
 		return this.bidStateManager.makePlayerPass(player)
 	}
 
-	makePlayerSell(sessionId: SessionID, property: Property): UpdateInfo {
+	makePlayerSell(sessionId: SessionID, property: Card): UpdateInfo {
 		const player = this.getParticipant(sessionId)
 
 		if (!player) return { success: false, submitAllIndividualStates: false }

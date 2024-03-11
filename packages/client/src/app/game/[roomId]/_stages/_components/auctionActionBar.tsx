@@ -5,15 +5,15 @@ import { useEffect, useState } from "react"
 import { Slider } from "@/components/ui/slider"
 import { Plus, Minus } from "lucide-react"
 import { cn, uniqueKey } from "@/lib/utils"
-import { CardType, SessionID, Stage } from "@final-call/shared"
+import { Card, CardType, SessionID, Stage } from "@final-call/shared"
 import { PersonalCard } from "./PersonalCard"
 import { unique } from "next/dist/build/utils"
 
 interface AuctionActionBarProps {
-	currPlayerPropertyCards: number[]
-	currPlayerCashCards: number[]
+	currPlayerPropertyCards: Card[]
+	currPlayerCashCards: Card[]
 
-	sell: (amount: number) => void
+	sell: (amount: Card) => void
 	canTakeAction: boolean
 }
 
@@ -24,10 +24,10 @@ export const AuctionActionBar = ({
 	canTakeAction,
 }: AuctionActionBarProps) => {
 	const [selectedCard, setSelectedCard] = useState<string>("")
-	const handleSellProperty = (card: number, key: string) => {
+	const handleSellProperty = (card: Card) => {
 		console.log(window.innerWidth)
-		if (window.innerWidth < 640 && selectedCard !== key) {
-			setSelectedCard(key)
+		if (window.innerWidth < 640 && selectedCard !== card.id) {
+			setSelectedCard(card.id)
 		} else if (canTakeAction) {
 			sell(card)
 		}
@@ -38,19 +38,16 @@ export const AuctionActionBar = ({
 			<div className="w-2/3 px-5 lg:px-10 flex justify-start items-center space-x-2">
 				{currPlayerPropertyCards.map((card, index) => (
 					<PersonalCard
-						value={card}
-						key={uniqueKey(card, index)}
-						cardId={uniqueKey(card, index)}
-						color={"black"}
+						card={card}
+						key={card.id}
 						handleSellProperty={handleSellProperty}
-						cardType={CardType.Property}
-						selected={selectedCard === uniqueKey(card, index)}
+						selected={selectedCard === card.id}
 					/>
 				))}
 			</div>
 			<div className="w-1/3 flex justify-around items-center">
 				{currPlayerCashCards.map((card, index) => (
-					<PersonalCard value={card} cardId={uniqueKey(card, index)} color={"black"} cardType={CardType.Cash} />
+					<PersonalCard card={card} key={card.id} />
 				))}
 			</div>
 		</div>

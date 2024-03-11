@@ -7,6 +7,7 @@ import {
 	PlayerResultState,
 	ResultStateSerialized,
 	Sound,
+	Card,
 } from "./common"
 
 export type GameStateUpdatePayload = {
@@ -23,15 +24,15 @@ export type IndividualGameStateUpdatePayload = IndividualBidStateUploadPayload |
 
 export type IndividualBidStateUploadPayload = {
 	stage: Stage.Bidding
-	propertyCards: number[]
+	propertyCards: Card[]
 	bank: number
 }
 
 export type IndividualAuctionStateUploadPayload = {
 	stage: Stage.Auctioning
 	bank: number
-	propertyCards: number[]
-	cashCards: number[]
+	propertyCards: Card[]
+	cashCards: Card[]
 }
 
 export interface ServerToClientEvents {

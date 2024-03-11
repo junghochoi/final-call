@@ -1,9 +1,6 @@
 export type SessionID = string
 export type RoomID = string
 
-export type Property = number
-export type Cash = number
-
 export type PlayerInit = {
 	nickname: string
 	roomId: RoomID
@@ -41,6 +38,12 @@ export enum Stage {
 	Result,
 }
 
+export type Card = {
+	value: number
+	id: string
+	type: CardType
+}
+
 export type Action = BidAction | PassAction | SellAction
 
 export type BidAction = {
@@ -60,21 +63,21 @@ export type SellAction = {
 	name: "sell"
 	roomId: RoomID
 	player: Player
-	property: Property
+	property: Card
 }
 
 export type BidStateSerialized = {
 	round: number
-	roundCards: number[]
+	roundCards: Card[]
 	playerBids: [string, number][]
-	playerPropertyCards: [string, number[]][]
+	playerPropertyCards: [string, Card[]][]
 	playerTurn: number
 	endRoundAnimate: boolean
 }
 
 export type BidState = {
 	round: number
-	roundCards: number[]
+	roundCards: Card[]
 	playerBids: Map<SessionID, number>
 	playerTurn: number
 	endRoundAnimate: boolean
@@ -82,25 +85,25 @@ export type BidState = {
 
 export type AuctionStateSerialized = {
 	round: number
-	roundCards: number[]
-	playerPropertyCards: [SessionID, number[]][]
-	playerSellingPropertyCard: [SessionID, number][]
-	playerCashCards: [SessionID, number[]][]
+	roundCards: Card[]
+	playerPropertyCards: [SessionID, Card[]][]
+	playerSellingPropertyCard: [SessionID, Card][]
+	playerCashCards: [SessionID, Card[]][]
 	endRoundAnimate: boolean
 }
 
 export type AuctionState = {
 	round: number
-	roundCards: number[]
-	playerPropertyCards: Map<SessionID, number[]>
-	playerSellingPropertyCard: Map<SessionID, number>
-	playerCashCards: Map<SessionID, number[]>
+	roundCards: Card[]
+	playerPropertyCards: Map<SessionID, Card[]>
+	playerSellingPropertyCard: Map<SessionID, Card>
+	playerCashCards: Map<SessionID, Card[]>
 	endRoundAnimate: boolean
 }
 
 export type PlayerResultState = {
 	bank: number
-	cashCards: number[]
+	cashCards: Card[]
 }
 
 export type ResultStateSerialized = [SessionID, PlayerResultState][]

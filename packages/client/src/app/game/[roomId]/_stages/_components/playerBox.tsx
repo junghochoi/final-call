@@ -1,6 +1,6 @@
 import { AnimatePresence, Variants, motion } from "framer-motion"
 import { cn } from "@/lib/utils"
-import { Stage } from "@final-call/shared"
+import { Card, Stage } from "@final-call/shared"
 import { WINNER_SOUND_EFFECT_PATH } from "@/lib/soundEffects"
 
 import { useAudio } from "@/hooks/useAudio"
@@ -44,7 +44,7 @@ interface PlayerBoxProps {
 	nickname?: string
 	bid?: number
 	propertyCard?: {
-		value?: number
+		value?: Card
 		visible: boolean
 	}
 
@@ -134,11 +134,11 @@ export const PlayerBox = ({
 						animate={{ opacity: 1 }}
 						transition={{ duration: 0.7 }}
 						exit={{ opacity: 0, transition: { duration: 0.7 } }}
-						key={propertyCard.value}
+						key={propertyCard.value.value}
 					>
 						{propertyCard?.visible && (
 							<>
-								<div className={cn("md:text-2xl pl-1 lg:ml-2", luckiestGuy.className)}>{propertyCard.value}</div>
+								<div className={cn("md:text-2xl pl-1 lg:ml-2", luckiestGuy.className)}>{propertyCard.value.value}</div>
 
 								<Home
 									color="black"

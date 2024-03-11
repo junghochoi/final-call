@@ -81,7 +81,7 @@ export const Results = ({ gameState }: ResultProps) => {
 			return {
 				sessionId: sessionId,
 				nickname: gameState.players.find((p) => p.sessionId === sessionId)?.nickname ?? "Error: Could not find name",
-				data: [playerResult.bank, ...playerResult.cashCards].reverse(),
+				data: [playerResult.bank, ...playerResult.cashCards.map((card) => card.value)].reverse(),
 			}
 		})
 
