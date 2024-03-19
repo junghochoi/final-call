@@ -13,22 +13,7 @@ import { useState } from "react"
 import { createHathoraLobby } from "@/api/home"
 import { persistNickname } from "@/lib/utils"
 
-import { Titan_One, Coiny, DynaPuff, Josefin_Sans, Luckiest_Guy } from "next/font/google"
-
-const titanOne = Titan_One({
-	subsets: ["latin-ext"],
-	weight: ["400"],
-})
-
-const coiny = Coiny({
-	subsets: ["latin"],
-	weight: "400",
-})
-
-const dynaPuff = DynaPuff({
-	subsets: ["latin"],
-	weight: ["400", "500", "600", "700"],
-})
+import { Luckiest_Guy } from "next/font/google"
 
 const luckiestGuy = Luckiest_Guy({
 	subsets: ["latin"],
