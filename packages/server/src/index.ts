@@ -9,6 +9,7 @@ dotenv.config()
 const app: Express = express()
 const httpServer: HttpServer = createServer(app)
 const port: String | undefined = process.env.PORT || "8000"
+const host: string | undefined = process.env.HOST || "localhost"
 
 app.use(express.json())
 
@@ -22,5 +23,5 @@ const io = new SocketIOServer(httpServer, {
 const game = new Game(io)
 
 httpServer.listen(port, () => {
-	console.log(`[server]: Server is running at http://localhost:${port}`)
+	console.log(`[server]: Server is running at http://${host}:${port}`)
 })
