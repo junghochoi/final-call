@@ -105,14 +105,7 @@ export class AuctionStateManager {
 				.map((a) => a[0])
 			const cashCardsOrdered = this.roundCards.sort((a, b) => a.value - b.value)
 
-			console.log(this.roundCards)
-
-			console.log("LOOK HERE")
-			console.log(cashCardsOrdered)
-
 			const assignments = zip(playersOrdered, cashCardsOrdered)
-
-			console.log(assignments)
 
 			assignments.forEach((pair) => {
 				const userId: string = pair[0]
