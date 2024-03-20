@@ -130,18 +130,19 @@ export class BidStateManager {
 		this.#addPropertyCardToPlayerHand(propertyCard, player.sessionId)
 		this.#setNextPlayerTurn()
 
+		const bank = this.playerBanks.get(player.sessionId)!
+		const bid = this.playerBids.get(player.sessionId)!
+
+		console.log(bank, bid)
+		this.playerBanks.set(player.sessionId, bank + Math.floor(bid / 2))
+		this.playerBids.set(player.sessionId, 0)
+
 		if (this.numPlayersPassed === this.numPlayers - 1) {
 			this.endRound()
-
 			return {
 				success: true,
 				emitGameState: true,
 			}
-		} else {
-			const bank = this.playerBanks.get(player.sessionId)!
-			const bid = this.playerBids.get(player.sessionId)!
-			this.playerBanks.set(player.sessionId, bank + Math.floor(bid / 2))
-			this.playerBids.set(player.sessionId, 0)
 		}
 
 		return {
