@@ -1,6 +1,5 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { useEffect, useState } from "react"
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
 }
@@ -42,3 +41,13 @@ export function persistNickname(newNickname: string) {
 export const zip = <K, T>(a: K[], b: T[]) => Array.from(Array(Math.max(a.length, b.length)), (_, i) => [a[i], b[i]])
 
 export const uniqueKey = (number: number, index: number) => `${number}_${index}`
+
+export const generateRandomKey = () => {
+	const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	let key = ""
+	for (let i = 0; i < 6; i++) {
+		const randomIndex = Math.floor(Math.random() * characters.length)
+		key += characters.charAt(randomIndex)
+	}
+	return key
+}

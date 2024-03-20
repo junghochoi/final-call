@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils"
 
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { createHathoraLobby } from "@/api/home"
 import { persistNickname } from "@/lib/utils"
+import { generateRandomKey } from "@/lib/utils"
 
 import { Luckiest_Guy } from "next/font/google"
 
@@ -21,9 +21,10 @@ export default function Home() {
 	const router = useRouter()
 
 	const createPrivateGame = async () => {
-		const lobby = await createHathoraLobby()
+		// const lobby = await createHathoraLobby()
+		const roomId = generateRandomKey()
 		persistNickname(nickname)
-		router.push(`/game/${lobby.roomId}`)
+		router.push(`/game/${roomId}`)
 	}
 
 	return (
