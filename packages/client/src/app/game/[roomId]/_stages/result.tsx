@@ -93,7 +93,7 @@ export const Results = ({ gameState }: ResultProps) => {
 	}
 
 	return (
-		<div className="bg-[#1F002E] h-screen text-white flex items-center justify-center flex-col">
+		<div className="bg-[#1F002E] h-[100svh] text-white flex items-center justify-center flex-col">
 			<div className="flex flex-col max-w-screen-md items-center justify-center p-6 pb-6 rounded-lg shadow-xl sm:p-8">
 				<h2 className="text-xl font-bold mb-16">Standings</h2>
 				{/* <span className="text-sm font-semibold text-gray-500">2020</span> */}

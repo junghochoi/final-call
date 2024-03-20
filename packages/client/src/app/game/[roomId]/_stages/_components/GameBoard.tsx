@@ -65,7 +65,7 @@ export const GameBoard = ({
 	}, [auctionState.playerSellingPropertyCard, auctionState.roundCards])
 	// top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]
 	return (
-		<div className="bg-[#1F002E] h-screen  mx-auto relative overscroll-none shadow-xl p-4">
+		<div className="bg-[#1F002E] h-[100svh] mx-auto relative overscroll-none shadow-xl p-4">
 			<div className="relative h-[calc(100%-7em)]">
 				<div className="bg-blue-200 p-1 rounded flex justify-center space-x-4 absolute h-16 md:h-28 w-2/3 shadow-sm shadow-fuchsia-blue-300 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 					{stage === Stage.Bidding && (

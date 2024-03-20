@@ -53,7 +53,7 @@ const UsernameSelection: React.FC<UsernameSelectionProps> = (props) => {
 	}
 
 	return (
-		<div className={"flex items-center justify-center flex-col bg-tolopea-950 min-h-screen"}>
+		<div className={"flex items-center justify-center flex-col bg-tolopea-950 min-h-[100svh]"}>
 			<div className="space-y-4">
 				<h1 className={cn("text-white text-4xl", luckiestGuy.className)}>Pick a Username</h1>
 				<Input onChange={handleUsernameChange} value={username} />

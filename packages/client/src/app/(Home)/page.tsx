@@ -28,7 +28,7 @@ export default function Home() {
 	}
 
 	return (
-		<div className="min-h-[calc(100vh-64px)] lg:max-w-screen-lg mx-auto  flex flex-col ">
+		<div className="min-h-[calc(100svh-64px)] lg:max-w-screen-lg mx-auto  flex flex-col ">
 			<div className="m-12">
 				<h1
 					className={cn(

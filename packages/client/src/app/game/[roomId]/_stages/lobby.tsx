@@ -18,7 +18,7 @@ const luckiestGuy = Luckiest_Guy({
 export const Lobby = ({ gameState, handleStartGame }: LobbyProps) => {
 	return (
 		<div className="bg-tolopea-950">
-			<div className="flex  items-center flex-col lg:max-w-screen-md mx-auto min-h-screen p-12">
+			<div className="flex  items-center flex-col lg:max-w-screen-md mx-auto min-h-[100svh] p-12">
 				<h1 className={cn("mb-20 text-white text-4xl lg:text-6xl", luckiestGuy.className)}>Lobby</h1>
 
 				<div className="flex items-center justify-center space-y-5 lg:space-x-5 lg:items-start lg:space-y-0 flex-col lg:flex-row w-full ">
