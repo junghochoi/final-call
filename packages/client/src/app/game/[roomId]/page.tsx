@@ -84,7 +84,6 @@ const GamePage = () => {
 				socketId: socket.id!,
 			}
 			socket.emit("PlayerInitialization", playerInit, playerInitializationCallback)
-			setConnected(true)
 		})
 
 		return () => {
@@ -193,7 +192,7 @@ const GamePage = () => {
 
 	return (
 		<AnimatePresence>
-			{!connected && <Loading />}
+			{/* {!connected && <Loading />} */}
 			{component}
 		</AnimatePresence>
 	)

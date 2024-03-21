@@ -101,7 +101,7 @@ export const PlayerBox = ({
 				variants={variants}
 				animate={animateWinner ? "animate" : "initial"}
 			>
-				<div className="text-xs">{nickname}</div>
+				<div className="text-xs md:text-lg">{nickname}</div>
 
 				{currPlayer && <div className="p-1 rounded-full bg-sky-300 text-sm">${currPlayerBank}</div>}
 			</motion.div>
