@@ -85,7 +85,7 @@ export const CommunityCard = ({ card, labelVisible, label, animateLastCard, posi
 						custom={position}
 						key={card.id}
 					>
-						<span className="text-lg font-bold bg-white rounded p-1 whitespace-nowrap">{label}</span>
+						<span className="text-xl font-bold bg-white rounded p-1 whitespace-nowrap">{label}</span>
 					</motion.div>
 				)}
 			</AnimatePresence>

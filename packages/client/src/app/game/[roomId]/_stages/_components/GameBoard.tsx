@@ -105,8 +105,8 @@ export const GameBoard = ({
 									<CommunityCard
 										key={cashCard.id}
 										position={index}
-										// labelVisible={auctionState.endRoundAnimate}
-										labelVisible={true}
+										labelVisible={auctionState.endRoundAnimate}
+										// labelVisible={true}
 										label={`${playerOrder.find((player) => player.sessionId === sessionId)?.nickname} - ${
 											propertyCard?.value
 										}`}
@@ -123,7 +123,7 @@ export const GameBoard = ({
 						<PlayerBox
 							playerPosition={ind}
 							playerPresent={true}
-							playerTurn={visualPlayerTurn === ind}
+							playerTurn={visualPlayerTurn === ind && stage === Stage.Bidding}
 							currPlayer={player.sessionId === currPlayer.sessionId}
 							stage={stage}
 							nickname={player.nickname}
