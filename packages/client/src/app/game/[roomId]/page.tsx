@@ -20,7 +20,7 @@ import {
 	PlayerResultState,
 	Sound,
 } from "@final-call/shared"
-import { getNickname, getSessionId, persistSessionId } from "@/lib/utils"
+import { cn, getNickname, getSessionId, persistSessionId } from "@/lib/utils"
 import { useSocket } from "@/contexts/SocketContext"
 import UsernameSelection from "./usernameSelection"
 import { Lobby, Game, Results } from "./_stages"
@@ -31,6 +31,7 @@ import {
 	PLACING_CARD_SOUND_EFFECT_PATH,
 } from "@/lib/soundEffects"
 import { AnimatePresence } from "framer-motion"
+import { Loading } from "@/components/shared/Loading"
 
 const GamePage = () => {
 	const { socket } = useSocket()
@@ -63,7 +64,7 @@ const GamePage = () => {
 		socket.emit("PlayerJoin", playerData)
 
 		persistSessionId(playerData.sessionId)
-		setConnected(true)
+
 		// setTimeout(() => {}, 1000)
 	}, [])
 
@@ -83,6 +84,7 @@ const GamePage = () => {
 				socketId: socket.id!,
 			}
 			socket.emit("PlayerInitialization", playerInit, playerInitializationCallback)
+			setConnected(true)
 		})
 
 		return () => {
@@ -189,7 +191,12 @@ const GamePage = () => {
 		component = <div>{gameState.stage}</div>
 	}
 
-	return <AnimatePresence>{component}</AnimatePresence>
+	return (
+		<AnimatePresence>
+			{!connected && <Loading />}
+			{component}
+		</AnimatePresence>
+	)
 }
 
 export default GamePage

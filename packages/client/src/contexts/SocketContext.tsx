@@ -5,6 +5,7 @@ import { Socket } from "socket.io-client"
 import { ServerToClientEvents, ClientToServerEvents } from "@final-call/shared"
 import { getSocketConnection } from "@/lib/socketUtils"
 import { useParams } from "next/navigation"
+import { Loading } from "@/components/shared/Loading"
 
 interface SocketContextProps {
 	socket: Socket<ServerToClientEvents, ClientToServerEvents>
@@ -34,7 +35,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [])
 
 	if (!socket) {
-		return <div>Connecting...</div>
+		return <Loading />
 	}
 
 	const contextValue = {
