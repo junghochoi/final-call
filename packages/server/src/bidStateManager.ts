@@ -73,6 +73,7 @@ export class BidStateManager {
 	getBidState(): BidStateSerialized {
 		return {
 			round: this.round,
+			totalNumRounds: Math.ceil(this.deckSize / this.numPlayers),
 			playerTurn: this.playerTurn,
 			roundCards: this.roundCards,
 			playerBids: [...this.playerBids.entries()],

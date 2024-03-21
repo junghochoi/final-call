@@ -1,14 +1,12 @@
 import { useSocket } from "@/contexts/SocketContext"
-import { GameState, PlayerResultState, SessionID, Stage } from "@final-call/shared"
+import { GameState, SessionID, Stage } from "@final-call/shared"
 import { Button } from "@/components/ui/button"
 import { useParams } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { useEffect, useState } from "react"
 import { heightStyle, backgroundStyle } from "@/lib/dynamicStyles"
 import { motion } from "framer-motion"
-import { Luckiest_Guy, Poppins } from "next/font/google"
-import { INCREASE_SOUND_EFFECT_PATH } from "@/lib/soundEffects"
-import { useAudio } from "@/hooks/useAudio"
+import { Poppins } from "next/font/google"
 
 interface ResultProps {
 	gameState: GameState
@@ -31,7 +29,8 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: num
 				},
 			}}
 		>
-			<span className="absolute top-0 hidden -mt-6 text-xs font-bold group-hover:block">
+			{/* Add "hidden group-hover:block" if you want it to be shown on hover */}
+			<span className="absolute top-0  -mt-6 text-xs font-bold ">
 				{stack.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}
 			</span>
 			{stack.reverse().map((value: number, index) => {
@@ -51,7 +50,10 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: num
 						<motion.span
 							initial={{ opacity: 0 }}
 							animate={{ opacity: 1, transition: { delay: delay, duration: 2 } }}
-							className={cn("text-center text-black", poppins.className)}
+							className={cn(
+								"text-center text-lavender-magenta-4  drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]",
+								poppins.className
+							)}
 						>
 							{value}
 						</motion.span>
@@ -104,8 +106,8 @@ export const Results = ({ gameState }: ResultProps) => {
 				</div>
 			</div>
 
-			<Button onClick={returnToLobby} className="bg-indigo-400">
-				Return to Lobby
+			<Button onClick={returnToLobby} disabled={!gameState.currPlayer?.host} className="bg-indigo-400">
+				{gameState.currPlayer?.host ? "Return to Lobby" : "Waiting for Host ..."}
 			</Button>
 		</div>
 	)

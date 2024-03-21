@@ -68,6 +68,7 @@ export type SellAction = {
 
 export type BidStateSerialized = {
 	round: number
+	totalNumRounds: number
 	roundCards: Card[]
 	playerBids: [string, number][]
 	playerPropertyCards: [string, Card[]][]
@@ -77,6 +78,7 @@ export type BidStateSerialized = {
 
 export type BidState = {
 	round: number
+	totalNumRounds: number
 	roundCards: Card[]
 	playerBids: Map<SessionID, number>
 	playerTurn: number
@@ -85,6 +87,7 @@ export type BidState = {
 
 export type AuctionStateSerialized = {
 	round: number
+	totalNumRounds: number
 	roundCards: Card[]
 	playerPropertyCards: [SessionID, Card[]][]
 	playerSellingPropertyCard: [SessionID, Card][]
@@ -94,6 +97,7 @@ export type AuctionStateSerialized = {
 
 export type AuctionState = {
 	round: number
+	totalNumRounds: number
 	roundCards: Card[]
 	playerPropertyCards: Map<SessionID, Card[]>
 	playerSellingPropertyCard: Map<SessionID, Card>

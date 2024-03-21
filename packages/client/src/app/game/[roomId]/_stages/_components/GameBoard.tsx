@@ -5,10 +5,11 @@ import { useState, useEffect } from "react"
 import { AuctionState, BidState, CardType, Player, SessionID, Stage, Card } from "@final-call/shared"
 
 import { PlayerBox } from "./playerBox"
-import { uniqueKey } from "@/lib/utils"
+import { cn, uniqueKey } from "@/lib/utils"
 import { CommunityCard } from "./CommunityCard"
 import { AnimatePresence } from "framer-motion"
 import { off } from "process"
+import { Luckiest_Guy } from "next/font/google"
 
 interface GameBoardProps {
 	stage: Stage
@@ -24,6 +25,11 @@ export type CashCard = {
 	propertyCard?: Card
 	cashCard: Card
 }
+
+const luckiestGuy = Luckiest_Guy({
+	subsets: ["latin"],
+	weight: ["400"],
+})
 
 export const GameBoard = ({
 	stage,
@@ -83,6 +89,19 @@ export const GameBoard = ({
 	}, [auctionState.playerSellingPropertyCard, auctionState.roundCards])
 	return (
 		<div className="bg-[#1F002E] h-[100svh] mx-auto relative overscroll-none shadow-xl p-4">
+			<div className={cn("text-white", luckiestGuy.className)}>
+				{stage === Stage.Bidding && (
+					<span>
+						Round {bidState.round + 1}/{bidState.totalNumRounds}
+					</span>
+				)}
+
+				{stage === Stage.Auctioning && (
+					<span>
+						Round {auctionState.round + 1}/{auctionState.totalNumRounds}
+					</span>
+				)}
+			</div>
 			<div className="relative h-[calc(100%-7em)]">
 				<div className="bg-blue-200 p-1 rounded flex justify-center space-x-4 absolute h-16 md:h-28 w-2/3 shadow-sm shadow-fuchsia-blue-300 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 					{stage === Stage.Bidding && (
@@ -106,7 +125,6 @@ export const GameBoard = ({
 										key={cashCard.id}
 										position={index}
 										labelVisible={auctionState.endRoundAnimate}
-										// labelVisible={true}
 										label={`${playerOrder.find((player) => player.sessionId === sessionId)?.nickname} - ${
 											propertyCard?.value
 										}`}

@@ -69,6 +69,7 @@ export class AuctionStateManager {
 	getAuctionState(): AuctionStateSerialized {
 		return {
 			round: this.round,
+			totalNumRounds: Math.ceil(this.deckSize / this.numPlayers),
 			roundCards: this.roundCards,
 			playerPropertyCards: [...this.playerPropertyCards.entries()],
 			playerCashCards: [...this.playerCashCards.entries()],
@@ -80,9 +81,6 @@ export class AuctionStateManager {
 	getIndividualAuctionState(sessionId: SessionID): IndividualAuctionStateUploadPayload {
 		const propertyCards = this.playerPropertyCards.get(sessionId)
 		const cashCards = this.playerCashCards.get(sessionId)
-
-		console.log("LOOK HERE")
-		console.log(cashCards)
 
 		return {
 			stage: Stage.Auctioning,
