@@ -56,10 +56,16 @@ export default function ThreeDotsWave() {
 				justifyContent: "center",
 			}}
 		>
-			<motion.div style={LoadingContainer} variants={ContainerVariants} initial="initial" animate="animate">
-				<motion.span style={LoadingDot} variants={DotVariants} transition={DotTransition} />
-				<motion.span style={LoadingDot} variants={DotVariants} transition={DotTransition} />
-				<motion.span style={LoadingDot} variants={DotVariants} transition={DotTransition} />
+			<motion.div
+				key={"loading_group"}
+				style={LoadingContainer}
+				variants={ContainerVariants}
+				initial="initial"
+				animate="animate"
+			>
+				<motion.span key={"loading_group_1"} style={LoadingDot} variants={DotVariants} transition={DotTransition} />
+				<motion.span key={"loading_group_2"} style={LoadingDot} variants={DotVariants} transition={DotTransition} />
+				<motion.span key={"loading_group_3"} style={LoadingDot} variants={DotVariants} transition={DotTransition} />
 			</motion.div>
 		</div>
 	)

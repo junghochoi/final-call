@@ -193,7 +193,7 @@ const GamePage = () => {
 
 	return (
 		<AnimatePresence>
-			{pickedName && !connected && <Loading />}
+			{pickedName && !connected && <Loading key={"loading"} />}
 			{component}
 		</AnimatePresence>
 	)
