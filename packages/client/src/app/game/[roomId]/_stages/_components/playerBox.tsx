@@ -8,21 +8,21 @@ import { Home } from "lucide-react"
 import { Luckiest_Guy } from "next/font/google"
 
 const playerBoxPositions = [
-	"left-[calc(50%-2.5rem)] md:left-[calc(50%-4rem)] bottom-[0.5rem]",
-	"left-[0.5rem] bottom-[20%]",
-	"left-[0.5rem] top-[20%]",
-	"left-[calc(50%-2.5rem)] md:left-[calc(50%-4rem)] top-[0.5rem]",
-	"right-[0.5rem] top-[20%]",
-	"right-[0.5rem] bottom-[20%]",
+	"left-[calc(50%-2.5rem)] md:left-[calc(50%-4rem)] bottom-[0.5rem]", // Bottom
+	"left-[0.5rem] bottom-[20%]", // Bottom Left
+	"left-[0.5rem] top-[20%]", // Top Left
+	"left-[calc(50%-2.5rem)] md:left-[calc(50%-4rem)] top-[0.5rem]", // Top
+	"right-[0.5rem] top-[20%]", // Top Right
+	"right-[0.5rem] bottom-[20%]", // Bottom Right
 ]
 
 const playerBidPositions = [
-	"left-[calc(50%-0.75rem)] bottom-[4.5rem]",
-	"left-[6.5rem] md:left-[10rem] bottom-[calc(20%+1rem)]",
-	"left-[6.5rem] md:left-[10rem] top-[calc(20%+1rem)]",
-	"left-[calc(50%-0.75rem)] top-[4.5rem]",
-	"right-[6.5rem] md:right-[10rem] top-[calc(20%+1rem)]",
-	"right-[6.5rem] md:right-[10rem] bottom-[calc(20%+1rem)]",
+	"left-[calc(50%-0.75rem)] bottom-[4.5rem]", // Bottom
+	"left-[6.5rem] md:left-[10rem] bottom-[calc(20%+1rem)]", // Bottom Left
+	"left-[6.5rem] md:left-[10rem] top-[calc(20%+1rem)]", // Bottom Left
+	"left-[calc(50%-0.75rem)] top-[4.5rem]", // Top
+	"right-[6.5rem] md:right-[10rem] top-[calc(20%+1rem)]", // Top Right
+	"right-[6.5rem] md:right-[10rem] bottom-[calc(20%+1rem)]", // Bottom Right
 ]
 
 const playerPresentStyle = ""

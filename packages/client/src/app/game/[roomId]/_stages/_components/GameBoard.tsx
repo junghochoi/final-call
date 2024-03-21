@@ -8,6 +8,7 @@ import { PlayerBox } from "./playerBox"
 import { uniqueKey } from "@/lib/utils"
 import { CommunityCard } from "./CommunityCard"
 import { AnimatePresence } from "framer-motion"
+import { off } from "process"
 
 interface GameBoardProps {
 	stage: Stage
@@ -37,11 +38,28 @@ export const GameBoard = ({
 	const [cashCards, setCashCards] = useState<CashCard[]>([])
 	const [propertyCards, setPropertyCards] = useState<Card[]>([])
 
+	const [visualPlayerOrder, setVisualPlayerOrder] = useState<Player[]>([])
+	const [visualPlayerTurn, setVisualPlayerTurn] = useState<number>(0)
+
+	// Reorder players
+	useEffect(() => {
+		const ind = playerOrder.findIndex((player) => player.sessionId === currPlayer.sessionId)
+
+		const rightSide = playerOrder.slice(ind) // Get elements to the right of the index
+		const leftSide = playerOrder.slice(0, ind)
+
+		setVisualPlayerTurn((bidState.playerTurn + rightSide.length) % playerOrder.length)
+
+		setVisualPlayerOrder(rightSide.concat(leftSide))
+	}, [playerOrder])
+
+	// Ordering the bidCards
 	useEffect(() => {
 		const orderedCards = Array.from(bidState.roundCards).sort((a, b) => a.value - b.value)
 		setPropertyCards(orderedCards)
 	}, [bidState.roundCards])
 
+	// Ordering the Auction Cards and Correct Winners
 	useEffect(() => {
 		const orderedSellingProperties = Array.from(auctionState.playerSellingPropertyCard.entries()).sort(
 			(a, b) => a[1].value - b[1].value
@@ -63,7 +81,6 @@ export const GameBoard = ({
 			})
 		setCashCards(orderedCashCards)
 	}, [auctionState.playerSellingPropertyCard, auctionState.roundCards])
-	// top-[calc(50%-2rem)] md:top-[calc(50%-3.5rem)]
 	return (
 		<div className="bg-[#1F002E] h-[100svh] mx-auto relative overscroll-none shadow-xl p-4">
 			<div className="relative h-[calc(100%-7em)]">
@@ -100,12 +117,12 @@ export const GameBoard = ({
 					)}
 				</div>
 
-				{playerOrder.map((player, ind) => {
+				{visualPlayerOrder.map((player, ind) => {
 					return (
 						<PlayerBox
 							playerPosition={ind}
 							playerPresent={true}
-							playerTurn={bidState!.playerTurn === ind}
+							playerTurn={visualPlayerTurn === ind}
 							currPlayer={player.sessionId === currPlayer.sessionId}
 							stage={stage}
 							nickname={player.nickname}
@@ -116,7 +133,7 @@ export const GameBoard = ({
 								value: auctionState.playerSellingPropertyCard.get(player.sessionId),
 								visible: auctionState.playerSellingPropertyCard.size === playerOrder.length,
 							}}
-							animateWinner={bidState.endRoundAnimate && bidState.playerTurn === ind}
+							animateWinner={bidState.endRoundAnimate && visualPlayerTurn === ind}
 						/>
 					)
 				})}
