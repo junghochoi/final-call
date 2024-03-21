@@ -37,14 +37,7 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: Car
 			}}
 		>
 			{/* Add "hidden group-hover:block" if you want it to be shown on hover */}
-			<motion.span
-				className="absolute top-0 -mt-6 text-xl font-bold"
-				initial={{ opacity: 0, y: -20 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ duration: 0.5 }}
-			>
-				{sum}
-			</motion.span>
+			<span>{sum}</span>
 			{stack.reverse().map((card: Card, index) => {
 				const delay = (stack.length - index) * 3
 
