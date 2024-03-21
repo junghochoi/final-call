@@ -35,7 +35,7 @@ export const AuctionActionBar = ({
 
 	return (
 		<div className="h-28 mx-auto w-full border-t border-fuchsia-blue-900 absolute bottom-0 flex justify-between">
-			<div className="w-1/2 px-5 lg:px-10 flex justify-start items-center space-x-2">
+			<div className="w-full px-5 lg:px-10 flex justify-start items-center space-x-2">
 				{currPlayerPropertyCards
 					.sort((a, b) => a.value - b.value)
 					.map((card, index) => (
@@ -46,8 +46,7 @@ export const AuctionActionBar = ({
 							selected={selectedCard === card.id}
 						/>
 					))}
-			</div>
-			<div className="mr-3 w-1/2 flex justify-end items-center space-x-2">
+				<div className="inline-block h-full py-3  w-0.5 self-stretch bg-fuchsia-blue-900 dark:bg-white/10"></div>
 				{currPlayerCashCards
 					.sort((a, b) => a.value - b.value)
 					.map((card, index) => (
