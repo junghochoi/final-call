@@ -20,6 +20,13 @@ const poppins = Poppins({
 const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: number[]; nickname: string }) => {
 	const barWidthStyle = numBars <= 3 ? "w-32" : "w-14"
 
+	const [sum, setSum] = useState(0)
+
+	const addToSum = (value: number) => {
+		console.log("animation end")
+		setSum((prev) => prev + value)
+	}
+
 	return (
 		<motion.div
 			className={cn("relative flex flex-col items-center flex-grow pb-5 group", barWidthStyle)}
@@ -30,9 +37,14 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: num
 			}}
 		>
 			{/* Add "hidden group-hover:block" if you want it to be shown on hover */}
-			<span className="absolute top-0  -mt-6 text-xs font-bold ">
-				{stack.reduce((accumulator, currentValue) => accumulator + currentValue, 0)}
-			</span>
+			<motion.span
+				className="absolute top-0 -mt-6 text-xl font-bold"
+				initial={{ opacity: 0, y: -20 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.5 }}
+			>
+				{sum}
+			</motion.span>
 			{stack.reverse().map((value: number, index) => {
 				const delay = (stack.length - index) * 3
 
@@ -46,6 +58,7 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: num
 						)}
 						initial={{ height: 0 }}
 						animate={{ height: value * 4, transition: { delay: delay, duration: 1 } }}
+						onAnimationComplete={() => addToSum(value)}
 					>
 						<motion.span
 							initial={{ opacity: 0 }}

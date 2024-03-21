@@ -116,15 +116,6 @@ export const PlayerBox = ({
 			</div>
 			<AnimatePresence>
 				{stage === Stage.Auctioning && propertyCard?.value !== undefined && (
-					// <div
-					// 	className={cn(
-					// 		"absolute rounded h-12 w-8 text-sm bg-cyan-300 text-center p-1",
-					// 		playerBidPositions[playerPosition]
-					// 	)}
-					// >
-					// 	{propertyCard?.visible && <p>{propertyCard.value}</p>}
-					// </div>
-
 					<motion.div
 						className={cn("absolute h-14 w-10 bg-white rounded-sm text-sm", playerBidPositions[playerPosition])}
 						initial={{ opacity: 0 }}
