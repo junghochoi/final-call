@@ -5,7 +5,7 @@ import { WINNER_SOUND_EFFECT_PATH } from "@/lib/soundEffects"
 
 import { useAudio } from "@/hooks/useAudio"
 import { Home } from "lucide-react"
-import { Luckiest_Guy } from "next/font/google"
+import { Luckiest_Guy, Poppins } from "next/font/google"
 
 const playerBoxPositions = [
 	"left-[calc(50%-2.5rem)] md:left-[calc(50%-4rem)] bottom-[0.5rem]", // Bottom

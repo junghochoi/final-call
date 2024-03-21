@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { Home } from "lucide-react"
 import { CircleDollarSign } from "lucide-react"
 import Image from "next/image"
-import { Luckiest_Guy } from "next/font/google"
+import { Alumni_Sans, Luckiest_Guy, Poppins } from "next/font/google"
 import { Card, CardType } from "@final-call/shared"
 interface CardProps {
 	card: Card
@@ -16,6 +16,16 @@ interface CardProps {
 }
 
 const luckiestGuy = Luckiest_Guy({
+	subsets: ["latin"],
+	weight: ["400"],
+})
+
+const alumniSans = Alumni_Sans({
+	subsets: ["latin", "latin-ext"],
+	weight: ["200", "300", "400", "500"],
+})
+
+const poppins = Poppins({
 	subsets: ["latin"],
 	weight: ["400"],
 })
@@ -67,11 +77,7 @@ export const CommunityCard = ({ card, labelVisible, label, animateLastCard, posi
 			<AnimatePresence>
 				{labelVisible && (
 					<motion.div
-						className={cn(
-							"absolute flex justify-center items-center w-20 h-6 lg:w-24 lg:h-8 text-center bottom-24 md:bottom-36 -rotate-45 text-sm bg-white rounded",
-							labelStyle,
-							luckiestGuy.className
-						)}
+						className={cn("absolute text-left bottom-24 w-20 md:bottom-36 ", labelStyle, alumniSans.className)}
 						variants={labelVariants}
 						initial={"auctionLabelInitial"}
 						animate={"auctionLabelAnimate"}
@@ -79,8 +85,7 @@ export const CommunityCard = ({ card, labelVisible, label, animateLastCard, posi
 						custom={position}
 						key={card.id}
 					>
-						{label}
-						<Home />
+						<span className="text-lg font-bold bg-white rounded p-1 whitespace-nowrap">{label}</span>
 					</motion.div>
 				)}
 			</AnimatePresence>
