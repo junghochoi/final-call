@@ -57,7 +57,6 @@ const GamePage = () => {
 	const auctionEndSound = useAudio(END_AUCTION_SOUND_EFFECT_PATH)
 
 	const playerInitializationCallback = useCallback((playerData: Player) => {
-		setConnected(true)
 		setGameState((prevGameState) => ({
 			...prevGameState,
 			currPlayer: playerData,
@@ -84,6 +83,7 @@ const GamePage = () => {
 				host: true,
 				socketId: socket.id!,
 			}
+			setConnected(true)
 			socket.emit("PlayerInitialization", playerInit, playerInitializationCallback)
 		})
 
