@@ -1,5 +1,5 @@
 import { useSocket } from "@/contexts/SocketContext"
-import { GameState, SessionID, Stage } from "@final-call/shared"
+import { Card, CardType, GameState, SessionID, Stage } from "@final-call/shared"
 import { Button } from "@/components/ui/button"
 import { useParams } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -17,7 +17,7 @@ const poppins = Poppins({
 	weight: ["700"],
 })
 
-const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: number[]; nickname: string }) => {
+const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: Card[]; nickname: string }) => {
 	const barWidthStyle = numBars <= 3 ? "w-32" : "w-14"
 
 	const [sum, setSum] = useState(0)
@@ -45,20 +45,20 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: num
 			>
 				{sum}
 			</motion.span>
-			{stack.reverse().map((value: number, index) => {
+			{stack.reverse().map((card: Card, index) => {
 				const delay = (stack.length - index) * 3
 
 				return (
 					<motion.div
-						key={`${value}_${index}`}
+						key={card.id}
 						className={cn(
 							"relative flex flex-col justify-center w-full",
 							backgroundStyle[(index + 1) * 100],
-							heightStyle[value]
+							heightStyle[card.value]
 						)}
 						initial={{ height: 0 }}
-						animate={{ height: value * 4, transition: { delay: delay, duration: 1 } }}
-						onAnimationComplete={() => addToSum(value)}
+						animate={{ height: card.value * 4, transition: { delay: delay, duration: 1 } }}
+						onAnimationComplete={() => addToSum(card.value)}
 					>
 						<motion.span
 							initial={{ opacity: 0 }}
@@ -68,7 +68,7 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: num
 								poppins.className
 							)}
 						>
-							{value}
+							{card.value}
 						</motion.span>
 					</motion.div>
 				)
@@ -81,7 +81,7 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: num
 type PlayerResultData = {
 	sessionId: SessionID
 	nickname: string
-	data: number[]
+	data: Card[]
 }
 
 export const Results = ({ gameState }: ResultProps) => {
@@ -96,7 +96,10 @@ export const Results = ({ gameState }: ResultProps) => {
 			return {
 				sessionId: sessionId,
 				nickname: gameState.players.find((p) => p.sessionId === sessionId)?.nickname ?? "Error: Could not find name",
-				data: [playerResult.bank, ...playerResult.cashCards.map((card) => card.value)].reverse(),
+				data: [
+					{ value: playerResult.bank, type: CardType.Cash, id: `${sessionId}_bank` },
+					...playerResult.cashCards,
+				].reverse(),
 			}
 		})
 
