@@ -38,7 +38,7 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: Car
 		>
 			{/* Add "hidden group-hover:block" if you want it to be shown on hover */}
 			{/* <span>{sum}</span> */}
-			{stack.reverse().map((card: Card, index) => {
+			{stack.map((card: Card, index) => {
 				const delay = (stack.length - index) * 3
 
 				return (
