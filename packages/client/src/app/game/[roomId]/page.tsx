@@ -76,6 +76,8 @@ const GamePage = () => {
 		socket.on("connect", () => {
 			if (!pickedName) return
 
+			setConnected(true)
+
 			const playerInit: PlayerInit = {
 				nickname: getNickname() as string,
 				roomId,
@@ -83,7 +85,7 @@ const GamePage = () => {
 				host: true,
 				socketId: socket.id!,
 			}
-			setConnected(true)
+
 			socket.emit("PlayerInitialization", playerInit, playerInitializationCallback)
 		})
 
@@ -193,7 +195,7 @@ const GamePage = () => {
 
 	return (
 		<AnimatePresence>
-			{pickedName && !connected && <Loading key={"loading"} />}
+			{pickedName && !connected && <Loading key={"loading"} message={"Initializing Player..."} />}
 			{component}
 		</AnimatePresence>
 	)
