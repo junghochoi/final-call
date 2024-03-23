@@ -35,7 +35,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [])
 
 	if (!socket) {
-		return <Loading />
+		return <Loading key={"socketLoading"} message={"Creating Websockets..."} />
 	}
 
 	const contextValue = {
