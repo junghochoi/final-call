@@ -74,9 +74,8 @@ const GamePage = () => {
 
 	useEffect(() => {
 		socket.on("connect", () => {
-			if (!pickedName) return
-
 			setConnected(true)
+			if (!pickedName) return
 
 			const playerInit: PlayerInit = {
 				nickname: getNickname() as string,
