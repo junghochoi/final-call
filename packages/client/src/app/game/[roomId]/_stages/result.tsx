@@ -20,12 +20,12 @@ const poppins = Poppins({
 const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: Card[]; nickname: string }) => {
 	const barWidthStyle = numBars <= 3 ? "w-32" : "w-14"
 
-	// const [sum, setSum] = useState(0)
+	const [sum, setSum] = useState(0)
 
-	// const addToSum = (value: number) => {
-	// 	console.log("animation end")
-	// 	setSum((prev) => prev + value)
-	// }
+	const addToSum = (value: number) => {
+		console.log("animation end")
+		setSum((prev) => prev + value)
+	}
 
 	return (
 		<motion.div
@@ -37,7 +37,7 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: Car
 			}}
 		>
 			{/* Add "hidden group-hover:block" if you want it to be shown on hover */}
-			{/* <span>{sum}</span> */}
+			<span>{sum}</span>
 			{stack.map((card: Card, index) => {
 				const delay = (stack.length - index) * 3
 
@@ -51,7 +51,7 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: Car
 						)}
 						initial={{ height: 0 }}
 						animate={{ height: card.value * 4, transition: { delay: delay, duration: 1 } }}
-						// onAnimationComplete={() => addToSum(card.value)}
+						onAnimationComplete={() => addToSum(card.value)}
 					>
 						<motion.span
 							initial={{ opacity: 0 }}
