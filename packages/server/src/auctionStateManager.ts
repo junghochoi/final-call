@@ -58,7 +58,7 @@ export class AuctionStateManager {
 		this.deckSize = 30 - removeCards
 		this.numPlayers = playerOrder.length
 		this.playerOrder = playerOrder
-		this.allCards = this.#createDeck(this.deckSize, removeCards)
+		this.allCards = this.#createDeck(removeCards)
 		this.roundCards = this.#drawCards(playerOrder.length)
 		this.round = 0
 		this.playerPropertyCards = playerPropertyCards
@@ -144,25 +144,25 @@ export class AuctionStateManager {
 			throw new Error("could not find player in playerPropertyCards")
 		}
 
-		console.log("OVER HERE", cashCard)
 		cashCards.push(cashCard)
 		this.playerCashCards.set(sessionId, cashCards)
 	}
 	// Helper Functions
-	#createDeck(numCards: number, removeCards: number): Card[] {
+	#createDeck(removeCards: number): Card[] {
 		// return shuffle(Array.from({ length: numCards }, (_, index) => index + 1))
-		return shuffle(
-			Array.from({ length: Math.floor(15) }, (_, index) => [
-				{
-					value: index + 1,
-					id: `${index}_C1`,
-					type: CardType.Cash,
-				},
-				{ value: index + 1, id: `${index}_C2`, type: CardType.Cash },
-			])
-				.flat()
-				.splice(removeCards)
-		)
+
+		const deck = Array.from({ length: Math.floor(15) }, (_, index) => [
+			{
+				value: index + 1,
+				id: `${index}_C1`,
+				type: CardType.Cash,
+			},
+			{ value: index + 1, id: `${index}_C2`, type: CardType.Cash },
+		])
+
+		const flatDeck = deck.reduce((accumulator, value) => accumulator.concat(value), [])
+		const finalDeck = shuffle(flatDeck).splice(removeCards)
+		return finalDeck
 	}
 	#drawCards(numCards: number): Card[] {
 		const cards = this.allCards.splice(-numCards).sort((a, b) => b.value - a.value)

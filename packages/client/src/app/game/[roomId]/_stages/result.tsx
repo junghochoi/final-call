@@ -47,7 +47,7 @@ const VerticalBar = ({ numBars, stack, nickname }: { numBars: number; stack: Car
 						className={cn(
 							"relative flex flex-col justify-center w-full",
 							backgroundStyle[(index + 1) * 100],
-							heightStyle[card.value]
+							heightStyle[card.value * 2]
 						)}
 						initial={{ height: 0 }}
 						animate={{ height: card.value * 4, transition: { delay: delay, duration: 1 } }}
